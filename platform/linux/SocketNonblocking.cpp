@@ -45,19 +45,19 @@
 const time_t TIMEOUT_CONNECT_S = 5;
 
 
-hbm::jet::SocketNonblocking::SocketNonblocking()
+hbm::SocketNonblocking::SocketNonblocking()
 	: m_fd(-1)
 	, m_bufferedReader()
 {
 	init();
 }
 
-hbm::jet::SocketNonblocking::~SocketNonblocking()
+hbm::SocketNonblocking::~SocketNonblocking()
 {
 	stop();
 }
 
-int hbm::jet::SocketNonblocking::init()
+int hbm::SocketNonblocking::init()
 {
 	int retVal = 0;
 	int opt = 1;
@@ -89,7 +89,7 @@ int hbm::jet::SocketNonblocking::init()
 	return retVal;
 }
 
-int hbm::jet::SocketNonblocking::connect(const std::string &address, const std::string& port)
+int hbm::SocketNonblocking::connect(const std::string &address, const std::string& port)
 {
 	int retVal = 0;
 
@@ -134,7 +134,7 @@ int hbm::jet::SocketNonblocking::connect(const std::string &address, const std::
 	return retVal;
 }
 
-int hbm::jet::SocketNonblocking::sendMessage(const void* buffer, size_t len)
+int hbm::SocketNonblocking::sendMessage(const void* buffer, size_t len)
 {
 	int retVal = 0;
 	uint32_t lenBig = htonl(static_cast < uint32_t > (len));
@@ -192,13 +192,44 @@ int hbm::jet::SocketNonblocking::sendMessage(const void* buffer, size_t len)
 	return retVal;
 }
 
-ssize_t hbm::jet::SocketNonblocking::receive(void* pBlock, size_t size)
+ssize_t hbm::SocketNonblocking::receive(void* pBlock, size_t size)
 {
 	return m_bufferedReader.recv(m_fd, pBlock, size, 0);
 }
 
+ssize_t hbm::SocketNonblocking::receiveComplete(void* pBlock, size_t size)
+{
+	ssize_t retVal;
+	unsigned char* pPos = reinterpret_cast < unsigned char* > (pBlock);
+	size_t sizeLeft = size;
+	while(sizeLeft) {
+		retVal = m_bufferedReader.recv(m_fd, pPos, sizeLeft, 0);
+		if(retVal>0) {
+			sizeLeft -= retVal;
+			pPos += retVal;
+		} else if(retVal==0) {
+			return 0;
+		} else {
+			if(errno==EWOULDBLOCK || errno==EAGAIN) {
+				// wait for socket to become readable.
+				struct pollfd pfd;
+				pfd.fd = m_fd;
+				pfd.events = POLLIN;
+				int nfds;
+				do {
+					nfds = poll(&pfd, 1, -1);
+				} while((nfds==-1) && (errno==EINTR));
+				if(nfds!=1) {
+					return 0;
+				}
+			}
+		}
+	}
+	return size;
+}
 
-int hbm::jet::SocketNonblocking::sendBlock(const void* pBlock, size_t size, bool more)
+
+int hbm::SocketNonblocking::sendBlock(const void* pBlock, size_t size, bool more)
 {
 	const uint8_t* pDat = reinterpret_cast<const uint8_t*>(pBlock);
 	size_t BytesLeft = size;
@@ -247,7 +278,7 @@ int hbm::jet::SocketNonblocking::sendBlock(const void* pBlock, size_t size, bool
 }
 
 
-void hbm::jet::SocketNonblocking::stop()
+void hbm::SocketNonblocking::stop()
 {
 	::shutdown(m_fd, SHUT_RDWR);
 	::close(m_fd);

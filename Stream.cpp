@@ -13,8 +13,9 @@ static const std::string STREAM_DATA_PORT = "7411";
 static const char* PARAMS = "params";
 
 
-struct timeMetaInformation_t {
-	Json::Value stamp;
+struct ntptime_t {
+	unsigned int seconds;
+	unsigned int fraction;
 	std::string scale;
 	std::string epoch;
 };
@@ -23,8 +24,8 @@ struct timeMetaInformation_t {
 int main(int argc, char* argv[])
 {
 	std::string address = "hbm-00087b";
-	hbm::SocketNonblocking socket;
-	int result = socket.connect(address.c_str(), STREAM_DATA_PORT);
+	hbm::SocketNonblocking streamSocket;
+	int result = streamSocket.connect(address.c_str(), STREAM_DATA_PORT);
 	if(result<0) {
 		return EXIT_FAILURE;
 	}
@@ -33,19 +34,19 @@ int main(int argc, char* argv[])
 	std::string streamId;
 	Json::Value supported;
 	Json::Value commandInterfaces;
-	timeMetaInformation_t time;
+	ntptime_t startTime;
 
 	std::set < std::string > availables;
 
 	do {
-		hbm::streaming::TransportHeader transportHeader(socket);
+		hbm::streaming::TransportHeader transportHeader(streamSocket);
 		int type = transportHeader.type();
 		size_t size = transportHeader.size();
 
 		if(type==hbm::streaming::TYPE_DATA) {
 
 		} else if(type==hbm::streaming::TYPE_META){
-			hbm::streaming::MetaInformation metaInformation(socket, size);
+			hbm::streaming::MetaInformation metaInformation(streamSocket, size);
 			const Json::Value& content = metaInformation.jsonContent();
 			std::string method = content["method"].asString();
 			if(method=="apiVersion") {
@@ -55,18 +56,12 @@ int main(int argc, char* argv[])
 				supported = content[PARAMS]["supported"];
 				commandInterfaces = content[PARAMS]["commandInterfaces"];
 			} else if(method=="time") {
+				if(content[PARAMS]["stamp"]["type"]=="ntp")
 				std::cout << Json::StyledWriter().write(content) << std::endl;
-				time.stamp = content[PARAMS]["stamp"];
-				time.epoch = content[PARAMS]["epoch"].asString();
-				time.scale = content[PARAMS]["scale"].asString();
-//				{
-//				  "method": "time",
-//				  "params": {
-//				    "stamp": <time_object>,
-//				    "scale": <string>, // optional, e.g. UTC, TAI, GPS
-//				    "epoch": <string> // optional
-//				  }
-//				}
+				startTime.fraction = content[PARAMS]["stamp"]["fraction"].asUInt();
+				startTime.seconds = content[PARAMS]["stamp"]["seconds"].asUInt();
+				startTime.epoch = content[PARAMS]["epoch"].asString();
+				startTime.scale = content[PARAMS]["scale"].asString();
 
 			} else if(method=="available") {
 				for (Json::ValueConstIterator iter = content[PARAMS].begin(); iter!= content[PARAMS].end(); ++iter) {

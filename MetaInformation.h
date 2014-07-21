@@ -17,12 +17,12 @@ namespace hbm {
 
 			MetaInformation(hbm::SocketNonblocking& socket, size_t size);
 
-			const Json::Value& jsonContent()
+			Json::Value jsonContent()
 			{
 				return m_jsonContent;
 			}
 
-			const binaryContent_t& binaryContent()
+			binaryContent_t binaryContent()
 			{
 				return m_binaryContent;
 			}

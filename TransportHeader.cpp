@@ -18,7 +18,7 @@ namespace hbm {
 			uint32_t headerBig;
 			uint32_t header;
 
-			socket.receive(&headerBig, sizeof(headerBig));
+			socket.receiveComplete(&headerBig, sizeof(headerBig));
 
 			header = ntohl(headerBig);
 			m_signalNumber =  header & 0x000fffff;

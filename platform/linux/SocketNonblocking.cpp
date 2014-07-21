@@ -134,64 +134,6 @@ int hbm::SocketNonblocking::connect(const std::string &address, const std::strin
 	return retVal;
 }
 
-int hbm::SocketNonblocking::sendMessage(const void* buffer, size_t len)
-{
-	int retVal = 0;
-	uint32_t lenBig = htonl(static_cast < uint32_t > (len));
-	{
-		// synchronize sending complete message!!!
-		boost::unique_lock < boost::mutex > lock(m_sendMutex);
-
-		size_t completeLength = sizeof(lenBig)+len;
-
-		struct iovec iovs[2];
-
-		iovs[0].iov_base = &lenBig;
-		iovs[0].iov_len = sizeof(lenBig);
-		iovs[1].iov_base = const_cast < void* > (buffer);
-		iovs[1].iov_len = len;
-
-//		// test case: write incomplete length information and no data at all
-//		iovs[0].iov_base = &lenBig;
-//		iovs[0].iov_len = 1;
-//		iovs[1].iov_base = const_cast < void* > (buffer);
-//		iovs[1].iov_len = 0;
-
-//		// test case: write complete length information and incomplete data part
-//		iovs[0].iov_base = &lenBig;
-//		iovs[0].iov_len = sizeof(lenBig);
-//		iovs[1].iov_base = const_cast < void* > (buffer);
-//		iovs[1].iov_len = 4;
-
-		retVal = writev(m_fd, iovs, sizeof(iovs)/sizeof(iovec));
-		if(retVal<=0) {
-			return retVal;
-		}
-		size_t bytesWritten = retVal;
-		if(bytesWritten==completeLength) {
-			// we are done!
-			return 0;
-		} else if(bytesWritten>sizeof(lenBig)) {
-			// the data buffer was not written completely.
-			const uint8_t* pBuffer = reinterpret_cast < const unsigned char* > (buffer);
-			size_t bufferBytesLeft = len-(bytesWritten-sizeof(lenBig));
-			pBuffer += bytesWritten-sizeof(lenBig);
-			retVal = sendBlock(pBuffer, bufferBytesLeft, false);
-		} else {
-			// not even the length information was written completely
-			const uint8_t* plenBig = reinterpret_cast < const uint8_t* > (&lenBig);
-			plenBig += bytesWritten;
-			retVal = sendBlock(plenBig, sizeof(lenBig)-bytesWritten, true);
-			if(retVal<0) {
-				return retVal;
-			}
-			retVal = sendBlock(buffer, len, false);
-		}
-	}
-
-	return retVal;
-}
-
 ssize_t hbm::SocketNonblocking::receive(void* pBlock, size_t size)
 {
 	return m_bufferedReader.recv(m_fd, pBlock, size, 0);
@@ -208,7 +150,7 @@ ssize_t hbm::SocketNonblocking::receiveComplete(void* pBlock, size_t size)
 			sizeLeft -= retVal;
 			pPos += retVal;
 		} else if(retVal==0) {
-			return 0;
+			return size-sizeLeft;
 		} else {
 			if(errno==EWOULDBLOCK || errno==EAGAIN) {
 				// wait for socket to become readable.
@@ -274,7 +216,7 @@ int hbm::SocketNonblocking::sendBlock(const void* pBlock, size_t size, bool more
 			}
 		}
 	}
-	return retVal;
+	return size;
 }
 
 

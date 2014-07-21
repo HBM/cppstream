@@ -8,6 +8,7 @@
 #include "SocketNonblocking.h"
 #include "TransportHeader.h"
 #include "MetaInformation.h"
+#include "Controller.h"
 
 static const std::string STREAM_DATA_PORT = "7411";
 static const char* PARAMS = "params";
@@ -33,7 +34,6 @@ int main(int argc, char* argv[])
 	std::string apiVersion;
 	std::string streamId;
 	Json::Value supported;
-	Json::Value commandInterfaces;
 	ntptime_t startTime;
 
 	std::set < std::string > availables;
@@ -54,7 +54,24 @@ int main(int argc, char* argv[])
 			} else if(method=="init") {
 				streamId = content[PARAMS]["streamId"].asString();
 				supported = content[PARAMS]["supported"];
-				commandInterfaces = content[PARAMS]["commandInterfaces"];
+				const Json::Value& commandInterfaces = content[PARAMS]["commandInterfaces"];
+				for (Json::ValueConstIterator iter = commandInterfaces.begin(); iter!= commandInterfaces.end(); ++iter) {
+					const Json::Value& element = *iter;
+					std::cout << Json::StyledWriter().write(element) << std::endl;
+				}
+
+
+//				"commandInterfaces": {
+//				  "jsonrpc-http": {
+//				    "port": <service_name_or_port_number>,
+//				    "apiVersion": 1,
+//				    "httpMethod": <http_method>,
+//				    "httpVersion": <http_method>,
+//				    "httpPath": <http_path>
+//				  }
+//				}
+
+
 			} else if(method=="time") {
 				if(content[PARAMS]["stamp"]["type"]=="ntp")
 				std::cout << Json::StyledWriter().write(content) << std::endl;
@@ -67,6 +84,9 @@ int main(int argc, char* argv[])
 				for (Json::ValueConstIterator iter = content[PARAMS].begin(); iter!= content[PARAMS].end(); ++iter) {
 					const Json::Value& element = *iter;
 					availables.insert(element.asString());
+					hbm::streaming::Controller controller(streamId, address.c_str(), "http", "rpc", "1.1");
+					controller.subscribe(element.asString());
+
 				}
 			} else if(method=="unavailable") {
 				for (Json::ValueConstIterator iter = content[PARAMS].begin(); iter!= content[PARAMS].end(); ++iter) {

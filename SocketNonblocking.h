@@ -50,9 +50,7 @@ namespace hbm
 		/// \return 0: success; -1: error
 		int connect(const std::string& address, const std::string& port);
 
-		/// thread safe
-		/// @param len limit is range of uint32_t
-		int sendMessage(const void* buffer, size_t len);
+		int sendBlock(const void* pBlock, size_t len, bool more);
 
 		/// might return with less bytes the requested
 		ssize_t receive(void* pBlock, size_t len);
@@ -76,7 +74,6 @@ namespace hbm
 	private:
 		int init();
 
-		int sendBlock(const void* pBlock, size_t len, bool more);
 
 		int m_fd;
 #ifdef _WIN32

@@ -8,6 +8,7 @@ set(SOURCES
   Stream.cpp
   SocketNonblocking.h
   MetaInformation.cpp
+  Controller.cpp
   platform/linux/SocketNonblocking.cpp
   BufferedReader.cpp
 )

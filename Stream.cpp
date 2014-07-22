@@ -106,9 +106,12 @@ int main(int argc, char* argv[])
 						hbm::streaming::Controller controller(streamId, address.c_str(), port);
 						controller.unsubscribe(signalReferences);
 					} else if(method=="alive") {
-						std::cout << "alive!" << std::endl;
+						// ignore!
 					} else if(method=="fill") {
-						std::cout << "fill=" << content["params"][0].asUInt() << std::endl;
+						unsigned int fill = content["params"][0].asUInt();
+						if(fill>25) {
+							std::cout << "fill=" << content["params"][0].asUInt() << "%" << std::endl;
+						}
 					} else {
 						std::cout << Json::StyledWriter().write(content) << std::endl;
 					}

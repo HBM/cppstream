@@ -34,7 +34,7 @@ namespace hbm {
 
 			header = ntohl(headerBig);
 			m_signalNumber =  header & 0x000fffff;
-			m_type = (header & 0x30000000) >> 28;
+			m_type = static_cast < type_t > ((header & 0x30000000) >> 28);
 			m_dataByteCount = (header & 0x0ff00000) >> 20;
 			if(m_dataByteCount==0) {
 				uint32_t additionalSizeBig;

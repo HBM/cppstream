@@ -23,7 +23,7 @@ namespace hbm {
 				return m_dataByteCount;
 			}
 
-			int type() const
+			type_t type() const
 			{
 				return m_type;
 			}
@@ -36,7 +36,7 @@ namespace hbm {
 			SocketNonblocking& m_socket;
 			size_t m_dataByteCount;
 			unsigned int m_signalNumber;
-			int m_type;
+			type_t m_type;
 		};
 	}
 }

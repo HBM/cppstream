@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <WinSock2.h>
 #else
+#include <arpa/inet.h>
 #include <endian.h>
 #endif
 
@@ -29,7 +30,7 @@ namespace hbm {
 								float* pTarget;
 								size_t count = size >> 2;
 								for(size_t i=0; i<count; ++i) {
-									targetUint32 = htonl(*pPos);
+									targetUint32 = ntohl(*pPos);
 									// this is it!
 									pTarget = reinterpret_cast < float* >(&targetUint32);
 									++pPos;
@@ -56,7 +57,7 @@ namespace hbm {
 								size_t count = size >> 2;
 								for(size_t i=0; i<count; ++i) {
 									// this is it!
-									target = htonl(*pPos);
+									target = ntohl(*pPos);
 									++pPos;
 								}
 							} else if(m_dataValueType==DATATYPE_S32) {
@@ -65,7 +66,7 @@ namespace hbm {
 								size_t count = size >> 2;
 								for(size_t i=0; i<count; ++i) {
 									// this is it!
-									target = htonl(*pPos);
+									target = ntohl(*pPos);
 									++pPos;
 								}
 							} else if(m_dataValueType==DATATYPE_U64) {

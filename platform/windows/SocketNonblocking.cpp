@@ -149,6 +149,53 @@ ssize_t hbm::SocketNonblocking::receive(void* pBlock, size_t size)
 	return m_bufferedReader.recv(m_fd, pBlock, size, 0);
 }
 
+ssize_t hbm::SocketNonblocking::receiveComplete(void* pBlock, size_t len)
+{
+	size_t DataToGet = len;
+	unsigned char* pDat = static_cast<unsigned char*>(pBlock);
+	ssize_t numBytes = 0;
+
+	fd_set recvFds;
+
+	FD_ZERO(&recvFds);
+	FD_SET(m_fd,&recvFds);
+	int err;
+
+
+	while (DataToGet > 0) {
+		// wir warten, bis etwas zu lesen ist
+		err = select(static_cast < int >(m_fd) + 1, &recvFds, NULL, NULL, NULL);
+
+		if(err==1) {
+			if(FD_ISSET(m_fd, &recvFds)) {
+				numBytes = recv(m_fd, reinterpret_cast<char*>(pDat), static_cast < int >(DataToGet), 0);
+				if (numBytes > 0) {
+					pDat += numBytes;
+					DataToGet -= numBytes;
+				} else if (numBytes==0) {
+					// the peer has performed an orderly shutdown!
+					DataToGet = 0;
+					return -1;
+				} else {
+					// error!
+					// ignore "would block"
+					if(WSAGetLastError()!=WSAEWOULDBLOCK) {
+						return -1;
+					}
+				}
+			}
+		} else {
+			// ignore EINTR
+			if(WSAGetLastError()!=WSAEINTR) {
+				return -1;
+			}
+			break;
+		}
+	}
+
+	return len;
+}
+
 
 int hbm::SocketNonblocking::sendBlock(const void* pBlock, size_t size, bool more)
 {

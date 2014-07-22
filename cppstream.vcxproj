@@ -80,8 +80,10 @@
     <ClCompile Include="BufferedReader.cpp" />
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="HttpPost.cpp" />
+    <ClCompile Include="MetaInformation.cpp" />
     <ClCompile Include="platform\windows\SocketNonblocking.cpp" />
     <ClCompile Include="Stream.cpp" />
+    <ClCompile Include="TransportHeader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\jsoncpp\jsoncpp.vcxproj">

@@ -1,6 +1,9 @@
+#ifdef _WIN32
+#include <WinSock2.h>
+#else
 #include <arpa/inet.h>
+#endif
 
-#include "jsoncpp/json/reader.h"
 
 #include "MetaInformation.h"
 
@@ -21,8 +24,7 @@ namespace hbm {
 				Json::Reader().parse(&data[0], &data[data.size()], m_jsonContent);
 			} else {
 				m_binaryContent.resize(size-sizeof(m_type));
-				socket.receive(&m_binaryContent[0], m_binaryContent.size());
-			}
+				socket.receive(&m_binaryContent[0], m_binaryContent.size());			}
 
 		}
 	}

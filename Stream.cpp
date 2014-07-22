@@ -20,7 +20,7 @@
 #include "Types.h"
 
 
-/// alle information goes in here
+/// alle information goes in here.
 typedef std::unordered_map < unsigned int, hbm::streaming::Signal > signals_t;
 
 
@@ -125,7 +125,7 @@ int main(int argc, char* argv[])
 					} else if(method=="time") {
 						signalProperties[signalNumber].startTime.set(content[PARAMS]);
 					} else if(method=="data") {
-						signalProperties[signalNumber].data = content[PARAMS];
+						signalProperties[signalNumber].dataFormat(content[PARAMS]);
 					} else if(method=="signalRate") {
 						signalProperties[signalNumber].signalRate = content[PARAMS];
 					} else {

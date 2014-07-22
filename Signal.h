@@ -26,9 +26,18 @@ namespace hbm {
 				PATTERN_TB,
 			};
 
+			enum dataType_t {
+				DATATYPE_U32,
+				DATATYPE_S32,
+				DATATYPE_REAL32,
+				DATATYPE_U64,
+				DATATYPE_S64,
+				DATATYPE_REAL64,
+			};
+
 			pattern_t m_dataFormatPattern;
 			bool m_dataIsBigEndian;
-			std::string m_dataValueType;
+			dataType_t m_dataValueType;
 			size_t m_dataValueSize;
 			std::string m_dataTimeType;
 			size_t m_dataTimeSize;

@@ -1,4 +1,7 @@
+#include <stdint.h>
 #include <iostream>
+
+#include <arpa/inet.h>
 
 #include "Signal.h"
 
@@ -13,6 +16,19 @@ namespace hbm {
 		{
 			switch(m_dataFormatPattern) {
 				case PATTERN_V:
+					{
+						if(m_dataIsBigEndian) {
+							if(m_dataValueType==DATATYPE_REAL32) {
+								uint32_t* pPos = reinterpret_cast < uint32_t* > (pData);
+								float target;
+								size_t count = size >> 2;
+								for(size_t i=0; i<count; ++i) {
+									target = ntohl(*pPos);
+									++pPos;
+								}
+							}
+						}
+					}
 					break;
 				case PATTERN_TV:
 					break;
@@ -41,22 +57,41 @@ namespace hbm {
 			} else {
 				m_dataIsBigEndian = false;
 			}
-			m_dataValueType = params["valueType"].asString();
+			std::string dataValueType = params["valueType"].asString();
+			if(dataValueType=="real32") {
+				m_dataValueType = DATATYPE_REAL32;
+			} else if(dataValueType=="u32") {
+				m_dataValueType = DATATYPE_U32;
+			} else if(dataValueType=="s32") {
+				m_dataValueType = DATATYPE_S32;
+			} else if(dataValueType=="real64") {
+				m_dataValueType = DATATYPE_REAL64;
+			} else if(dataValueType=="u64") {
+				m_dataValueType = DATATYPE_U64;
+			} else if(dataValueType=="s64") {
+				m_dataValueType = DATATYPE_S64;
+			}
+
 			if(
-				 (m_dataValueType=="real32") ||
-				 (m_dataValueType=="u32") ||
-				 (m_dataValueType=="s32") ||
-				 (m_dataValueType=="u32")
+				 (m_dataValueType==DATATYPE_REAL32) ||
+				 (m_dataValueType==DATATYPE_U32) ||
+				 (m_dataValueType==DATATYPE_S32)
 				 ) {
 				m_dataValueSize = 4;
 			} else if(
-								(m_dataValueType=="real64") ||
-								(m_dataValueType=="u64") ||
-								(m_dataValueType=="s64") ||
-								(m_dataValueType=="u64")
+								(m_dataValueType==DATATYPE_REAL64) ||
+								(m_dataValueType==DATATYPE_U64) ||
+								(m_dataValueType==DATATYPE_S64)
 								) {
 				m_dataValueSize = 8;
 			}
+
+
+
+
+
+
+
 
 			m_dataTimeType = params["time"]["type"].asString();
 			m_dataTimeSize = params["time"]["size"].asUInt();

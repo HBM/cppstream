@@ -2,6 +2,7 @@
 #include <vector>
 #include <set>
 #include <iostream>
+#include <unordered_map>
 
 #ifdef _WIN32
 #include "jsoncpp/include/json/reader.h"
@@ -20,17 +21,53 @@ static const std::string STREAM_DATA_PORT = "7411";
 static const char* PARAMS = "params";
 
 
-struct ntptime_t {
+
+struct ntpTimeStamp_t {
 	unsigned int seconds;
 	unsigned int fraction;
+};
+
+struct timeInfo_t {
+	void set(const Json::Value& params)
+	{
+		const Json::Value& stampNode = params["stamp"];
+		if(stampNode["type"]=="ntp") {
+			stamp.fraction = stampNode["fraction"].asUInt();
+			stamp.seconds = stampNode["seconds"].asUInt();
+		}
+		epoch = params["epoch"].asString();
+		scale = params["scale"].asString();
+	}
+
+	ntpTimeStamp_t stamp;
 	std::string scale;
 	std::string epoch;
 };
 
+struct signalProperties_t {
+	std::string signalReference;
+	timeInfo_t startTime;
+	Json::Value signalRate;
+	Json::Value data;
+};
+
+
+typedef std::unordered_map < unsigned int, signalProperties_t > signals_t;
+
 
 int main(int argc, char* argv[])
 {
-	std::string address = "hbm-00087b";
+	if((argc<=2) || (std::string(argv[1])=="-h") ) {
+			std::cout << "syntax: " << argv[0] << " <stream source address>" << std::endl;
+			return EXIT_SUCCESS;
+	}
+
+	std::string port = "http";
+	std::string address = argv[1];
+	if(argc>2) {
+		port = argv[2];
+	}
+
 	hbm::SocketNonblocking streamSocket;
 	int result = streamSocket.connect(address.c_str(), STREAM_DATA_PORT);
 	if(result<0) {
@@ -40,7 +77,8 @@ int main(int argc, char* argv[])
 	std::string apiVersion;
 	std::string streamId;
 	Json::Value supported;
-	ntptime_t startTime;
+	timeInfo_t startTime;
+	signals_t signalProperties;
 
 	std::set < std::string > availables;
 
@@ -70,13 +108,7 @@ int main(int argc, char* argv[])
 						std::cout << Json::StyledWriter().write(element) << std::endl;
 					}
 				} else if(method=="time") {
-					const Json::Value& stampNode = content[PARAMS]["stamp"];
-					if(stampNode["type"]=="ntp")
-					std::cout << Json::StyledWriter().write(content) << std::endl;
-					startTime.fraction = stampNode["fraction"].asUInt();
-					startTime.seconds = stampNode["seconds"].asUInt();
-					startTime.epoch = content[PARAMS]["epoch"].asString();
-					startTime.scale = content[PARAMS]["scale"].asString();
+					startTime.set(content[PARAMS]);
 				} else if(method=="available") {
 					hbm::streaming::signalReferences_t signalReferences;
 					for (Json::ValueConstIterator iter = content[PARAMS].begin(); iter!= content[PARAMS].end(); ++iter) {
@@ -84,7 +116,7 @@ int main(int argc, char* argv[])
 						availables.insert(element.asString());
 						signalReferences.push_back(element.asString());
 					}
-					hbm::streaming::Controller controller(streamId, address.c_str(), "http");
+					hbm::streaming::Controller controller(streamId, address.c_str(), port);
 					controller.subscribe(signalReferences);
 				} else if(method=="unavailable") {
 					hbm::streaming::signalReferences_t signalReferences;
@@ -92,10 +124,8 @@ int main(int argc, char* argv[])
 						const Json::Value& element = *iter;
 						availables.erase(element.asString());
 					}
-					hbm::streaming::Controller controller(streamId, address.c_str(), "http");
+					hbm::streaming::Controller controller(streamId, address.c_str(), port);
 					controller.unsubscribe(signalReferences);
-				} else if(method=="subscribe") {
-					std::cout << Json::StyledWriter().write(content) << std::endl;
 				} else if(method=="alive") {
 					std::cout << "alive!" << std::endl;
 				} else if(method=="fill") {
@@ -105,11 +135,20 @@ int main(int argc, char* argv[])
 				}
 			} else {
 				// signal related meta information
-
-				std::cout << "signal number= " << signalNumber << " ";
-				//} else {
-				std::cout << Json::StyledWriter().write(content) << std::endl;
-				//}
+				if(method=="subscribe") {
+					signalProperties[signalNumber].signalReference = content[PARAMS][0].asString();
+				} else if(method=="unsubscribe") {
+					signalProperties.erase(signalNumber);
+				} else if(method=="time") {
+					signalProperties[signalNumber].startTime.set(content[PARAMS]);
+				} else if(method=="data") {
+					signalProperties[signalNumber].data = content[PARAMS];
+				} else if(method=="signalRate") {
+					signalProperties[signalNumber].signalRate = content[PARAMS];
+				} else {
+					std::cout << "signal number= " << signalNumber << " ";
+					std::cout << Json::StyledWriter().write(content) << std::endl;
+				}
 			}
 		}
 	} while(true);

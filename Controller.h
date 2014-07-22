@@ -8,7 +8,7 @@ namespace hbm {
 		class Controller
 		{
 		public:
-			Controller(const std::string& streamId, const std::string& address, const std::string& port, const std::string& httpPath, const std::string& httpVersion);
+			Controller(const std::string& streamId, const std::string& address, const std::string& port);
 
 			int subscribe(const std::string& signalReference);
 
@@ -17,8 +17,6 @@ namespace hbm {
 			std::string m_streamId;
 			std::string m_address;
 			std::string m_port;
-			std::string m_httpPath;
-			std::string m_httpVersion;
 
 			static unsigned int s_id;
 		};

@@ -84,7 +84,7 @@ int main(int argc, char* argv[])
 				for (Json::ValueConstIterator iter = content[PARAMS].begin(); iter!= content[PARAMS].end(); ++iter) {
 					const Json::Value& element = *iter;
 					availables.insert(element.asString());
-					hbm::streaming::Controller controller(streamId, address.c_str(), "http", "rpc", "1.1");
+					hbm::streaming::Controller controller(streamId, address.c_str(), "http");
 					controller.subscribe(element.asString());
 
 				}

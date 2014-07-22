@@ -1,4 +1,3 @@
-#include <sstream>
 #include <cstdio>
 
 #include <jsoncpp/json/value.h>
@@ -8,18 +7,17 @@
 #include "SocketNonblocking.h"
 
 #include "Controller.h"
+#include "HttpPost.h"
 
 namespace hbm {
 	namespace streaming {
 
 		unsigned int Controller::s_id = 0;
 
-		Controller::Controller(const std::string& streamId, const std::string& address, const std::string& port, const std::string& httpPath, const std::string& httpVersion)
+		Controller::Controller(const std::string& streamId, const std::string& address, const std::string& port)
 			: m_streamId(streamId)
 			, m_address(address)
 			, m_port(port)
-			, m_httpPath(httpPath)
-			, m_httpVersion(httpVersion)
 		{
 		}
 
@@ -33,42 +31,16 @@ namespace hbm {
 
 			std::string contentString = Json::FastWriter().write(content);
 
+			HttpPost httpPost(m_address, m_port, "rpc");
+			std::string response = httpPost.execute(contentString);
 
-			SocketNonblocking socket;
-			socket.connect(m_address, m_port);
-
-
-
-			std::stringstream message;
-			message << "POST /" << m_httpPath << " HTTP/" << m_httpVersion << "\r\n";
-			message << "Host: " << m_address << "\r\n";
-			message << "Accept: */*\r\n";
-			message << "Content-Type: application/json; charset=utf-8" << "\r\n";
-			message << "Content-Length: " << contentString.length() << "\r\n";
-			message << "\r\n";
-			message << contentString;
-
-			std::cout << message.str() << std::endl;
-			if(socket.sendBlock(message.str().c_str(), message.str().length(), 0)<=0) {
+			Json::Value result;
+			if(Json::Reader().parse(response, result)==false) {
 				return -1;
 			}
-
-
-			char recvBuffer[1024];
-			ssize_t retVal = socket.receiveComplete(recvBuffer, sizeof(recvBuffer));
-			if(retVal>0) {
-				std::cout << recvBuffer << std::endl;
-
-				Json::Value result;
-				if(Json::Reader().parse(recvBuffer, recvBuffer+retVal, result)==false) {
-					return -1;
-				}
-				if(result.isMember("error")) {
-					return -1;
-				}
+			if(result.isMember("error")) {
+				return -1;
 			}
-
-
 
 			return 0;
 		}

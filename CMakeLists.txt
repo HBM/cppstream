@@ -9,6 +9,7 @@ set(SOURCES
   SocketNonblocking.h
   MetaInformation.cpp
   Controller.cpp
+  HttpPost.cpp
   platform/linux/SocketNonblocking.cpp
   BufferedReader.cpp
 )

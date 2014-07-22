@@ -13,8 +13,11 @@
 
 namespace hbm {
 	namespace streaming {
+
+		// we use this as target for all values. Otherwise the compiler might optimize away a lot of functionality!
+		static double sum = 0;
+
 		Signal::Signal()
-			: m_dataByteCount(0)
 		{
 		}
 
@@ -33,6 +36,7 @@ namespace hbm {
 									targetUint32 = ntohl(*pPos);
 									// this is it!
 									pTarget = reinterpret_cast < float* >(&targetUint32);
+									sum += *pTarget;
 									++pPos;
 								}
 							} else if(m_dataValueType==DATATYPE_REAL64) {
@@ -49,6 +53,7 @@ namespace hbm {
 #endif
 									// this is it!
 									pTarget = reinterpret_cast < double* >(&targetUint64);
+									sum += *pTarget;
 									++pPos;
 								}
 							} else if(m_dataValueType==DATATYPE_U32) {
@@ -58,6 +63,7 @@ namespace hbm {
 								for(size_t i=0; i<count; ++i) {
 									// this is it!
 									target = ntohl(*pPos);
+									sum += target;
 									++pPos;
 								}
 							} else if(m_dataValueType==DATATYPE_S32) {
@@ -67,6 +73,7 @@ namespace hbm {
 								for(size_t i=0; i<count; ++i) {
 									// this is it!
 									target = ntohl(*pPos);
+									sum += target;
 									++pPos;
 								}
 							} else if(m_dataValueType==DATATYPE_U64) {
@@ -80,6 +87,7 @@ namespace hbm {
 #else
 									target = be64toh(*pPos);
 #endif
+									sum += target;
 									++pPos;
 								}
 							} else if(m_dataValueType==DATATYPE_S64) {
@@ -93,6 +101,7 @@ namespace hbm {
 #else
 									target = be64toh(*pPos);
 #endif
+									sum += target;
 									++pPos;
 								}
 							}
@@ -104,8 +113,6 @@ namespace hbm {
 				case PATTERN_TB:
 					break;
 			}
-
-			m_dataByteCount += size;
 		}
 
 		int Signal::dataFormat(const Json::Value& params)

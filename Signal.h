@@ -42,8 +42,6 @@ namespace hbm {
 			size_t m_dataValueSize;
 			std::string m_dataTimeType;
 			size_t m_dataTimeSize;
-
-			size_t m_dataByteCount;
 		};
 	}
 }

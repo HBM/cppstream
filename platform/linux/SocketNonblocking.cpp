@@ -34,10 +34,6 @@
 #include <syslog.h>
 #include <poll.h>
 
-
-#include <boost/bind/bind.hpp>
-#include <boost/thread/locks.hpp>
-
 #include "SocketNonblocking.h"
 
 

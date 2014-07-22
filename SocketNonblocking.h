@@ -41,49 +41,46 @@
 
 namespace hbm
 {
-	namespace jet
+	class SocketNonblocking
 	{
-		class SocketNonblocking
+	public:
+		SocketNonblocking();
+		virtual ~SocketNonblocking();
+
+		/// \return 0: success; -1: error
+		int connect(const std::string& address, const std::string& port);
+
+		int sendBlock(const void* pBlock, size_t len, bool more);
+
+		/// might return with less bytes the requested
+		ssize_t receive(void* pBlock, size_t len);
+
+		ssize_t receiveComplete(void* pBlock, size_t len);
+
+		/// poll this fd to see whether there is something to be received or out of order;
+		int getFd() const
 		{
-		public:
-			SocketNonblocking();
-			virtual ~SocketNonblocking();
-
-			/// \return 0: success; -1: error
-			int connect(const std::string& address, const std::string& port);
-
-			/// thread safe
-			/// @param len limit is range of uint32_t
-			int sendMessage(const void* buffer, size_t len);
-
-			ssize_t receive(void* pBlock, size_t len);
-
-			/// poll this fd to see whether there is something to be received or out of order;
-			int getFd() const
-			{
-				return m_fd;
-			}
+			return m_fd;
+		}
 
 #ifdef _WIN32
-			WSAEVENT getEvent() const
-			{
-				return m_event;
-			}
+		WSAEVENT getEvent() const
+		{
+			return m_event;
+		}
 #endif
-			void stop();
+		void stop();
 
-		private:
-			int init();
+	private:
+		int init();
 
-			int sendBlock(const void* pBlock, size_t len, bool more);
 
-			int m_fd;
+		int m_fd;
 #ifdef _WIN32
-			WSAEVENT m_event;
+		WSAEVENT m_event;
 #endif
-			boost::mutex m_sendMutex;
-			BufferedReader m_bufferedReader;
-		};
-	}
+		boost::mutex m_sendMutex;
+		BufferedReader m_bufferedReader;
+	};
 }
 #endif

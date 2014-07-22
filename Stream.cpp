@@ -49,6 +49,8 @@ int main(int argc, char* argv[])
 			hbm::streaming::MetaInformation metaInformation(streamSocket, size);
 			const Json::Value& content = metaInformation.jsonContent();
 			std::string method = content["method"].asString();
+
+			// stream related meta information
 			if(method=="apiVersion") {
 				apiVersion = content[PARAMS][0].asString();
 			} else if(method=="init") {
@@ -60,10 +62,11 @@ int main(int argc, char* argv[])
 					std::cout << Json::StyledWriter().write(element) << std::endl;
 				}
 			} else if(method=="time") {
-				if(content[PARAMS]["stamp"]["type"]=="ntp")
+				const Json::Value& stampNode = content[PARAMS]["stamp"];
+				if(stampNode["type"]=="ntp")
 				std::cout << Json::StyledWriter().write(content) << std::endl;
-				startTime.fraction = content[PARAMS]["stamp"]["fraction"].asUInt();
-				startTime.seconds = content[PARAMS]["stamp"]["seconds"].asUInt();
+				startTime.fraction = stampNode["fraction"].asUInt();
+				startTime.seconds = stampNode["seconds"].asUInt();
 				startTime.epoch = content[PARAMS]["epoch"].asString();
 				startTime.scale = content[PARAMS]["scale"].asString();
 			} else if(method=="available") {
@@ -90,6 +93,8 @@ int main(int argc, char* argv[])
 				std::cout << "alive!" << std::endl;
 			} else if(method=="fill") {
 				std::cout << "fill=" << content["params"][0].asUInt() << std::endl;
+
+			// signal related meta information
 			} else {
 				std::cout << Json::StyledWriter().write(content) << std::endl;
 			}

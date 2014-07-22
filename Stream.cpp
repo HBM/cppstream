@@ -57,7 +57,7 @@ typedef std::unordered_map < unsigned int, signalProperties_t > signals_t;
 
 int main(int argc, char* argv[])
 {
-	if((argc<=2) || (std::string(argv[1])=="-h") ) {
+	if((argc<2) || (std::string(argv[1])=="-h") ) {
 			std::cout << "syntax: " << argv[0] << " <stream source address>" << std::endl;
 			return EXIT_SUCCESS;
 	}

@@ -19,6 +19,7 @@
  * which is part of the standard terms and conditions of sale from HBM.
 */
 
+#include <cstring>
 #include <stdint.h>
 #include <sys/types.h>
 #include <sys/socket.h>

@@ -25,8 +25,6 @@ namespace hbm {
 			message << "\r\n";
 			message << request;
 
-			std::cout << message.str() << std::endl;
-
 			SocketNonblocking socket;
 			socket.connect(m_address, m_port);
 

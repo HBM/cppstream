@@ -25,9 +25,6 @@
 
 #include <string>
 
-#include <boost/thread/mutex.hpp>
-
-
 
 #ifdef _WIN32
 #include <WinSock2.h>
@@ -79,7 +76,6 @@ namespace hbm
 #ifdef _WIN32
 		WSAEVENT m_event;
 #endif
-		boost::mutex m_sendMutex;
 		BufferedReader m_bufferedReader;
 	};
 }

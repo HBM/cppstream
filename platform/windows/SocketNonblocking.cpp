@@ -35,17 +35,15 @@
 #define snprintf sprintf_s
 
 
-#include <boost/bind/bind.hpp>
-#include <boost/thread/locks.hpp>
 
-#include "socketNonblocking.h"
+#include "SocketNonblocking.h"
 
 
 /// Maximum time to wait for connecting
 const time_t TIMEOUT_CONNECT_S = 5;
 
 
-hbm::jet::SocketNonblocking::SocketNonblocking()
+hbm::SocketNonblocking::SocketNonblocking()
 	: m_fd(-1)
 	, m_event(WSACreateEvent())
 	, m_bufferedReader()
@@ -56,12 +54,12 @@ hbm::jet::SocketNonblocking::SocketNonblocking()
 	init();
 }
 
-hbm::jet::SocketNonblocking::~SocketNonblocking()
+hbm::SocketNonblocking::~SocketNonblocking()
 {
 	stop();
 }
 
-int hbm::jet::SocketNonblocking::init()
+int hbm::SocketNonblocking::init()
 {
 	int retVal = 0;
 	bool opt = true;
@@ -94,7 +92,7 @@ int hbm::jet::SocketNonblocking::init()
 	return retVal;
 }
 
-int hbm::jet::SocketNonblocking::connect(const std::string &address, const std::string& port)
+int hbm::SocketNonblocking::connect(const std::string &address, const std::string& port)
 {
 	int retVal = 0;
 
@@ -145,31 +143,14 @@ int hbm::jet::SocketNonblocking::connect(const std::string &address, const std::
 	return retVal;
 }
 
-int hbm::jet::SocketNonblocking::sendMessage(const void* buffer, size_t len)
-{
-	int retVal = 0;
-	uint32_t lenBig = htonl(static_cast < uint32_t > (len));
-	{
-		// synchronize sending complete message!!!
-		boost::unique_lock < boost::mutex > lock(m_sendMutex);
 
-		retVal = sendBlock(&lenBig, sizeof(lenBig), true);
-		if(retVal<0) {
-			return retVal;
-		}
-		retVal = sendBlock(buffer, len, false);
-	}
-
-	return retVal;
-}
-
-ssize_t hbm::jet::SocketNonblocking::receive(void* pBlock, size_t size)
+ssize_t hbm::SocketNonblocking::receive(void* pBlock, size_t size)
 {
 	return m_bufferedReader.recv(m_fd, pBlock, size, 0);
 }
 
 
-int hbm::jet::SocketNonblocking::sendBlock(const void* pBlock, size_t size, bool more)
+int hbm::SocketNonblocking::sendBlock(const void* pBlock, size_t size, bool more)
 {
 	const uint8_t* pDat = reinterpret_cast<const uint8_t*>(pBlock);
 	size_t BytesLeft = size;
@@ -220,7 +201,7 @@ int hbm::jet::SocketNonblocking::sendBlock(const void* pBlock, size_t size, bool
 }
 
 
-void hbm::jet::SocketNonblocking::stop()
+void hbm::SocketNonblocking::stop()
 {
 	::shutdown(m_fd, SD_BOTH);
 	::closesocket(m_fd);

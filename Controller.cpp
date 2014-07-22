@@ -1,6 +1,13 @@
+
+#ifdef _WIN32
+#include "jsoncpp/include/json/value.h"
+#include "jsoncpp/include/json/reader.h"
+#include "jsoncpp/include/json/writer.h"
+#else
 #include <jsoncpp/json/value.h>
 #include <jsoncpp/json/reader.h>
 #include <jsoncpp/json/writer.h>
+#endif
 
 #include "Controller.h"
 #include "HttpPost.h"

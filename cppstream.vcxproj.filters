@@ -30,5 +30,11 @@
     <ClCompile Include="platform\windows\SocketNonblocking.cpp">
       <Filter>Source Files\platform\windows</Filter>
     </ClCompile>
+    <ClCompile Include="Controller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HttpPost.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

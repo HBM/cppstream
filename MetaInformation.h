@@ -5,7 +5,11 @@
 
 #include <stdint.h>
 
+#ifdef _WIN32
+#include "jsoncpp/include/json/reader.h"
+#else
 #include "jsoncpp/json/value.h"
+#endif
 
 #include "SocketNonblocking.h"
 namespace hbm {
@@ -31,8 +35,6 @@ namespace hbm {
 			uint32_t m_type;
 			Json::Value m_jsonContent;
 			binaryContent_t m_binaryContent;
-			//std::string m_apiVersion;
-			//std::string m_streamId;
 		};
 	}
 }

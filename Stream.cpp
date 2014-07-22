@@ -1,9 +1,15 @@
 #include <cstdlib>
 #include <vector>
 #include <set>
+#include <iostream>
 
+#ifdef _WIN32
+#include "jsoncpp/include/json/reader.h"
+#include "jsoncpp/include/json/writer.h"
+#else
 #include <jsoncpp/json/reader.h>
 #include <jsoncpp/json/writer.h>
+#endif
 
 #include "SocketNonblocking.h"
 #include "TransportHeader.h"

@@ -5,6 +5,7 @@
 
 namespace hbm {
 	namespace streaming {
+		/// \warning for windows, this class works on little endian machines only. this is because of endian issues with data types wider than 4 byte.
 		class Signal {
 		public:
 			Signal();

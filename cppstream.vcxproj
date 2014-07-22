@@ -82,6 +82,7 @@
     <ClCompile Include="HttpPost.cpp" />
     <ClCompile Include="MetaInformation.cpp" />
     <ClCompile Include="platform\windows\SocketNonblocking.cpp" />
+    <ClCompile Include="Signal.cpp" />
     <ClCompile Include="Stream.cpp" />
     <ClCompile Include="TransportHeader.cpp" />
   </ItemGroup>
@@ -89,6 +90,14 @@
     <ProjectReference Include="..\jsoncpp\jsoncpp.vcxproj">
       <Project>{1e6c2c1c-6453-4129-ae3f-0ee8e6599c89}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Controller.h" />
+    <ClInclude Include="HttpPost.h" />
+    <ClInclude Include="MetaInformation.h" />
+    <ClInclude Include="Signal.h" />
+    <ClInclude Include="SocketNonblocking.h" />
+    <ClInclude Include="Types.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

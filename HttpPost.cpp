@@ -44,6 +44,7 @@ namespace hbm {
 				pPos += sizeof(NEEDLE)-1;
 				return pPos;
 			}
+			return "";
 		}
 	}
 }

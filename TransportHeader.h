@@ -25,6 +25,11 @@ namespace hbm {
 			{
 				return m_type;
 			}
+
+			unsigned int signalNumber() const
+			{
+				return m_signalNumber;
+			}
 		private:
 			size_t m_dataByteCount;
 			unsigned int m_signalNumber;

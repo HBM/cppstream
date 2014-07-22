@@ -11,6 +11,11 @@
 namespace hbm {
 	namespace streaming {
 		TransportHeader::TransportHeader(SocketNonblocking& socket)
+			: m_socket(socket)
+		{
+		}
+
+		int TransportHeader::receive()
 		{
 			//big endian:
 			// 12 bit signal info | 20 bit signal number
@@ -22,7 +27,10 @@ namespace hbm {
 			uint32_t headerBig;
 			uint32_t header;
 
-			socket.receiveComplete(&headerBig, sizeof(headerBig));
+			ssize_t retVal = m_socket.receiveComplete(&headerBig, sizeof(headerBig));
+			if(retVal!=sizeof(headerBig)) {
+				return -1;
+			}
 
 			header = ntohl(headerBig);
 			m_signalNumber =  header & 0x000fffff;
@@ -30,9 +38,15 @@ namespace hbm {
 			m_dataByteCount = (header & 0x0ff00000) >> 20;
 			if(m_dataByteCount==0) {
 				uint32_t additionalSizeBig;
-				socket.receive(&additionalSizeBig, sizeof(additionalSizeBig));
+				retVal = m_socket.receiveComplete(&additionalSizeBig, sizeof(additionalSizeBig));
+				if(retVal!=sizeof(additionalSizeBig)) {
+					return -1;
+				}
+
 				m_dataByteCount = ntohl(additionalSizeBig);
 			}
+
+			return 0;
 		}
 	}
 }

@@ -79,16 +79,22 @@ int main(int argc, char* argv[])
 	Json::Value supported;
 	timeInfo_t startTime;
 	signals_t signalProperties;
+	unsigned char recvBuffer[1024];
 
 	std::set < std::string > availables;
-
+	hbm::streaming::TransportHeader transportHeader(streamSocket);
 	do {
-		hbm::streaming::TransportHeader transportHeader(streamSocket);
+		result = transportHeader.receive();
+		if(result<0) {
+			break;
+		}
 		int type = transportHeader.type();
 		size_t size = transportHeader.size();
 		unsigned int signalNumber = transportHeader.signalNumber();
 
 		if(type==hbm::streaming::TYPE_DATA) {
+			result = streamSocket.receiveComplete(recvBuffer, size);
+			//std::cout << result << " bytes of data from signal number= " << signalNumber << std::endl;
 
 		} else if(type==hbm::streaming::TYPE_META){
 			hbm::streaming::MetaInformation metaInformation(streamSocket, size);

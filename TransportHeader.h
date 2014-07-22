@@ -16,6 +16,8 @@ namespace hbm {
 		public:
 			TransportHeader(SocketNonblocking& socket);
 
+			int receive();
+
 			size_t size() const
 			{
 				return m_dataByteCount;
@@ -31,6 +33,7 @@ namespace hbm {
 				return m_signalNumber;
 			}
 		private:
+			SocketNonblocking& m_socket;
 			size_t m_dataByteCount;
 			unsigned int m_signalNumber;
 			int m_type;

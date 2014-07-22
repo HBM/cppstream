@@ -1,10 +1,6 @@
-#include <cstdio>
-
 #include <jsoncpp/json/value.h>
 #include <jsoncpp/json/reader.h>
 #include <jsoncpp/json/writer.h>
-
-#include "SocketNonblocking.h"
 
 #include "Controller.h"
 #include "HttpPost.h"
@@ -21,18 +17,20 @@ namespace hbm {
 		{
 		}
 
-		int Controller::subscribe(const std::string& signalReference)
+		int Controller::subscribe(const signalReferences_t &signalReferences)
 		{
 			Json::Value content;
 			content["jsonrpc"] = "2.0";
 			content["method"] = m_streamId +".subscribe";
-			content["params"].append(signalReference);
-			content["id"] = ++ s_id;
+			for(signalReferences_t::const_iterator iter = signalReferences.begin(); iter!=signalReferences.end(); ++iter) {
+				content["params"].append(*iter);
+			}
+			content["id"] = ++s_id;
 
-			std::string contentString = Json::FastWriter().write(content);
+			std::string request = Json::FastWriter().write(content);
 
 			HttpPost httpPost(m_address, m_port, "rpc");
-			std::string response = httpPost.execute(contentString);
+			std::string response = httpPost.execute(request);
 
 			Json::Value result;
 			if(Json::Reader().parse(response, result)==false) {
@@ -45,8 +43,29 @@ namespace hbm {
 			return 0;
 		}
 
-		int Controller::unsubscribe(const std::string& signalReference)
+		int Controller::unsubscribe(const signalReferences_t &signalReferences)
 		{
+			Json::Value content;
+			content["jsonrpc"] = "2.0";
+			content["method"] = m_streamId +".unsubscribe";
+			for(signalReferences_t::const_iterator iter = signalReferences.begin(); iter!=signalReferences.end(); ++iter) {
+				content["params"].append(*iter);
+			}
+			content["id"] = ++s_id;
+
+			std::string request = Json::FastWriter().write(content);
+
+			HttpPost httpPost(m_address, m_port, "rpc");
+			std::string response = httpPost.execute(request);
+
+			Json::Value result;
+			if(Json::Reader().parse(response, result)==false) {
+				return -1;
+			}
+			if(result.isMember("error")) {
+				return -1;
+			}
+
 			return 0;
 		}
 

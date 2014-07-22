@@ -59,19 +59,6 @@ int main(int argc, char* argv[])
 					const Json::Value& element = *iter;
 					std::cout << Json::StyledWriter().write(element) << std::endl;
 				}
-
-
-//				"commandInterfaces": {
-//				  "jsonrpc-http": {
-//				    "port": <service_name_or_port_number>,
-//				    "apiVersion": 1,
-//				    "httpMethod": <http_method>,
-//				    "httpVersion": <http_method>,
-//				    "httpPath": <http_path>
-//				  }
-//				}
-
-
 			} else if(method=="time") {
 				if(content[PARAMS]["stamp"]["type"]=="ntp")
 				std::cout << Json::StyledWriter().write(content) << std::endl;
@@ -79,20 +66,26 @@ int main(int argc, char* argv[])
 				startTime.seconds = content[PARAMS]["stamp"]["seconds"].asUInt();
 				startTime.epoch = content[PARAMS]["epoch"].asString();
 				startTime.scale = content[PARAMS]["scale"].asString();
-
 			} else if(method=="available") {
+				hbm::streaming::signalReferences_t signalReferences;
 				for (Json::ValueConstIterator iter = content[PARAMS].begin(); iter!= content[PARAMS].end(); ++iter) {
 					const Json::Value& element = *iter;
 					availables.insert(element.asString());
-					hbm::streaming::Controller controller(streamId, address.c_str(), "http");
-					controller.subscribe(element.asString());
-
+					signalReferences.push_back(element.asString());
 				}
+
+				hbm::streaming::Controller controller(streamId, address.c_str(), "http");
+				controller.subscribe(signalReferences);
 			} else if(method=="unavailable") {
+				hbm::streaming::signalReferences_t signalReferences;
 				for (Json::ValueConstIterator iter = content[PARAMS].begin(); iter!= content[PARAMS].end(); ++iter) {
 					const Json::Value& element = *iter;
 					availables.erase(element.asString());
 				}
+				hbm::streaming::Controller controller(streamId, address.c_str(), "http");
+				controller.unsubscribe(signalReferences);
+			} else if(method=="subscribe") {
+				std::cout << Json::StyledWriter().write(content) << std::endl;
 			} else if(method=="alive") {
 				std::cout << "alive!" << std::endl;
 			} else if(method=="fill") {

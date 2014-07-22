@@ -11,8 +11,6 @@
 namespace hbm {
 	namespace streaming {
 
-		static const int METAINFORMATION_JSON = 1;
-
 		MetaInformation::MetaInformation(SocketNonblocking &socket, size_t size)
 		{
 			uint32_t typeBig;
@@ -28,8 +26,8 @@ namespace hbm {
 				Json::Reader().parse(&data[0], &data[dataSize], m_jsonContent);
 			} else {
 				m_binaryContent.resize(size-sizeof(m_type));
-				socket.receive(&m_binaryContent[0], m_binaryContent.size());			}
-
+				socket.receive(&m_binaryContent[0], m_binaryContent.size());
+			}
 		}
 	}
 }

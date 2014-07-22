@@ -38,6 +38,7 @@
 
 namespace hbm
 {
+	/// the socke uses keep-alive in order to detect broken connection.
 	class SocketNonblocking
 	{
 	public:

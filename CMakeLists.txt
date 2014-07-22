@@ -13,6 +13,7 @@ set(SOURCES
   MetaInformation.cpp
   Controller.cpp
   HttpPost.cpp
+  Signal.cpp
   platform/linux/SocketNonblocking.cpp
   BufferedReader.cpp
 )

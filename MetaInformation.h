@@ -14,6 +14,8 @@
 #include "SocketNonblocking.h"
 namespace hbm {
 	namespace streaming {
+		static const int METAINFORMATION_JSON = 1;
+
 		class MetaInformation
 		{
 		public:
@@ -21,14 +23,19 @@ namespace hbm {
 
 			MetaInformation(hbm::SocketNonblocking& socket, size_t size);
 
-			Json::Value jsonContent()
+			Json::Value jsonContent() const
 			{
 				return m_jsonContent;
 			}
 
-			binaryContent_t binaryContent()
+			binaryContent_t binaryContent() const
 			{
 				return m_binaryContent;
+			}
+
+			uint32_t type() const
+			{
+				return m_type;
 			}
 
 		private:

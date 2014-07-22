@@ -16,43 +16,12 @@
 #include "TransportHeader.h"
 #include "MetaInformation.h"
 #include "Controller.h"
-
-static const std::string STREAM_DATA_PORT = "7411";
-static const char* PARAMS = "params";
-
+#include "Signal.h"
+#include "Types.h"
 
 
-struct ntpTimeStamp_t {
-	unsigned int seconds;
-	unsigned int fraction;
-};
-
-struct timeInfo_t {
-	void set(const Json::Value& params)
-	{
-		const Json::Value& stampNode = params["stamp"];
-		if(stampNode["type"]=="ntp") {
-			stamp.fraction = stampNode["fraction"].asUInt();
-			stamp.seconds = stampNode["seconds"].asUInt();
-		}
-		epoch = params["epoch"].asString();
-		scale = params["scale"].asString();
-	}
-
-	ntpTimeStamp_t stamp;
-	std::string scale;
-	std::string epoch;
-};
-
-struct signalProperties_t {
-	std::string signalReference;
-	timeInfo_t startTime;
-	Json::Value signalRate;
-	Json::Value data;
-};
-
-
-typedef std::unordered_map < unsigned int, signalProperties_t > signals_t;
+/// alle information goes in here
+typedef std::unordered_map < unsigned int, hbm::streaming::Signal > signals_t;
 
 
 int main(int argc, char* argv[])
@@ -93,71 +62,76 @@ int main(int argc, char* argv[])
 		unsigned int signalNumber = transportHeader.signalNumber();
 
 		if(type==hbm::streaming::TYPE_DATA) {
+			// read measured data
 			result = streamSocket.receiveComplete(recvBuffer, size);
-			//std::cout << result << " bytes of data from signal number= " << signalNumber << std::endl;
-
+			if(result!=size) {
+				break;
+			}
+			signalProperties[signalNumber].dataCb(recvBuffer, result);
 		} else if(type==hbm::streaming::TYPE_META){
 			hbm::streaming::MetaInformation metaInformation(streamSocket, size);
-			const Json::Value& content = metaInformation.jsonContent();
-			std::string method = content["method"].asString();
+			if(metaInformation.type()==hbm::streaming::METAINFORMATION_JSON) {
+				const Json::Value& content = metaInformation.jsonContent();
+				std::string method = content["method"].asString();
 
-			if(signalNumber==0) {
-				// stream related meta information
-				if(method=="apiVersion") {
-					apiVersion = content[PARAMS][0].asString();
-				} else if(method=="init") {
-					streamId = content[PARAMS]["streamId"].asString();
-					supported = content[PARAMS]["supported"];
-					const Json::Value& commandInterfaces = content[PARAMS]["commandInterfaces"];
-					for (Json::ValueConstIterator iter = commandInterfaces.begin(); iter!= commandInterfaces.end(); ++iter) {
-						const Json::Value& element = *iter;
-						std::cout << Json::StyledWriter().write(element) << std::endl;
+				if(signalNumber==0) {
+					// stream related meta information
+					if(method=="apiVersion") {
+						apiVersion = content[PARAMS][0].asString();
+					} else if(method=="init") {
+						streamId = content[PARAMS]["streamId"].asString();
+						supported = content[PARAMS]["supported"];
+						const Json::Value& commandInterfaces = content[PARAMS]["commandInterfaces"];
+						for (Json::ValueConstIterator iter = commandInterfaces.begin(); iter!= commandInterfaces.end(); ++iter) {
+							const Json::Value& element = *iter;
+							std::cout << Json::StyledWriter().write(element) << std::endl;
+						}
+					} else if(method=="time") {
+						startTime.set(content[PARAMS]);
+					} else if(method=="available") {
+						hbm::streaming::signalReferences_t signalReferences;
+						for (Json::ValueConstIterator iter = content[PARAMS].begin(); iter!= content[PARAMS].end(); ++iter) {
+							const Json::Value& element = *iter;
+							availables.insert(element.asString());
+							signalReferences.push_back(element.asString());
+						}
+						hbm::streaming::Controller controller(streamId, address.c_str(), port);
+						controller.subscribe(signalReferences);
+					} else if(method=="unavailable") {
+						hbm::streaming::signalReferences_t signalReferences;
+						for (Json::ValueConstIterator iter = content[PARAMS].begin(); iter!= content[PARAMS].end(); ++iter) {
+							const Json::Value& element = *iter;
+							availables.erase(element.asString());
+						}
+						hbm::streaming::Controller controller(streamId, address.c_str(), port);
+						controller.unsubscribe(signalReferences);
+					} else if(method=="alive") {
+						std::cout << "alive!" << std::endl;
+					} else if(method=="fill") {
+						std::cout << "fill=" << content["params"][0].asUInt() << std::endl;
+					} else {
+						std::cout << Json::StyledWriter().write(content) << std::endl;
 					}
-				} else if(method=="time") {
-					startTime.set(content[PARAMS]);
-				} else if(method=="available") {
-					hbm::streaming::signalReferences_t signalReferences;
-					for (Json::ValueConstIterator iter = content[PARAMS].begin(); iter!= content[PARAMS].end(); ++iter) {
-						const Json::Value& element = *iter;
-						availables.insert(element.asString());
-						signalReferences.push_back(element.asString());
-					}
-					hbm::streaming::Controller controller(streamId, address.c_str(), port);
-					controller.subscribe(signalReferences);
-				} else if(method=="unavailable") {
-					hbm::streaming::signalReferences_t signalReferences;
-					for (Json::ValueConstIterator iter = content[PARAMS].begin(); iter!= content[PARAMS].end(); ++iter) {
-						const Json::Value& element = *iter;
-						availables.erase(element.asString());
-					}
-					hbm::streaming::Controller controller(streamId, address.c_str(), port);
-					controller.unsubscribe(signalReferences);
-				} else if(method=="alive") {
-					std::cout << "alive!" << std::endl;
-				} else if(method=="fill") {
-					std::cout << "fill=" << content["params"][0].asUInt() << std::endl;
 				} else {
-					std::cout << Json::StyledWriter().write(content) << std::endl;
-				}
-			} else {
-				// signal related meta information
-				if(method=="subscribe") {
-					std::string signalReference = content[PARAMS][0].asString();
-					std::cout << "signal number= " << signalNumber << " with signal reference '" << signalReference << "' appeared" << std::endl;
-					signalProperties[signalNumber].signalReference = signalReference;
-				} else if(method=="unsubscribe") {
-					std::string signalReference = content[PARAMS][0].asString();
-					std::cout << "signal number= " << signalNumber << " with signal reference '" << signalReference << "' disappeared" << std::endl;
-					signalProperties.erase(signalNumber);
-				} else if(method=="time") {
-					signalProperties[signalNumber].startTime.set(content[PARAMS]);
-				} else if(method=="data") {
-					signalProperties[signalNumber].data = content[PARAMS];
-				} else if(method=="signalRate") {
-					signalProperties[signalNumber].signalRate = content[PARAMS];
-				} else {
-					std::cout << "signal number= " << signalNumber << " ";
-					std::cout << Json::StyledWriter().write(content) << std::endl;
+					// signal related meta information
+					if(method=="subscribe") {
+						std::string signalReference = content[PARAMS][0].asString();
+						signalProperties[signalNumber].signalReference = signalReference;
+						std::cout << "signal number= " << signalNumber << " with signal reference '" << signalReference << "' appeared" << std::endl;
+					} else if(method=="unsubscribe") {
+						std::string signalReference = content[PARAMS][0].asString();
+						signalProperties.erase(signalNumber);
+						std::cout << "signal number= " << signalNumber << " with signal reference '" << signalReference << "' disappeared" << std::endl;
+					} else if(method=="time") {
+						signalProperties[signalNumber].startTime.set(content[PARAMS]);
+					} else if(method=="data") {
+						signalProperties[signalNumber].data = content[PARAMS];
+					} else if(method=="signalRate") {
+						signalProperties[signalNumber].signalRate = content[PARAMS];
+					} else {
+						std::cout << "signal number= " << signalNumber << " ";
+						std::cout << Json::StyledWriter().write(content) << std::endl;
+					}
 				}
 			}
 		}

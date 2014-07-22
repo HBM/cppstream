@@ -142,8 +142,12 @@ int main(int argc, char* argv[])
 			} else {
 				// signal related meta information
 				if(method=="subscribe") {
-					signalProperties[signalNumber].signalReference = content[PARAMS][0].asString();
+					std::string signalReference = content[PARAMS][0].asString();
+					std::cout << "signal number= " << signalNumber << " with signal reference '" << signalReference << "' appeared" << std::endl;
+					signalProperties[signalNumber].signalReference = signalReference;
 				} else if(method=="unsubscribe") {
+					std::string signalReference = content[PARAMS][0].asString();
+					std::cout << "signal number= " << signalNumber << " with signal reference '" << signalReference << "' disappeared" << std::endl;
 					signalProperties.erase(signalNumber);
 				} else if(method=="time") {
 					signalProperties[signalNumber].startTime.set(content[PARAMS]);

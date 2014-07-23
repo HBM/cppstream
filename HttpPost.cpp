@@ -35,6 +35,7 @@ namespace hbm {
 			char recvBuffer[1024];
 			ssize_t retVal = socket.receiveComplete(recvBuffer, sizeof(recvBuffer));
 			if(retVal>0) {
+				/// body with response is to be found after the first empty line
 				const char NEEDLE[] = "\r\n\r\n";
 
 				char *pPos = strstr(recvBuffer, NEEDLE);

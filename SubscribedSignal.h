@@ -1,6 +1,12 @@
 #ifndef _HBM__STREAMING__SUBSCRIBEDSIGNAL
 #define _HBM__STREAMING__SUBSCRIBEDSIGNAL
 
+#ifdef _WIN32
+#include "jsoncpp/include/json/value.h"
+#else
+#include <jsoncpp/json/value.h>
+#endif
+
 #include "Types.h"
 
 namespace hbm {
@@ -10,12 +16,15 @@ namespace hbm {
 		public:
 			SubscribedSignal();
 
-			void dataCb(unsigned char* pData, size_t size);
+			void setSignalReference(const std::string& signalReference) {
+				m_signalReference = signalReference;
+			}
 
-			std::string signalReference;
-			timeInfo_t startTime;
-			Json::Value signalRate;
-			int dataFormat(const Json::Value& params);
+			int setDataFormat(const Json::Value& params);
+
+			void dataCb(unsigned char* pData, size_t size);
+			void metaCb(const std::string& method, const Json::Value& params);
+
 		private:
 
 			enum pattern_t {
@@ -35,6 +44,13 @@ namespace hbm {
 				DATATYPE_S64,
 				DATATYPE_REAL64,
 			};
+
+
+
+			std::string m_signalReference;
+			timeInfo_t m_startTime;
+			Json::Value m_signalRate;
+
 
 			pattern_t m_dataFormatPattern;
 			bool m_dataIsBigEndian;

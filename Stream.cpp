@@ -114,20 +114,14 @@ namespace hbm {
 							// signal related meta information
 							if(method=="subscribe") {
 								std::string signalReference = content[PARAMS][0].asString();
-								m_signalProperties[signalNumber].signalReference = signalReference;
+								m_signalProperties[signalNumber].setSignalReference(signalReference);
 								std::cout << "subscribed signal number= " << signalNumber << " with signal reference '" << signalReference << "'" << std::endl;
 							} else if(method=="unsubscribe") {
 								std::string signalReference = content[PARAMS][0].asString();
 								m_signalProperties.erase(signalNumber);
 								std::cout << "unsubscribed signal number= " << signalNumber << " with signal reference '" << signalReference << "'" << std::endl;
-							} else if(method=="time") {
-								m_signalProperties[signalNumber].startTime.set(content[PARAMS]);
-							} else if(method=="data") {
-								m_signalProperties[signalNumber].dataFormat(content[PARAMS]);
-							} else if(method=="signalRate") {
-								m_signalProperties[signalNumber].signalRate = content[PARAMS];
 							} else {
-								std::cout << "unhandled signal related meta information for signal " << signalNumber << ": " << Json::StyledWriter().write(content) << std::endl;
+								m_signalProperties[signalNumber].metaCb(method, content[PARAMS]);
 							}
 						}
 					}

@@ -9,6 +9,12 @@
 #include <endian.h>
 #endif
 
+#ifdef _WIN32
+#include "jsoncpp/include/json/writer.h"
+#else
+#include <jsoncpp/json/writer.h>
+#endif
+
 #include "SubscribedSignal.h"
 
 namespace hbm {
@@ -115,7 +121,21 @@ namespace hbm {
 			}
 		}
 
-		int SubscribedSignal::dataFormat(const Json::Value& params)
+		void SubscribedSignal::metaCb(const std::string& method, const Json::Value& params)
+		{
+			if(method=="time") {
+				m_startTime.set(params);
+			} else if(method=="data") {
+				setDataFormat(params);
+			} else if(method=="signalRate") {
+				m_signalRate = params;
+			} else {
+				std::cout << "unhandled signal related meta information '" << method << "' for signal " << m_signalReference << " with parameters: " << Json::StyledWriter().write(params) << std::endl;
+			}
+		}
+
+
+		int SubscribedSignal::setDataFormat(const Json::Value& params)
 		{
 			std::string dataFormatPattern = params["pattern"].asString();
 			if(dataFormatPattern=="V") {

@@ -7,6 +7,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 
 include_directories(.)
 set(SOURCES
+  Main.cpp
   Stream.cpp
   TransportHeader.cpp
   SocketNonblocking.h

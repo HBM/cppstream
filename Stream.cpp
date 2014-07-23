@@ -19,9 +19,10 @@
 #include "Signal.h"
 #include "Types.h"
 
+using namespace hbm::streaming;
 
 /// alle information goes in here.
-typedef std::unordered_map < unsigned int, hbm::streaming::Signal > signals_t;
+typedef std::unordered_map < unsigned int, Signal > signals_t;
 
 
 int main(int argc, char* argv[])
@@ -45,13 +46,18 @@ int main(int argc, char* argv[])
 
 	std::string apiVersion;
 	std::string streamId;
-	Json::Value supported;
+
 	timeInfo_t startTime;
 	signals_t signalProperties;
-	unsigned char recvBuffer[1024];
 
+
+	/// signal references of all available signals
 	std::set < std::string > availables;
-	hbm::streaming::TransportHeader transportHeader(streamSocket);
+
+
+	unsigned char dataRecvBuffer[1024];
+
+	TransportHeader transportHeader(streamSocket);
 	do {
 		result = transportHeader.receive();
 		if(result<0) {
@@ -61,16 +67,18 @@ int main(int argc, char* argv[])
 		size_t size = transportHeader.size();
 		unsigned int signalNumber = transportHeader.signalNumber();
 
-		if(type==hbm::streaming::TYPE_DATA) {
+		if(type==TYPE_DATA) {
 			// read measured data
-			result = streamSocket.receiveComplete(recvBuffer, size);
+			result = streamSocket.receiveComplete(dataRecvBuffer, size);
 			if(result!=size) {
 				break;
 			}
-			signalProperties[signalNumber].dataCb(recvBuffer, result);
-		} else if(type==hbm::streaming::TYPE_META){
-			hbm::streaming::MetaInformation metaInformation(streamSocket, size);
-			if(metaInformation.type()==hbm::streaming::METAINFORMATION_JSON) {
+			signalProperties[signalNumber].dataCb(dataRecvBuffer, result);
+		} else if(type==TYPE_META){
+			MetaInformation metaInformation(streamSocket, size);
+			if(metaInformation.type()!=METAINFORMATION_JSON) {
+				std::cout << "unhandled meta information of type " << metaInformation.type() << std::endl;
+			} else {
 				const Json::Value& content = metaInformation.jsonContent();
 				std::string method = content["method"].asString();
 
@@ -80,7 +88,13 @@ int main(int argc, char* argv[])
 						apiVersion = content[PARAMS][0].asString();
 					} else if(method=="init") {
 						streamId = content[PARAMS]["streamId"].asString();
-						supported = content[PARAMS]["supported"];
+						std::cout << "this is: " << streamId << std::endl;
+						const Json::Value& supported = content[PARAMS]["supported"];
+						for (Json::ValueConstIterator iter = supported.begin(); iter!= supported.end(); ++iter) {
+							const Json::Value& element = *iter;
+							std::cout << Json::StyledWriter().write(element) << std::endl;
+						}
+
 						const Json::Value& commandInterfaces = content[PARAMS]["commandInterfaces"];
 						for (Json::ValueConstIterator iter = commandInterfaces.begin(); iter!= commandInterfaces.end(); ++iter) {
 							const Json::Value& element = *iter;
@@ -89,42 +103,43 @@ int main(int argc, char* argv[])
 					} else if(method=="time") {
 						startTime.set(content[PARAMS]);
 					} else if(method=="available") {
-						hbm::streaming::signalReferences_t signalReferences;
+						// all signals that become available at any time are being subscribed
+						signalReferences_t signalReferences;
 						for (Json::ValueConstIterator iter = content[PARAMS].begin(); iter!= content[PARAMS].end(); ++iter) {
 							const Json::Value& element = *iter;
 							availables.insert(element.asString());
 							signalReferences.push_back(element.asString());
 						}
-						hbm::streaming::Controller controller(streamId, address.c_str(), port);
+						Controller controller(streamId, address.c_str(), port);
 						controller.subscribe(signalReferences);
 					} else if(method=="unavailable") {
-						hbm::streaming::signalReferences_t signalReferences;
+						signalReferences_t signalReferences;
 						for (Json::ValueConstIterator iter = content[PARAMS].begin(); iter!= content[PARAMS].end(); ++iter) {
 							const Json::Value& element = *iter;
 							availables.erase(element.asString());
 						}
-						hbm::streaming::Controller controller(streamId, address.c_str(), port);
+						Controller controller(streamId, address.c_str(), port);
 						controller.unsubscribe(signalReferences);
 					} else if(method=="alive") {
 						// ignore!
 					} else if(method=="fill") {
-						unsigned int fill = content["params"][0].asUInt();
+						unsigned int fill = content[PARAMS][0].asUInt();
 						if(fill>25) {
-							std::cout << "fill=" << content["params"][0].asUInt() << "%" << std::endl;
+							std::cout << "fill=" << content[PARAMS][0].asUInt() << "%" << std::endl;
 						}
 					} else {
-						std::cout << Json::StyledWriter().write(content) << std::endl;
+						std::cout << "unhandled stream related meta information: " << Json::StyledWriter().write(content) << std::endl;
 					}
 				} else {
 					// signal related meta information
 					if(method=="subscribe") {
 						std::string signalReference = content[PARAMS][0].asString();
 						signalProperties[signalNumber].signalReference = signalReference;
-						std::cout << "signal number= " << signalNumber << " with signal reference '" << signalReference << "' appeared" << std::endl;
+						std::cout << "subscribed signal number= " << signalNumber << " with signal reference '" << signalReference << "'" << std::endl;
 					} else if(method=="unsubscribe") {
 						std::string signalReference = content[PARAMS][0].asString();
 						signalProperties.erase(signalNumber);
-						std::cout << "signal number= " << signalNumber << " with signal reference '" << signalReference << "' disappeared" << std::endl;
+						std::cout << "unsubscribed signal number= " << signalNumber << " with signal reference '" << signalReference << "'" << std::endl;
 					} else if(method=="time") {
 						signalProperties[signalNumber].startTime.set(content[PARAMS]);
 					} else if(method=="data") {
@@ -132,8 +147,7 @@ int main(int argc, char* argv[])
 					} else if(method=="signalRate") {
 						signalProperties[signalNumber].signalRate = content[PARAMS];
 					} else {
-						std::cout << "signal number= " << signalNumber << " ";
-						std::cout << Json::StyledWriter().write(content) << std::endl;
+						std::cout << "unhandled signal related meta information for signal " << signalNumber << ": " << Json::StyledWriter().write(content) << std::endl;
 					}
 				}
 			}
@@ -142,3 +156,5 @@ int main(int argc, char* argv[])
 
 	return EXIT_SUCCESS;
 }
+
+

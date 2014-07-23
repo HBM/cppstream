@@ -16,6 +16,9 @@
 namespace hbm {
 	namespace streaming {
 
+		static const char ERROR[] = "error";
+		static const char JSONRPC[] = "jsonrpc";
+
 		unsigned int Controller::s_id = 0;
 
 		Controller::Controller(const std::string& streamId, const std::string& address, const std::string& port)
@@ -28,7 +31,7 @@ namespace hbm {
 		int Controller::subscribe(const signalReferences_t &signalReferences)
 		{
 			Json::Value content;
-			content["jsonrpc"] = "2.0";
+			content[JSONRPC] = "2.0";
 			content[METHOD] = m_streamId +".subscribe";
 			for(signalReferences_t::const_iterator iter = signalReferences.begin(); iter!=signalReferences.end(); ++iter) {
 				content[PARAMS].append(*iter);
@@ -37,14 +40,14 @@ namespace hbm {
 
 			std::string request = Json::FastWriter().write(content);
 
-			HttpPost httpPost(m_address, m_port, "rpc");
+			HttpPost httpPost(m_address, m_port, SERVERPATH);
 			std::string response = httpPost.execute(request);
 
 			Json::Value result;
 			if(Json::Reader().parse(response, result)==false) {
 				return -1;
 			}
-			if(result.isMember("error")) {
+			if(result.isMember(ERROR)) {
 				return -1;
 			}
 
@@ -54,7 +57,7 @@ namespace hbm {
 		int Controller::unsubscribe(const signalReferences_t &signalReferences)
 		{
 			Json::Value content;
-			content["jsonrpc"] = "2.0";
+			content[JSONRPC] = "2.0";
 			content[METHOD] = m_streamId +".unsubscribe";
 			for(signalReferences_t::const_iterator iter = signalReferences.begin(); iter!=signalReferences.end(); ++iter) {
 				content[PARAMS].append(*iter);
@@ -63,14 +66,14 @@ namespace hbm {
 
 			std::string request = Json::FastWriter().write(content);
 
-			HttpPost httpPost(m_address, m_port, "rpc");
+			HttpPost httpPost(m_address, m_port, SERVERPATH);
 			std::string response = httpPost.execute(request);
 
 			Json::Value result;
 			if(Json::Reader().parse(response, result)==false) {
 				return -1;
 			}
-			if(result.isMember("error")) {
+			if(result.isMember(ERROR)) {
 				return -1;
 			}
 

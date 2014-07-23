@@ -13,6 +13,7 @@ namespace hbm {
 		static const char PARAMS[] = "params";
 		static const char METHOD[] = "method";
 
+		static const char SERVERPATH[] = "rpc";
 
 
 		struct ntpTimeStamp_t {

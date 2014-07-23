@@ -70,6 +70,12 @@ namespace hbm
 		void stop();
 
 	private:
+		/// should not be copied
+		SocketNonblocking(const SocketNonblocking& op);
+
+		/// should not be assigned
+		SocketNonblocking& operator= (const SocketNonblocking& op);
+
 		int init();
 
 

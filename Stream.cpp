@@ -101,56 +101,62 @@ namespace hbm {
 			return 0;
 		}
 
-		void Stream::metaCb(const std::string& method, const Json::Value& params)
+		int Stream::metaCb(const std::string& method, const Json::Value& params)
 		{
-			// stream related meta information
-			if(method=="apiVersion") {
-				m_apiVersion = params[0].asString();
-			} else if(method=="init") {
-				m_streamId = params["streamId"].asString();
-				std::cout << "this is: " << m_streamId << std::endl;
-				const Json::Value& supported = params["supported"];
-				for (Json::ValueConstIterator iter = supported.begin(); iter!= supported.end(); ++iter) {
-					const Json::Value& element = *iter;
-					std::cout << Json::StyledWriter().write(element) << std::endl;
-				}
+			try {
+				// stream related meta information
+				if(method=="apiVersion") {
+					m_apiVersion = params[0].asString();
+				} else if(method=="init") {
+					m_streamId = params["streamId"].asString();
+					std::cout << "this is: " << m_streamId << std::endl;
+					const Json::Value& supported = params["supported"];
+					for (Json::ValueConstIterator iter = supported.begin(); iter!= supported.end(); ++iter) {
+						const Json::Value& element = *iter;
+						std::cout << Json::StyledWriter().write(element) << std::endl;
+					}
 
-				const Json::Value& commandInterfaces = params["commandInterfaces"];
-				for (Json::ValueConstIterator iter = commandInterfaces.begin(); iter!= commandInterfaces.end(); ++iter) {
-					const Json::Value& element = *iter;
-					std::cout << Json::StyledWriter().write(element) << std::endl;
+					const Json::Value& commandInterfaces = params["commandInterfaces"];
+					for (Json::ValueConstIterator iter = commandInterfaces.begin(); iter!= commandInterfaces.end(); ++iter) {
+						const Json::Value& element = *iter;
+						std::cout << Json::StyledWriter().write(element) << std::endl;
+					}
+				} else if(method=="time") {
+					m_initialTime.set(params);
+				} else if(method=="alive") {
+					// We do ignore this. We are using TCP keep alive in order to detect communication problems.
+				} else if(method=="fill") {
+					unsigned int fill = params[0].asUInt();
+					if(fill>25) {
+						std::cout << "ring buffer fill level is " << params[0].asUInt() << "%" << std::endl;
+					}
+				} else if(method=="available") {
+					std::string signalReference;
+					std::cout << "the following signal(s) became available: ";
+					for (Json::ValueConstIterator iter = params.begin(); iter!= params.end(); ++iter) {
+						const Json::Value& element = *iter;
+						signalReference = element.asString();
+						m_availableSignals.insert(signalReference);
+						std::cout << "'" << signalReference << "' ";
+					}
+					std::cout << std::endl;
+				} else if(method=="unavailable") {
+					std::string signalReference;
+					std::cout << "the following signal(s) became unavailable: ";
+					for (Json::ValueConstIterator iter = params.begin(); iter!= params.end(); ++iter) {
+						const Json::Value& element = *iter;
+						signalReference = element.asString();
+						m_availableSignals.erase(signalReference);
+						std::cout << "'" << signalReference << "' ";
+					}
+					std::cout << std::endl;
+				} else {
+					std::cout << "unhandled stream related meta information '" << method << "' with parameters: " << Json::StyledWriter().write(params) << std::endl;
 				}
-			} else if(method=="time") {
-				m_initialTime.set(params);
-			} else if(method=="alive") {
-				// We do ignore this. We are using TCP keep alive in order to detect communication problems.
-			} else if(method=="fill") {
-				unsigned int fill = params[0].asUInt();
-				if(fill>25) {
-					std::cout << "ring buffer fill level is " << params[0].asUInt() << "%" << std::endl;
-				}
-			} else if(method=="available") {
-				std::string signalReference;
-				std::cout << "the following signal(s) became available: ";
-				for (Json::ValueConstIterator iter = params.begin(); iter!= params.end(); ++iter) {
-					const Json::Value& element = *iter;
-					signalReference = element.asString();
-					m_availableSignals.insert(signalReference);
-					std::cout << "'" << signalReference << "' ";
-				}
-				std::cout << std::endl;
-			} else if(method=="unavailable") {
-				std::string signalReference;
-				std::cout << "the following signal(s) became unavailable: ";
-				for (Json::ValueConstIterator iter = params.begin(); iter!= params.end(); ++iter) {
-					const Json::Value& element = *iter;
-					signalReference = element.asString();
-					m_availableSignals.erase(signalReference);
-					std::cout << "'" << signalReference << "' ";
-				}
-				std::cout << std::endl;
-			} else {
-				std::cout << "unhandled stream related meta information '" << method << "' with parameters: " << Json::StyledWriter().write(params) << std::endl;
+				return 0;
+			} catch(const std::runtime_error& e) {
+				std::cerr << e.what();
+				return -1;
 			}
 		}
 	}

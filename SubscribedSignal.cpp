@@ -137,61 +137,52 @@ namespace hbm {
 
 		int SubscribedSignal::setDataFormat(const Json::Value& params)
 		{
-			std::string dataFormatPattern = params["pattern"].asString();
-			if(dataFormatPattern=="V") {
-				m_dataFormatPattern = PATTERN_V;
-			} else if(dataFormatPattern=="TV"){
-				m_dataFormatPattern = PATTERN_TV;
-			} else if(dataFormatPattern=="TB"){
-				m_dataFormatPattern = PATTERN_TB;
-			} else {
+			try {
+				std::string dataFormatPattern = params["pattern"].asString();
+				if(dataFormatPattern=="V") {
+					m_dataFormatPattern = PATTERN_V;
+				} else if(dataFormatPattern=="TV"){
+					m_dataFormatPattern = PATTERN_TV;
+				} else if(dataFormatPattern=="TB"){
+					m_dataFormatPattern = PATTERN_TB;
+				} else {
+					return -1;
+				}
+
+				if(params["endian"].asString()=="big") {
+					m_dataIsBigEndian = true;
+				} else {
+					m_dataIsBigEndian = false;
+				}
+				std::string dataValueType = params["valueType"].asString();
+				if(dataValueType=="real32") {
+					m_dataValueType = DATATYPE_REAL32;
+					m_dataValueSize = 4;
+				} else if(dataValueType=="u32") {
+					m_dataValueType = DATATYPE_U32;
+					m_dataValueSize = 4;
+				} else if(dataValueType=="s32") {
+					m_dataValueType = DATATYPE_S32;
+					m_dataValueSize = 4;
+				} else if(dataValueType=="real64") {
+					m_dataValueType = DATATYPE_REAL64;
+					m_dataValueSize = 8;
+				} else if(dataValueType=="u64") {
+					m_dataValueType = DATATYPE_U64;
+					m_dataValueSize = 8;
+				} else if(dataValueType=="s64") {
+					m_dataValueType = DATATYPE_S64;
+					m_dataValueSize = 8;
+				}
+
+
+				m_dataTimeType = params["time"]["type"].asString();
+				m_dataTimeSize = params["time"]["size"].asUInt();
+				return 0;
+			} catch(const std::runtime_error& e) {
+				std::cerr << e.what();
 				return -1;
 			}
-
-			if(params["endian"].asString()=="big") {
-				m_dataIsBigEndian = true;
-			} else {
-				m_dataIsBigEndian = false;
-			}
-			std::string dataValueType = params["valueType"].asString();
-			if(dataValueType=="real32") {
-				m_dataValueType = DATATYPE_REAL32;
-			} else if(dataValueType=="u32") {
-				m_dataValueType = DATATYPE_U32;
-			} else if(dataValueType=="s32") {
-				m_dataValueType = DATATYPE_S32;
-			} else if(dataValueType=="real64") {
-				m_dataValueType = DATATYPE_REAL64;
-			} else if(dataValueType=="u64") {
-				m_dataValueType = DATATYPE_U64;
-			} else if(dataValueType=="s64") {
-				m_dataValueType = DATATYPE_S64;
-			}
-
-			if(
-				 (m_dataValueType==DATATYPE_REAL32) ||
-				 (m_dataValueType==DATATYPE_U32) ||
-				 (m_dataValueType==DATATYPE_S32)
-				 ) {
-				m_dataValueSize = 4;
-			} else if(
-								(m_dataValueType==DATATYPE_REAL64) ||
-								(m_dataValueType==DATATYPE_U64) ||
-								(m_dataValueType==DATATYPE_S64)
-								) {
-				m_dataValueSize = 8;
-			}
-
-
-
-
-
-
-
-
-			m_dataTimeType = params["time"]["type"].asString();
-			m_dataTimeSize = params["time"]["size"].asUInt();
-			return 0;
 		}
 	}
 }

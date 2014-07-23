@@ -2,6 +2,7 @@
 #include <set>
 #include <iostream>
 #include <unordered_map>
+#include <stdexcept>
 
 #ifdef _WIN32
 #include "jsoncpp/include/json/reader.h"

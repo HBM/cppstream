@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <iostream>
+#include <stdexcept>
 
 #ifdef _WIN32
 #include <cstdlib>

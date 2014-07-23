@@ -3,7 +3,7 @@
 int main(int argc, char* argv[])
 {
 	if((argc<2) || (std::string(argv[1])=="-h") ) {
-			std::cout << "syntax: " << argv[0] << " <stream source address>" << std::endl;
+			std::cout << "syntax: " << argv[0] << " <stream server address>" << std::endl;
 			return EXIT_SUCCESS;
 	}
 

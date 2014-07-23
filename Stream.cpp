@@ -63,6 +63,7 @@ namespace hbm {
 						std::string method = content[METHOD].asString();
 
 						if(signalNumber==0) {
+							// stream related meta information
 							metaCb(method, content[PARAMS]);
 
 							// additional handling of meta information goes in here: <=======================

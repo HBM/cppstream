@@ -7,8 +7,7 @@ int main(int argc, char* argv[])
 			return EXIT_SUCCESS;
 	}
 
-	std::string address = argv[1];
-	hbm::streaming::Stream stream(address);
+	hbm::streaming::Stream stream(argv[1]);
 
 	// the control port might differ when communication runs via a router (CX27)
 	std::string controlPort = "http";

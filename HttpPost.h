@@ -1,5 +1,5 @@
-#ifndef HTTPPOST_H
-#define HTTPPOST_H
+#ifndef _HBM__STREMAING__HTTPPOST_H
+#define _HBM__STREMAING__HTTPPOST_H
 
 #include <string>
 
@@ -20,5 +20,4 @@ namespace hbm {
 		};
 	}
 }
-
-#endif // HTTPPOST_H
+#endif // _HBM__STREMAING__HTTPPOST_H

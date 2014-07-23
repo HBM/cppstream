@@ -14,7 +14,7 @@ set(SOURCES
   MetaInformation.cpp
   Controller.cpp
   HttpPost.cpp
-  Signal.cpp
+  SubscribedSignal.cpp
   platform/linux/SocketNonblocking.cpp
   BufferedReader.cpp
 )

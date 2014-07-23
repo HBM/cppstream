@@ -1,14 +1,14 @@
-#ifndef _HBM__STREAMING__SIGNAL
-#define _HBM__STREAMING__SIGNAL
+#ifndef _HBM__STREAMING__SUBSCRIBEDSIGNAL
+#define _HBM__STREAMING__SUBSCRIBEDSIGNAL
 
 #include "Types.h"
 
 namespace hbm {
 	namespace streaming {
 		/// \warning for windows, this class works on little endian machines only. this is because of endian issues with data types wider than 4 byte.
-		class Signal {
+		class SubscribedSignal {
 		public:
-			Signal();
+			SubscribedSignal();
 
 			void dataCb(unsigned char* pData, size_t size);
 

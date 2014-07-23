@@ -6,14 +6,14 @@
 #include <unordered_map>
 
 #include "Types.h"
-#include "Signal.h"
+#include "SubscribedSignal.h"
 
 namespace hbm {
 	namespace streaming {
 		typedef std::set < std::string > availableSignals_t;
 
 		/// signal number is the key
-		typedef std::unordered_map < unsigned int, Signal > subscribedSignals_t;
+		typedef std::unordered_map < unsigned int, SubscribedSignal > subscribedSignals_t;
 
 		class Stream {
 		public:

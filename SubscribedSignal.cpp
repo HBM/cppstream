@@ -9,7 +9,7 @@
 #include <endian.h>
 #endif
 
-#include "Signal.h"
+#include "SubscribedSignal.h"
 
 namespace hbm {
 	namespace streaming {
@@ -17,11 +17,11 @@ namespace hbm {
 		// we use this as target for all values. Otherwise the compiler might optimize away a lot of functionality!
 		static double sum = 0;
 
-		Signal::Signal()
+		SubscribedSignal::SubscribedSignal()
 		{
 		}
 
-		void Signal::dataCb(unsigned char* pData, size_t size)
+		void SubscribedSignal::dataCb(unsigned char* pData, size_t size)
 		{
 			switch(m_dataFormatPattern) {
 				case PATTERN_V:
@@ -115,7 +115,7 @@ namespace hbm {
 			}
 		}
 
-		int Signal::dataFormat(const Json::Value& params)
+		int SubscribedSignal::dataFormat(const Json::Value& params)
 		{
 			std::string dataFormatPattern = params["pattern"].asString();
 			if(dataFormatPattern=="V") {

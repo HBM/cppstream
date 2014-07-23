@@ -15,7 +15,7 @@
 #include "TransportHeader.h"
 #include "MetaInformation.h"
 #include "Controller.h"
-#include "Signal.h"
+#include "SubscribedSignal.h"
 #include "Types.h"
 #include "Stream.h"
 

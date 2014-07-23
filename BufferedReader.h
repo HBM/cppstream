@@ -41,6 +41,9 @@ namespace hbm {
 		ssize_t recv(int sockfd, void *buf, size_t len, int flags);
 
 	private:
+		BufferedReader(const BufferedReader& op);
+		BufferedReader& operator=(const BufferedReader& op);
+
 		unsigned char m_buffer[65536*4];
 		size_t m_fillLevel;
 		size_t m_alreadyRead;

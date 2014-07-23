@@ -8,15 +8,19 @@
 namespace hbm {
 	namespace streaming {
 		enum type_t {
+			TYPE_UNKNOWN = 0,
 			TYPE_DATA = 1,
 			TYPE_META = 2
 		};
-		/// at least 32 Bit. May have 32 additional Bit extended length information.
+
+		/// reads and interprets the header of the transport layer
 		class TransportHeader {
 		public:
 			TransportHeader(SocketNonblocking& socket);
 
-			int receive();
+			/// at least 32 Bit are being read. May have 32 additional Bit extended length information.
+			/// \return the number of bytes read or error
+			ssize_t receive();
 
 			size_t size() const
 			{
@@ -28,6 +32,7 @@ namespace hbm {
 				return m_type;
 			}
 
+			/// \return 0 tells, that this is stream related.
 			unsigned int signalNumber() const
 			{
 				return m_signalNumber;

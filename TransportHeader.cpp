@@ -12,17 +12,20 @@ namespace hbm {
 	namespace streaming {
 		TransportHeader::TransportHeader(SocketNonblocking& socket)
 			: m_socket(socket)
+			, m_dataByteCount(0)
+			, m_signalNumber(0)
+			, m_type(TYPE_UNKNOWN)
 		{
 		}
 
-		int TransportHeader::receive()
+		ssize_t TransportHeader::receive()
 		{
-			//big endian:
+			//header is in big endian:
 			// 12 bit signal info | 20 bit signal number
 
-			// signal info
+			// details of signal info:
 			// 2 bits reserved | 2 bits signal type | 8 bits size
-
+			size_t bytesRead;
 
 			uint32_t headerBig;
 			uint32_t header;
@@ -31,6 +34,7 @@ namespace hbm {
 			if(retVal!=sizeof(headerBig)) {
 				return -1;
 			}
+			bytesRead = sizeof(headerBig);
 
 			header = ntohl(headerBig);
 			m_signalNumber =  header & 0x000fffff;
@@ -42,11 +46,12 @@ namespace hbm {
 				if(retVal!=sizeof(additionalSizeBig)) {
 					return -1;
 				}
+				bytesRead += sizeof(additionalSizeBig);
 
 				m_dataByteCount = ntohl(additionalSizeBig);
 			}
 
-			return 0;
+			return bytesRead;
 		}
 	}
 }

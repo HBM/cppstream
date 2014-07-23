@@ -12,6 +12,10 @@ namespace hbm {
 	namespace streaming {
 
 		MetaInformation::MetaInformation(SocketNonblocking &socket, size_t size)
+			: m_type(0)
+			, m_jsonContent()
+			, m_binaryContent()
+
 		{
 			uint32_t typeBig;
 			socket.receiveComplete(&typeBig, sizeof(typeBig));

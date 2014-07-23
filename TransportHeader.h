@@ -18,7 +18,7 @@ namespace hbm {
 		public:
 			TransportHeader(SocketNonblocking& socket);
 
-			/// at least 32 Bit are being read. May have 32 additional Bit extended length information.
+			/// at least 32 Bit are being read. Maybe 32 additional bit extended length information are being read.
 			/// \return the number of bytes read or error
 			ssize_t receive();
 

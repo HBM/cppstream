@@ -86,7 +86,6 @@ int hbm::SocketNonblocking::connect(const std::string &address, const std::strin
 	// success if errno equals EINPROGRESS
 	if((err==-1) && (errno == EINPROGRESS))
 	{
-
 		struct pollfd pfd;
 		pfd.fd = m_fd;
 		pfd.events = POLLOUT;
@@ -138,8 +137,10 @@ ssize_t hbm::SocketNonblocking::receiveComplete(void* pBlock, size_t size)
 					nfds = poll(&pfd, 1, -1);
 				} while((nfds==-1) && (errno==EINTR));
 				if(nfds!=1) {
-					return 0;
+					return -1;
 				}
+			} else {
+				return -1;
 			}
 		}
 	}

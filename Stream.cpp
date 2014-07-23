@@ -63,52 +63,33 @@ namespace hbm {
 						std::string method = content[METHOD].asString();
 
 						if(signalNumber==0) {
-							// stream related meta information
-							if(method=="apiVersion") {
-								m_apiVersion = content[PARAMS][0].asString();
-							} else if(method=="init") {
-								m_streamId = content[PARAMS]["streamId"].asString();
-								std::cout << "this is: " << m_streamId << std::endl;
-								const Json::Value& supported = content[PARAMS]["supported"];
-								for (Json::ValueConstIterator iter = supported.begin(); iter!= supported.end(); ++iter) {
-									const Json::Value& element = *iter;
-									std::cout << Json::StyledWriter().write(element) << std::endl;
-								}
-
-								const Json::Value& commandInterfaces = content[PARAMS]["commandInterfaces"];
-								for (Json::ValueConstIterator iter = commandInterfaces.begin(); iter!= commandInterfaces.end(); ++iter) {
-									const Json::Value& element = *iter;
-									std::cout << Json::StyledWriter().write(element) << std::endl;
-								}
-							} else if(method=="time") {
-								m_initialTime.set(content[PARAMS]);
-							} else if(method=="available") {
+							if(method=="available") {
 								// all signals that become available at any time are being subscribed
+								std::string signalReference;
 								signalReferences_t signalReferences;
+								std::cout << "the following signal(s) became available: ";
 								for (Json::ValueConstIterator iter = content[PARAMS].begin(); iter!= content[PARAMS].end(); ++iter) {
 									const Json::Value& element = *iter;
-									m_availableSignals.insert(element.asString());
-									signalReferences.push_back(element.asString());
+									signalReference = element.asString();
+									m_availableSignals.insert(signalReference);
+									signalReferences.push_back(signalReference);
+									std::cout << "'" << signalReference << "' ";
 								}
+								std::cout << std::endl;
 								Controller controller(m_streamId, m_address.c_str(), controlPort);
 								controller.subscribe(signalReferences);
 							} else if(method=="unavailable") {
-								signalReferences_t signalReferences;
+								std::string signalReference;
+								std::cout << "the following signal(s) became unavailable: ";
 								for (Json::ValueConstIterator iter = content[PARAMS].begin(); iter!= content[PARAMS].end(); ++iter) {
 									const Json::Value& element = *iter;
-									m_availableSignals.erase(element.asString());
+									signalReference = element.asString();
+									m_availableSignals.erase(signalReference);
+									std::cout << "'" << signalReference << "' ";
 								}
-								Controller controller(m_streamId, m_address.c_str(), controlPort);
-								controller.unsubscribe(signalReferences);
-							} else if(method=="alive") {
-								// ignore!
-							} else if(method=="fill") {
-								unsigned int fill = content[PARAMS][0].asUInt();
-								if(fill>25) {
-									std::cout << "ring buffer fill level is " << content[PARAMS][0].asUInt() << "%" << std::endl;
-								}
-							} else {
-								std::cout << "unhandled stream related meta information: " << Json::StyledWriter().write(content) << std::endl;
+								std::cout << std::endl;
+							} else  {
+								metaCb(method, content[PARAMS]);
 							}
 						} else {
 							// signal related meta information
@@ -129,6 +110,39 @@ namespace hbm {
 			} while(true);
 
 			return 0;
+		}
+
+		void Stream::metaCb(const std::string& method, const Json::Value& params)
+		{
+			// stream related meta information
+			if(method=="apiVersion") {
+				m_apiVersion = params[0].asString();
+			} else if(method=="init") {
+				m_streamId = params["streamId"].asString();
+				std::cout << "this is: " << m_streamId << std::endl;
+				const Json::Value& supported = params["supported"];
+				for (Json::ValueConstIterator iter = supported.begin(); iter!= supported.end(); ++iter) {
+					const Json::Value& element = *iter;
+					std::cout << Json::StyledWriter().write(element) << std::endl;
+				}
+
+				const Json::Value& commandInterfaces = params["commandInterfaces"];
+				for (Json::ValueConstIterator iter = commandInterfaces.begin(); iter!= commandInterfaces.end(); ++iter) {
+					const Json::Value& element = *iter;
+					std::cout << Json::StyledWriter().write(element) << std::endl;
+				}
+			} else if(method=="time") {
+				m_initialTime.set(params);
+			} else if(method=="alive") {
+				// we do ignore this.
+			} else if(method=="fill") {
+				unsigned int fill = params[0].asUInt();
+				if(fill>25) {
+					std::cout << "ring buffer fill level is " << params[0].asUInt() << "%" << std::endl;
+				}
+			} else {
+				std::cout << "unhandled stream related meta information '" << method << "' with parameters: " << Json::StyledWriter().write(params) << std::endl;
+			}
 		}
 	}
 }

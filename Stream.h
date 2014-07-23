@@ -5,6 +5,12 @@
 #include <set>
 #include <unordered_map>
 
+#ifdef _WIN32
+#include "jsoncpp/include/json/value.h"
+#else
+#include <jsoncpp/json/value.h>
+#endif
+
 #include "Types.h"
 #include "SubscribedSignal.h"
 
@@ -23,6 +29,9 @@ namespace hbm {
 			int execute(const std::string& controlPort);
 
 		private:
+
+			void metaCb(const std::string& method, const Json::Value& params);
+
 			std::string m_address;
 
 			std::string m_apiVersion;

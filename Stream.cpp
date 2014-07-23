@@ -21,8 +21,10 @@
 
 using namespace hbm::streaming;
 
-/// alle information goes in here.
-typedef std::unordered_map < unsigned int, Signal > signals_t;
+typedef std::set < std::string > availableSignals_t;
+
+/// signal number is the key
+typedef std::unordered_map < unsigned int, Signal > subscribedSignals_t;
 
 
 int main(int argc, char* argv[])
@@ -32,10 +34,10 @@ int main(int argc, char* argv[])
 			return EXIT_SUCCESS;
 	}
 
-	std::string port = "http";
+	std::string controlPort = "http";
 	std::string address = argv[1];
 	if(argc>2) {
-		port = argv[2];
+		controlPort = argv[2];
 	}
 
 	hbm::SocketNonblocking streamSocket;
@@ -47,12 +49,15 @@ int main(int argc, char* argv[])
 	std::string apiVersion;
 	std::string streamId;
 
-	timeInfo_t startTime;
-	signals_t signalProperties;
 
+	/// initial time received when opening the stream
+	timeInfo_t initialTime;
 
 	/// signal references of all available signals
-	std::set < std::string > availables;
+	availableSignals_t availableSignals;
+
+	/// information about all subscribed signals
+	subscribedSignals_t signalProperties;
 
 
 	unsigned char dataRecvBuffer[1024];
@@ -101,24 +106,24 @@ int main(int argc, char* argv[])
 							std::cout << Json::StyledWriter().write(element) << std::endl;
 						}
 					} else if(method=="time") {
-						startTime.set(content[PARAMS]);
+						initialTime.set(content[PARAMS]);
 					} else if(method=="available") {
 						// all signals that become available at any time are being subscribed
 						signalReferences_t signalReferences;
 						for (Json::ValueConstIterator iter = content[PARAMS].begin(); iter!= content[PARAMS].end(); ++iter) {
 							const Json::Value& element = *iter;
-							availables.insert(element.asString());
+							availableSignals.insert(element.asString());
 							signalReferences.push_back(element.asString());
 						}
-						Controller controller(streamId, address.c_str(), port);
+						Controller controller(streamId, address.c_str(), controlPort);
 						controller.subscribe(signalReferences);
 					} else if(method=="unavailable") {
 						signalReferences_t signalReferences;
 						for (Json::ValueConstIterator iter = content[PARAMS].begin(); iter!= content[PARAMS].end(); ++iter) {
 							const Json::Value& element = *iter;
-							availables.erase(element.asString());
+							availableSignals.erase(element.asString());
 						}
-						Controller controller(streamId, address.c_str(), port);
+						Controller controller(streamId, address.c_str(), controlPort);
 						controller.unsubscribe(signalReferences);
 					} else if(method=="alive") {
 						// ignore!

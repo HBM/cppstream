@@ -1,5 +1,5 @@
-#ifndef CONTROLLER_H
-#define CONTROLLER_H
+#ifndef _HBM__STREMAING__CONTROLLER_H
+#define _HBM__STREMAING__CONTROLLER_H
 
 #include <string>
 #include <vector>
@@ -7,6 +7,7 @@
 namespace hbm {
 	namespace streaming {
 		typedef std::vector < std::string > signalReferences_t;
+		/// used to send commands to the streaming control port.
 		class Controller
 		{
 		public:
@@ -25,6 +26,4 @@ namespace hbm {
 		};
 	}
 }
-
-
-#endif // CONTROLLER_H
+#endif // _HBM__STREMAING__CONTROLLER_H

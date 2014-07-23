@@ -17,7 +17,7 @@ namespace hbm {
 			, m_binaryContent()
 
 		{
-			uint32_t typeBig;
+			int32_t typeBig;
 			socket.receiveComplete(&typeBig, sizeof(typeBig));
 
 			m_type = ntohl(typeBig);

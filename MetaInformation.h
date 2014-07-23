@@ -33,13 +33,13 @@ namespace hbm {
 				return m_binaryContent;
 			}
 
-			uint32_t type() const
+			int type() const
 			{
 				return m_type;
 			}
 
 		private:
-			uint32_t m_type;
+			int m_type;
 			Json::Value m_jsonContent;
 			binaryContent_t m_binaryContent;
 		};

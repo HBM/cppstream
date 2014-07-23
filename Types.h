@@ -10,7 +10,8 @@
 namespace hbm {
 	namespace streaming {
 		static const std::string STREAM_DATA_PORT = "7411";
-		static const char* PARAMS = "params";
+		static const char PARAMS[] = "params";
+		static const char METHOD[] = "method";
 
 
 

@@ -11,6 +11,7 @@
 
 #include "Controller.h"
 #include "HttpPost.h"
+#include "Types.h"
 
 namespace hbm {
 	namespace streaming {
@@ -28,9 +29,9 @@ namespace hbm {
 		{
 			Json::Value content;
 			content["jsonrpc"] = "2.0";
-			content["method"] = m_streamId +".subscribe";
+			content[METHOD] = m_streamId +".subscribe";
 			for(signalReferences_t::const_iterator iter = signalReferences.begin(); iter!=signalReferences.end(); ++iter) {
-				content["params"].append(*iter);
+				content[PARAMS].append(*iter);
 			}
 			content["id"] = ++s_id;
 
@@ -54,9 +55,9 @@ namespace hbm {
 		{
 			Json::Value content;
 			content["jsonrpc"] = "2.0";
-			content["method"] = m_streamId +".unsubscribe";
+			content[METHOD] = m_streamId +".unsubscribe";
 			for(signalReferences_t::const_iterator iter = signalReferences.begin(); iter!=signalReferences.end(); ++iter) {
-				content["params"].append(*iter);
+				content[PARAMS].append(*iter);
 			}
 			content["id"] = ++s_id;
 

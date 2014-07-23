@@ -60,7 +60,7 @@ namespace hbm {
 						std::cout << "unhandled meta information of type " << metaInformation.type() << std::endl;
 					} else {
 						const Json::Value& content = metaInformation.jsonContent();
-						std::string method = content["method"].asString();
+						std::string method = content[METHOD].asString();
 
 						if(signalNumber==0) {
 							// stream related meta information

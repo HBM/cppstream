@@ -105,7 +105,7 @@ namespace hbm {
 							} else if(method=="fill") {
 								unsigned int fill = content[PARAMS][0].asUInt();
 								if(fill>25) {
-									std::cout << "fill=" << content[PARAMS][0].asUInt() << "%" << std::endl;
+									std::cout << "ring buffer fill level is " << content[PARAMS][0].asUInt() << "%" << std::endl;
 								}
 							} else {
 								std::cout << "unhandled stream related meta information: " << Json::StyledWriter().write(content) << std::endl;

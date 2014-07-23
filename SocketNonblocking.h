@@ -53,6 +53,7 @@ namespace hbm
 		/// might return with less bytes the requested
 		ssize_t receive(void* pBlock, size_t len);
 
+		/// might return with less bytes the requested if connection is being closed before completion
 		ssize_t receiveComplete(void* pBlock, size_t len);
 
 		/// poll this fd to see whether there is something to be received or out of order;
@@ -77,7 +78,6 @@ namespace hbm
 		SocketNonblocking& operator= (const SocketNonblocking& op);
 
 		int init();
-
 
 		int m_fd;
 #ifdef _WIN32

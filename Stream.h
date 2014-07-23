@@ -30,6 +30,7 @@ namespace hbm {
 
 		private:
 
+			/// handle stream related meta information
 			void metaCb(const std::string& method, const Json::Value& params);
 
 			std::string m_address;

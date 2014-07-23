@@ -48,7 +48,7 @@ namespace hbm {
 				unsigned int signalNumber = transportHeader.signalNumber();
 
 				if(type==TYPE_DATA) {
-					// read measured data
+					// read measured data. This happens really often! Be sure to be as efficient as possible here.
 					result = streamSocket.receiveComplete(dataRecvBuffer, size);
 					if(result!=size) {
 						break;
@@ -63,34 +63,22 @@ namespace hbm {
 						std::string method = content[METHOD].asString();
 
 						if(signalNumber==0) {
+							metaCb(method, content[PARAMS]);
+
+							// additional handling of meta information goes in here: <=======================
+
+
+							// all signals that become available at any time are being subscribed
 							if(method=="available") {
-								// all signals that become available at any time are being subscribed
-								std::string signalReference;
 								signalReferences_t signalReferences;
-								std::cout << "the following signal(s) became available: ";
 								for (Json::ValueConstIterator iter = content[PARAMS].begin(); iter!= content[PARAMS].end(); ++iter) {
 									const Json::Value& element = *iter;
-									signalReference = element.asString();
-									m_availableSignals.insert(signalReference);
-									signalReferences.push_back(signalReference);
-									std::cout << "'" << signalReference << "' ";
+									signalReferences.push_back(element.asString());
 								}
-								std::cout << std::endl;
 								Controller controller(m_streamId, m_address.c_str(), controlPort);
 								controller.subscribe(signalReferences);
-							} else if(method=="unavailable") {
-								std::string signalReference;
-								std::cout << "the following signal(s) became unavailable: ";
-								for (Json::ValueConstIterator iter = content[PARAMS].begin(); iter!= content[PARAMS].end(); ++iter) {
-									const Json::Value& element = *iter;
-									signalReference = element.asString();
-									m_availableSignals.erase(signalReference);
-									std::cout << "'" << signalReference << "' ";
-								}
-								std::cout << std::endl;
-							} else  {
-								metaCb(method, content[PARAMS]);
 							}
+							// =======================>
 						} else {
 							// signal related meta information
 							if(method=="subscribe") {
@@ -134,12 +122,32 @@ namespace hbm {
 			} else if(method=="time") {
 				m_initialTime.set(params);
 			} else if(method=="alive") {
-				// we do ignore this.
+				// We do ignore this. We are using TCP keep alive in order to detect communication problems.
 			} else if(method=="fill") {
 				unsigned int fill = params[0].asUInt();
 				if(fill>25) {
 					std::cout << "ring buffer fill level is " << params[0].asUInt() << "%" << std::endl;
 				}
+			} else if(method=="available") {
+				std::string signalReference;
+				std::cout << "the following signal(s) became available: ";
+				for (Json::ValueConstIterator iter = params.begin(); iter!= params.end(); ++iter) {
+					const Json::Value& element = *iter;
+					signalReference = element.asString();
+					m_availableSignals.insert(signalReference);
+					std::cout << "'" << signalReference << "' ";
+				}
+				std::cout << std::endl;
+			} else if(method=="unavailable") {
+				std::string signalReference;
+				std::cout << "the following signal(s) became unavailable: ";
+				for (Json::ValueConstIterator iter = params.begin(); iter!= params.end(); ++iter) {
+					const Json::Value& element = *iter;
+					signalReference = element.asString();
+					m_availableSignals.erase(signalReference);
+					std::cout << "'" << signalReference << "' ";
+				}
+				std::cout << std::endl;
 			} else {
 				std::cout << "unhandled stream related meta information '" << method << "' with parameters: " << Json::StyledWriter().write(params) << std::endl;
 			}

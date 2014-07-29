@@ -1,6 +1,7 @@
 #ifndef _HBM__STREAMING__TYPES
 #define _HBM__STREAMING__TYPES
 
+#include <vector>
 #ifdef _WIN32
 #include "jsoncpp/include/json/reader.h"
 #else
@@ -9,6 +10,8 @@
 
 namespace hbm {
 	namespace streaming {
+		typedef std::vector < std::string > signalReferences_t;
+
 		static const std::string STREAM_DATA_PORT = "7411";
 		static const char PARAMS[] = "params";
 		static const char METHOD[] = "method";

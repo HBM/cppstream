@@ -4,9 +4,10 @@
 #include <string>
 #include <vector>
 
+#include <Types.h>
+
 namespace hbm {
 	namespace streaming {
-		typedef std::vector < std::string > signalReferences_t;
 		/// used to send commands to the streaming control port.
 		class Controller
 		{

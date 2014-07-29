@@ -28,96 +28,111 @@ namespace hbm {
 		{
 		}
 
+		void SubscribedSignal::interpreteValues(unsigned char *pData, size_t size)
+		{
+			if(m_dataIsBigEndian) {
+				if(m_dataValueType==DATATYPE_REAL32) {
+					uint32_t* pPos = reinterpret_cast < uint32_t* > (pData);
+					uint32_t targetUint32;
+					float* pTarget;
+					size_t count = size >> 2;
+					for(size_t i=0; i<count; ++i) {
+						targetUint32 = ntohl(*pPos);
+						// this is it!
+						pTarget = reinterpret_cast < float* >(&targetUint32);
+						sum += *pTarget;
+						++pPos;
+					}
+				} else if(m_dataValueType==DATATYPE_REAL64) {
+					uint64_t* pPos = reinterpret_cast < uint64_t* > (pData);
+					uint64_t targetUint64;
+					double* pTarget;
+					size_t count = size >> 4;
+					for(size_t i=0; i<count; ++i) {
+#ifdef _WIN32
+						// this will create a mess on big endian machines
+						targetUint64 = _byteswap_uint64(*pPos);
+#else
+						targetUint64 = be64toh(*pPos);
+#endif
+						// this is it!
+						pTarget = reinterpret_cast < double* >(&targetUint64);
+						sum += *pTarget;
+						++pPos;
+					}
+				} else if(m_dataValueType==DATATYPE_U32) {
+					uint32_t* pPos = reinterpret_cast < uint32_t* > (pData);
+					uint32_t target;
+					size_t count = size >> 2;
+					for(size_t i=0; i<count; ++i) {
+						// this is it!
+						target = ntohl(*pPos);
+						sum += target;
+						++pPos;
+					}
+				} else if(m_dataValueType==DATATYPE_S32) {
+					int32_t* pPos = reinterpret_cast < int32_t* > (pData);
+					int32_t target;
+					size_t count = size >> 2;
+					for(size_t i=0; i<count; ++i) {
+						// this is it!
+						target = ntohl(*pPos);
+						sum += target;
+						++pPos;
+					}
+				} else if(m_dataValueType==DATATYPE_U64) {
+					uint64_t* pPos = reinterpret_cast < uint64_t* > (pData);
+					uint64_t target;
+					size_t count = size >> 4;
+					for(size_t i=0; i<count; ++i) {
+#ifdef _WIN32
+						// this will create a mess on big endian machines
+						target = _byteswap_uint64(*pPos);
+#else
+						target = be64toh(*pPos);
+#endif
+						sum += target;
+						++pPos;
+					}
+				} else if(m_dataValueType==DATATYPE_S64) {
+					int64_t* pPos = reinterpret_cast < int64_t* > (pData);
+					int64_t target;
+					size_t count = size >> 4;
+					for(size_t i=0; i<count; ++i) {
+#ifdef _WIN32
+						// this will create a mess on big endian machines
+						target = _byteswap_uint64(*pPos);
+#else
+						target = be64toh(*pPos);
+#endif
+						sum += target;
+						++pPos;
+					}
+				}
+			} else {
+				// handle little endian to host here...
+			}
+		}
+
+
 		void SubscribedSignal::dataCb(unsigned char* pData, size_t size)
 		{
 			switch(m_dataFormatPattern) {
 				case PATTERN_V:
-					{
-						if(m_dataIsBigEndian) {
-							if(m_dataValueType==DATATYPE_REAL32) {
-								uint32_t* pPos = reinterpret_cast < uint32_t* > (pData);
-								uint32_t targetUint32;
-								float* pTarget;
-								size_t count = size >> 2;
-								for(size_t i=0; i<count; ++i) {
-									targetUint32 = ntohl(*pPos);
-									// this is it!
-									pTarget = reinterpret_cast < float* >(&targetUint32);
-									sum += *pTarget;
-									++pPos;
-								}
-							} else if(m_dataValueType==DATATYPE_REAL64) {
-								uint64_t* pPos = reinterpret_cast < uint64_t* > (pData);
-								uint64_t targetUint64;
-								double* pTarget;
-								size_t count = size >> 4;
-								for(size_t i=0; i<count; ++i) {
-#ifdef _WIN32
-									// this will create a mess on big endian machines
-									targetUint64 = _byteswap_uint64(*pPos);
-#else
-									targetUint64 = be64toh(*pPos);
-#endif
-									// this is it!
-									pTarget = reinterpret_cast < double* >(&targetUint64);
-									sum += *pTarget;
-									++pPos;
-								}
-							} else if(m_dataValueType==DATATYPE_U32) {
-								uint32_t* pPos = reinterpret_cast < uint32_t* > (pData);
-								uint32_t target;
-								size_t count = size >> 2;
-								for(size_t i=0; i<count; ++i) {
-									// this is it!
-									target = ntohl(*pPos);
-									sum += target;
-									++pPos;
-								}
-							} else if(m_dataValueType==DATATYPE_S32) {
-								int32_t* pPos = reinterpret_cast < int32_t* > (pData);
-								int32_t target;
-								size_t count = size >> 2;
-								for(size_t i=0; i<count; ++i) {
-									// this is it!
-									target = ntohl(*pPos);
-									sum += target;
-									++pPos;
-								}
-							} else if(m_dataValueType==DATATYPE_U64) {
-								uint64_t* pPos = reinterpret_cast < uint64_t* > (pData);
-								uint64_t target;
-								size_t count = size >> 4;
-								for(size_t i=0; i<count; ++i) {
-#ifdef _WIN32
-									// this will create a mess on big endian machines
-									target = _byteswap_uint64(*pPos);
-#else
-									target = be64toh(*pPos);
-#endif
-									sum += target;
-									++pPos;
-								}
-							} else if(m_dataValueType==DATATYPE_S64) {
-								int64_t* pPos = reinterpret_cast < int64_t* > (pData);
-								int64_t target;
-								size_t count = size >> 4;
-								for(size_t i=0; i<count; ++i) {
-#ifdef _WIN32
-									// this will create a mess on big endian machines
-									target = _byteswap_uint64(*pPos);
-#else
-									target = be64toh(*pPos);
-#endif
-									sum += target;
-									++pPos;
-								}
-							}
-						}
-					}
+					interpreteValues(pData, size);
 					break;
 				case PATTERN_TV:
+					// 1 time stamp, 1 value
+					// there might be an optimized version here that expects only one value.
+					if(size>=m_dataTimeSize) {
+						interpreteValues(pData+m_dataTimeSize, size-m_dataTimeSize);
+					}
 					break;
 				case PATTERN_TB:
+					// 1 time stamp n values
+					if(size>=m_dataTimeSize) {
+						interpreteValues(pData+m_dataTimeSize, size-m_dataTimeSize);
+					}
 					break;
 			}
 		}

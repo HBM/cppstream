@@ -27,6 +27,8 @@ namespace hbm {
 
 		private:
 
+			void interpreteValues(unsigned char* pData, size_t size);
+
 			enum pattern_t {
 				/// "V"; No timestamps, values only.
 				PATTERN_V,

@@ -15,10 +15,10 @@
 #include "SocketNonblocking.h"
 #include "TransportHeader.h"
 #include "MetaInformation.h"
-#include "Controller.h"
 #include "SubscribedSignal.h"
 #include "Types.h"
 #include "Stream.h"
+#include "Controller.h"
 
 namespace hbm {
 	namespace streaming {
@@ -28,8 +28,33 @@ namespace hbm {
 		{
 		}
 
-		int Stream::execute(const std::string &controlPort)
+		void Stream::setCustomStreamMetaCb(StreamMetaCb_t cb)
 		{
+			m_customStreamMetaCb = cb;
+		}
+
+		void Stream::setCustomSignalMetaCb(SignalMetaCb_t cb)
+		{
+			m_customSignalMetaCb = cb;
+		}
+
+		int Stream::subscribe(const signalReferences_t& signalReferences)
+		{
+			Controller controller(m_streamId, m_address.c_str(), m_controlPort);
+			controller.subscribe(signalReferences);
+		}
+
+		int Stream::unsubscribe(const signalReferences_t& signalReferences)
+		{
+			Controller controller(m_streamId, m_address.c_str(), m_controlPort);
+			controller.unsubscribe(signalReferences);
+
+		}
+
+
+		int Stream::receive(const std::string &controlPort)
+		{
+			m_controlPort = controlPort;
 			hbm::SocketNonblocking streamSocket;
 			int result = streamSocket.connect(m_address.c_str(), STREAM_DATA_PORT);
 			if(result<0) {
@@ -62,37 +87,29 @@ namespace hbm {
 					} else {
 						const Json::Value& content = metaInformation.jsonContent();
 						std::string method = content[METHOD].asString();
+						const Json::Value& params = content[PARAMS];
 
 						if(signalNumber==0) {
 							// stream related meta information
-							metaCb(method, content[PARAMS]);
-
-							// additional handling of meta information goes in here: <=======================
-
-
-							// all signals that become available at any time are being subscribed
-							if(method=="available") {
-								signalReferences_t signalReferences;
-								for (Json::ValueConstIterator iter = content[PARAMS].begin(); iter!= content[PARAMS].end(); ++iter) {
-									const Json::Value& element = *iter;
-									signalReferences.push_back(element.asString());
-								}
-								Controller controller(m_streamId, m_address.c_str(), controlPort);
-								controller.subscribe(signalReferences);
+							metaCb(method, params);
+							if(m_customStreamMetaCb) {
+								m_customStreamMetaCb(*this, method, params);
 							}
-							// =======================>
 						} else {
 							// signal related meta information
 							if(method=="subscribe") {
-								std::string signalReference = content[PARAMS][0].asString();
+								std::string signalReference = params[0].asString();
 								m_signalProperties[signalNumber].setSignalReference(signalReference);
 								std::cout << "subscribed signal number= " << signalNumber << " with signal reference '" << signalReference << "'" << std::endl;
 							} else if(method=="unsubscribe") {
-								std::string signalReference = content[PARAMS][0].asString();
+								std::string signalReference = params[0].asString();
 								m_signalProperties.erase(signalNumber);
 								std::cout << "unsubscribed signal number= " << signalNumber << " with signal reference '" << signalReference << "'" << std::endl;
 							} else {
-								m_signalProperties[signalNumber].metaCb(method, content[PARAMS]);
+								m_signalProperties[signalNumber].metaCb(method, params);
+								if(m_customStreamMetaCb) {
+									m_customSignalMetaCb(*this, signalNumber, method, params);
+								}
 							}
 						}
 					}

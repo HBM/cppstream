@@ -4,6 +4,7 @@
 #include <string>
 #include <set>
 #include <unordered_map>
+#include <functional>
 
 #ifdef _WIN32
 #include "jsoncpp/include/json/value.h"
@@ -14,21 +15,35 @@
 #include "Types.h"
 #include "SubscribedSignal.h"
 
+
 namespace hbm {
 	namespace streaming {
-		typedef std::set < std::string > availableSignals_t;
+
+		class Stream;
 
 		/// signal number is the key
 		typedef std::unordered_map < unsigned int, SubscribedSignal > subscribedSignals_t;
+
+		typedef std::function<void(hbm::streaming::Stream& stream, const std::string& method, const Json::Value& params)> StreamMetaCb_t;
+		typedef std::function<void(hbm::streaming::Stream& stream, int signalNumber, const std::string& method, const Json::Value& params)> SignalMetaCb_t;
 
 		class Stream {
 		public:
 			Stream(const std::string& address);
 
+			void setCustomStreamMetaCb(StreamMetaCb_t cb);
+
+			void setCustomSignalMetaCb(SignalMetaCb_t cb);
+
+			int subscribe(const signalReferences_t& signalReferences);
+
+			int unsubscribe(const signalReferences_t& signalReferences);
+
 			/// connects to a streaming server and processes all received data
-			int execute(const std::string& controlPort);
+			int receive(const std::string& controlPort);
 
 		private:
+			typedef std::set < std::string > availableSignals_t;
 
 			/// handle stream related meta information
 			int metaCb(const std::string& method, const Json::Value& params);
@@ -37,6 +52,7 @@ namespace hbm {
 
 			std::string m_apiVersion;
 			std::string m_streamId;
+			std::string m_controlPort;
 
 			/// initial time received when opening the stream
 			timeInfo_t m_initialTime;
@@ -46,6 +62,9 @@ namespace hbm {
 
 			/// information about all subscribed signals
 			subscribedSignals_t m_signalProperties;
+
+			StreamMetaCb_t m_customStreamMetaCb;
+			SignalMetaCb_t m_customSignalMetaCb;
 		};
 	}
 }

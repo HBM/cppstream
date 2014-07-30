@@ -1,5 +1,38 @@
 #include <iostream>
+#include <string>
+
+#ifdef _WIN32
+#include "jsoncpp/include/json/value.h"
+#else
+#include <jsoncpp/json/value.h>
+#endif
 #include "Stream.h"
+
+static std::string streamId;
+static std::string controlPort;
+
+
+void customStreamMetaCb(hbm::streaming::Stream& stream, const std::string& method, const Json::Value params)
+{
+	// additional handling of meta information goes in here
+
+	// all signals that become available at any time are being subscribed
+	if(method=="available") {
+		hbm::streaming::signalReferences_t signalReferences;
+		for (Json::ValueConstIterator iter = params.begin(); iter!= params.end(); ++iter) {
+			const Json::Value& element = *iter;
+			signalReferences.push_back(element.asString());
+		}
+		stream.subscribe(signalReferences);
+	}
+}
+
+
+void customSignalMetaCb(hbm::streaming::Stream& stream, int signalNumber, const std::string& method, const Json::Value params)
+{
+	std::cout << signalNumber << " " << method << std::endl;
+}
+
 
 int main(int argc, char* argv[])
 {
@@ -16,5 +49,7 @@ int main(int argc, char* argv[])
 		controlPort = argv[2];
 	}
 
-	return stream.execute(controlPort);
+	stream.setCustomStreamMetaCb(customStreamMetaCb);
+	stream.setCustomSignalMetaCb(customSignalMetaCb);
+	return stream.receive(controlPort);
 }

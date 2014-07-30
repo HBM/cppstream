@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
 	stream.setCustomSignalMetaCb(customSignalMetaCb);
 
 	do {
-		boost::thread streamer = boost::thread(boost::bind(&hbm::streaming::Stream::start, boost::ref(stream), controlPort));
+		boost::thread streamer = boost::thread(boost::bind(&hbm::streaming::Stream::start, boost::ref(stream), hbm::streaming::STREAM_DATA_PORT, controlPort));
 		boost::this_thread::sleep_for(boost::chrono::milliseconds(300));
 		streamer.join();
 	} while(true);

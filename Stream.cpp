@@ -47,14 +47,13 @@ namespace hbm {
 		{
 			Controller controller(m_streamId, m_address.c_str(), m_controlPort);
 			controller.unsubscribe(signalReferences);
-
 		}
 
 
-		int Stream::start(const std::string &controlPort)
+		int Stream::start(const std::string &streamPort, const std::string &controlPort)
 		{
 			m_controlPort = controlPort;
-			int result = m_streamSocket.connect(m_address.c_str(), STREAM_DATA_PORT);
+			int result = m_streamSocket.connect(m_address.c_str(), streamPort);
 			if(result<0) {
 				return -1;
 			}
@@ -120,6 +119,8 @@ namespace hbm {
 		void Stream::stop()
 		{
 			m_streamSocket.stop();
+			m_availableSignals.clear();
+			m_signalProperties.clear();
 		}
 
 		int Stream::metaCb(const std::string& method, const Json::Value& params)

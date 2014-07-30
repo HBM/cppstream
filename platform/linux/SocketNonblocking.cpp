@@ -25,7 +25,6 @@ hbm::SocketNonblocking::SocketNonblocking()
 	: m_fd(-1)
 	, m_bufferedReader()
 {
-	init();
 }
 
 hbm::SocketNonblocking::~SocketNonblocking()
@@ -67,7 +66,11 @@ int hbm::SocketNonblocking::init()
 
 int hbm::SocketNonblocking::connect(const std::string &address, const std::string& port)
 {
-	int retVal = 0;
+	int retVal = init();
+	if(retVal<0) {
+		return retVal;
+	}
+
 
 	struct addrinfo hints;
 	struct addrinfo* pResult = NULL;

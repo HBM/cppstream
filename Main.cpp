@@ -7,6 +7,7 @@
 #include <jsoncpp/json/value.h>
 #endif
 #include "Stream.h"
+#include "Types.h"
 
 static std::string streamId;
 static std::string controlPort;
@@ -51,5 +52,5 @@ int main(int argc, char* argv[])
 
 	stream.setCustomStreamMetaCb(customStreamMetaCb);
 	stream.setCustomSignalMetaCb(customSignalMetaCb);
-	return stream.start(controlPort);
+	return stream.start(hbm::streaming::STREAM_DATA_PORT, controlPort);
 }

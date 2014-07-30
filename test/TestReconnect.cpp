@@ -1,6 +1,9 @@
 #include <iostream>
 #include <string>
 
+#include <boost/thread/thread.hpp>
+#include <boost/bind.hpp>
+
 #ifdef _WIN32
 #include "jsoncpp/include/json/value.h"
 #else
@@ -51,5 +54,10 @@ int main(int argc, char* argv[])
 
 	stream.setCustomStreamMetaCb(customStreamMetaCb);
 	stream.setCustomSignalMetaCb(customSignalMetaCb);
-	return stream.start(controlPort);
+
+	do {
+		boost::thread streamer = boost::thread(boost::bind(&hbm::streaming::Stream::start, boost::ref(stream), controlPort));
+		boost::this_thread::sleep_for(boost::chrono::milliseconds(300));
+		streamer.join();
+	} while(true);
 }

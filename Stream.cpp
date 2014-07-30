@@ -12,7 +12,6 @@
 #include <jsoncpp/json/writer.h>
 #endif
 
-#include "SocketNonblocking.h"
 #include "TransportHeader.h"
 #include "MetaInformation.h"
 #include "SubscribedSignal.h"
@@ -52,18 +51,17 @@ namespace hbm {
 		}
 
 
-		int Stream::receive(const std::string &controlPort)
+		int Stream::start(const std::string &controlPort)
 		{
 			m_controlPort = controlPort;
-			hbm::SocketNonblocking streamSocket;
-			int result = streamSocket.connect(m_address.c_str(), STREAM_DATA_PORT);
+			int result = m_streamSocket.connect(m_address.c_str(), STREAM_DATA_PORT);
 			if(result<0) {
 				return -1;
 			}
 
 			unsigned char dataRecvBuffer[1024];
 
-			TransportHeader transportHeader(streamSocket);
+			TransportHeader transportHeader(m_streamSocket);
 			do {
 				result = transportHeader.receive();
 				if(result<0) {
@@ -75,13 +73,13 @@ namespace hbm {
 
 				if(type==TYPE_DATA) {
 					// read measured data. This happens really often! Be sure to be as efficient as possible here.
-					result = streamSocket.receiveComplete(dataRecvBuffer, size);
+					result = m_streamSocket.receiveComplete(dataRecvBuffer, size);
 					if(result!=size) {
 						break;
 					}
 					m_signalProperties[signalNumber].dataCb(dataRecvBuffer, result);
 				} else if(type==TYPE_META){
-					MetaInformation metaInformation(streamSocket, size);
+					MetaInformation metaInformation(m_streamSocket, size);
 					if(metaInformation.type()!=METAINFORMATION_JSON) {
 						std::cout << "unhandled meta information of type " << metaInformation.type() << std::endl;
 					} else {
@@ -117,6 +115,11 @@ namespace hbm {
 			} while(true);
 
 			return 0;
+		}
+
+		void Stream::stop()
+		{
+			m_streamSocket.stop();
 		}
 
 		int Stream::metaCb(const std::string& method, const Json::Value& params)

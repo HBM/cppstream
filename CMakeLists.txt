@@ -6,8 +6,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 
 
 include_directories(.)
-set(SOURCES
-  Main.cpp
+set(STREAMCLIENT_SOURCES
   Types.h
   Stream.cpp
   TransportHeader.cpp
@@ -21,8 +20,32 @@ set(SOURCES
 )
 
 
-add_executable( cppstream.bin ${SOURCES} )
+add_library(streamclient-static  STATIC ${STREAMCLIENT_SOURCES})
+
+
+
+set(CPPSTREAM_SOURCES
+  Main.cpp
+)
+
+add_executable( cppstream.bin ${CPPSTREAM_SOURCES} )
 
 target_link_libraries( cppstream.bin
+  streamclient-static
   jsoncpp
 )
+
+set(TESTRECONNECT_SOURCES
+  test/TestReconnect.cpp
+)
+
+add_executable( testreconnect.bin ${TESTRECONNECT_SOURCES} )
+
+target_link_libraries( testreconnect.bin
+  streamclient-static
+  jsoncpp
+  boost_system
+  boost_thread
+)
+
+

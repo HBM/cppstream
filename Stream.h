@@ -14,6 +14,7 @@
 
 #include "Types.h"
 #include "SubscribedSignal.h"
+#include "SocketNonblocking.h"
 
 
 namespace hbm {
@@ -40,13 +41,18 @@ namespace hbm {
 			int unsubscribe(const signalReferences_t& signalReferences);
 
 			/// connects to a streaming server and processes all received data
-			int receive(const std::string& controlPort);
+			int start(const std::string& controlPort);
+
+			/// closes the stream socket.
+			void stop();
 
 		private:
 			typedef std::set < std::string > availableSignals_t;
 
 			/// handle stream related meta information
 			int metaCb(const std::string& method, const Json::Value& params);
+
+			hbm::SocketNonblocking m_streamSocket;
 
 			std::string m_address;
 

@@ -33,7 +33,7 @@ void customStreamMetaCb(hbm::streaming::Stream& stream, const std::string& metho
 
 void customSignalMetaCb(hbm::streaming::Stream& stream, int signalNumber, const std::string& method, const Json::Value params)
 {
-  //	std::cout << signalNumber << " " << method << std::endl;
+	//	std::cout << signalNumber << " " << method << std::endl;
 }
 
 
@@ -55,11 +55,12 @@ int main(int argc, char* argv[])
 	stream.setCustomStreamMetaCb(customStreamMetaCb);
 	stream.setCustomSignalMetaCb(customSignalMetaCb);
 
+	static const boost::chrono::milliseconds CYCLETIME(3000);
 	do {
 		boost::thread streamer = boost::thread(boost::bind(&hbm::streaming::Stream::start, boost::ref(stream), hbm::streaming::STREAM_DATA_PORT, controlPort));
 		std::cout << "started" << std::endl;
-		boost::this_thread::sleep_for(boost::chrono::milliseconds(3000));
-		std::cout << "waited some time" << std::endl;
+		std::cout << "waiting some time (" << CYCLETIME.count() << "ms)" << std::endl;
+		boost::this_thread::sleep_for(CYCLETIME);
 		stream.stop();
 		streamer.join();
 		std::cout << "stopped" << std::endl;

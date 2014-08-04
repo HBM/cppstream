@@ -24,7 +24,9 @@ namespace hbm {
 
 			int setDataFormat(const Json::Value& params);
 
+			/// process measured data
 			void dataCb(unsigned char* pData, size_t size);
+
 			void metaCb(const std::string& method, const Json::Value& params);
 
 		private:

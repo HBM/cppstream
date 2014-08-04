@@ -42,7 +42,10 @@
     <ClCompile Include="TransportHeader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Signal.cpp">
+    <ClCompile Include="SubscribedSignal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

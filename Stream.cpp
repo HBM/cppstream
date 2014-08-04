@@ -40,13 +40,13 @@ namespace hbm {
 		int Stream::subscribe(const signalReferences_t& signalReferences)
 		{
 			Controller controller(m_streamId, m_address.c_str(), m_controlPort);
-			controller.subscribe(signalReferences);
+			return controller.subscribe(signalReferences);
 		}
 
 		int Stream::unsubscribe(const signalReferences_t& signalReferences)
 		{
 			Controller controller(m_streamId, m_address.c_str(), m_controlPort);
-			controller.unsubscribe(signalReferences);
+			return controller.unsubscribe(signalReferences);
 		}
 
 

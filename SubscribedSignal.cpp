@@ -117,7 +117,11 @@ namespace hbm {
 					float* pTarget;
 					size_t count = size >> 2;
 					for(size_t i=0; i<count; ++i) {
+#ifdef _WIN32
+						targetUint32 =*pPos;
+#else
 						targetUint32 = le32toh(*pPos);
+#endif
 						// this is it!
 						pTarget = reinterpret_cast < float* >(&targetUint32);
 						sum += *pTarget;
@@ -129,7 +133,11 @@ namespace hbm {
 					double* pTarget;
 					size_t count = size >> 4;
 					for(size_t i=0; i<count; ++i) {
+#ifdef _WIN32
+						targetUint64 =*pPos;
+#else
 						targetUint64 = le64toh(*pPos);
+#endif
 						// this is it!
 						pTarget = reinterpret_cast < double* >(&targetUint64);
 						sum += *pTarget;
@@ -140,8 +148,11 @@ namespace hbm {
 					uint32_t target;
 					size_t count = size >> 2;
 					for(size_t i=0; i<count; ++i) {
-						// this is it!
+#ifdef _WIN32
+						target =*pPos;
+#else
 						target = le32toh(*pPos);
+#endif
 						sum += target;
 						++pPos;
 					}
@@ -150,8 +161,11 @@ namespace hbm {
 					int32_t target;
 					size_t count = size >> 2;
 					for(size_t i=0; i<count; ++i) {
-						// this is it!
+#ifdef _WIN32
+						target =*pPos;
+#else
 						target = le32toh(*pPos);
+#endif
 						sum += target;
 						++pPos;
 					}
@@ -160,7 +174,11 @@ namespace hbm {
 					uint64_t target;
 					size_t count = size >> 4;
 					for(size_t i=0; i<count; ++i) {
+#ifdef _WIN32
+						target =*pPos;
+#else
 						target = le64toh(*pPos);
+#endif
 						sum += target;
 						++pPos;
 					}
@@ -169,7 +187,11 @@ namespace hbm {
 					int64_t target;
 					size_t count = size >> 4;
 					for(size_t i=0; i<count; ++i) {
+#ifdef _WIN32
+						target =*pPos;
+#else
 						target = le64toh(*pPos);
+#endif
 						sum += target;
 						++pPos;
 					}

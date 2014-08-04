@@ -13,7 +13,7 @@ namespace hbm {
 	namespace streaming {
 		/// interpretes and stores meta information of a subscribed signal.
 		/// Mesured data of a subscribed signal is processed here
-		/// \warning for windows, this class works on little endian machines only. this is because of endian issues with data types wider than 4 byte.
+		/// \warning for windows, this class works on little endian machines only. this is because of endian issues.
 		class SubscribedSignal {
 		public:
 			SubscribedSignal();

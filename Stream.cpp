@@ -126,10 +126,11 @@ namespace hbm {
 				// stream related meta information
 				if(method=="apiVersion") {
 					m_apiVersion = params[0].asString();
+					std::cout << "daq stream version: " << m_apiVersion << std::endl;
 				} else if(method=="init") {
 					m_streamId = params["streamId"].asString();
 					std::cout << "this is: " << m_streamId << std::endl;
-					std::cout << "supported: " << params["supported"] << std::endl;
+					std::cout << "supported features: " << params["supported"] << std::endl;
 					const Json::Value& commandInterfaces = params["commandInterfaces"];
 					for (Json::ValueConstIterator iter = commandInterfaces.begin(); iter!= commandInterfaces.end(); ++iter) {
 						const Json::Value& element = *iter;

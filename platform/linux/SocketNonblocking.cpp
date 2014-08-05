@@ -86,9 +86,9 @@ int hbm::SocketNonblocking::connect(const std::string &address, const std::strin
 	}
 	int err = ::connect(m_fd, pResult->ai_addr, sizeof(sockaddr_in));
 	freeaddrinfo( pResult );
-	// success if errno equals EINPROGRESS
 	if(err==-1) {
 		if(errno == EINPROGRESS) {
+			// success if errno equals EINPROGRESS
 			struct pollfd pfd;
 			pfd.fd = m_fd;
 			pfd.events = POLLOUT;

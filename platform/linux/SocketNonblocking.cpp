@@ -87,28 +87,28 @@ int hbm::SocketNonblocking::connect(const std::string &address, const std::strin
 	int err = ::connect(m_fd, pResult->ai_addr, sizeof(sockaddr_in));
 	freeaddrinfo( pResult );
 	// success if errno equals EINPROGRESS
-	if((err==-1) && (errno == EINPROGRESS))
-	{
-		struct pollfd pfd;
-		pfd.fd = m_fd;
-		pfd.events = POLLOUT;
-		do {
-			err = poll(&pfd, 1, TIMEOUT_CONNECT_S*1000);
-		} while((err==-1) && (errno==EINTR) );
-		if(err==1) {
-			int value;
-			socklen_t len = sizeof(value);
-			getsockopt(m_fd, SOL_SOCKET, SO_ERROR, &value, &len);
-			if(value!=0) {
+	if(err==-1) {
+		if(errno == EINPROGRESS) {
+			struct pollfd pfd;
+			pfd.fd = m_fd;
+			pfd.events = POLLOUT;
+			do {
+				err = poll(&pfd, 1, TIMEOUT_CONNECT_S*1000);
+			} while((err==-1) && (errno==EINTR) );
+			if(err==1) {
+				int value;
+				socklen_t len = sizeof(value);
+				getsockopt(m_fd, SOL_SOCKET, SO_ERROR, &value, &len);
+				if(value!=0) {
+					retVal = -1;
+				}
+			} else {
 				retVal = -1;
 			}
 		} else {
 			retVal = -1;
 		}
-	} else {
-		retVal = -1;
 	}
-
 	return retVal;
 }
 
@@ -169,7 +169,6 @@ int hbm::SocketNonblocking::sendBlock(const void* pBlock, size_t size, bool more
 	int err;
 
 	while (BytesLeft > 0) {
-		// wir warten ohne timeout, bis wir schreiben koennen
 		numBytes = send(m_fd, pDat, BytesLeft, flags);
 		if(numBytes>0) {
 			pDat += numBytes;

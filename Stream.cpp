@@ -58,7 +58,7 @@ namespace hbm {
 				return -1;
 			}
 
-			unsigned char dataRecvBuffer[1024];
+			unsigned char dataRecvBuffer[8192];
 
 			TransportHeader transportHeader(m_streamSocket);
 			do {
@@ -76,7 +76,7 @@ namespace hbm {
 					if(result!=size) {
 						break;
 					}
-					m_signalProperties[signalNumber].dataCb(dataRecvBuffer, result);
+					m_subscribedSignals[signalNumber].dataCb(dataRecvBuffer, result);
 				} else if(type==TYPE_META){
 					MetaInformation metaInformation(m_streamSocket, size);
 					if(metaInformation.type()!=METAINFORMATION_JSON) {
@@ -96,14 +96,11 @@ namespace hbm {
 							// signal related meta information
 							if(method=="subscribe") {
 								std::string signalReference = params[0].asString();
-								m_signalProperties[signalNumber].setSignalReference(signalReference);
-								std::cout << "subscribed signal number= " << signalNumber << " with signal reference '" << signalReference << "'" << std::endl;
+								m_subscribedSignals[signalNumber].setSignalReference(signalReference);
 							} else if(method=="unsubscribe") {
-								std::string signalReference = params[0].asString();
-								m_signalProperties.erase(signalNumber);
-								std::cout << "unsubscribed signal number= " << signalNumber << " with signal reference '" << signalReference << "'" << std::endl;
+								m_subscribedSignals.erase(signalNumber);
 							} else {
-								m_signalProperties[signalNumber].metaCb(method, params);
+								m_subscribedSignals[signalNumber].metaCb(method, params);
 								if(m_customStreamMetaCb) {
 									m_customSignalMetaCb(*this, signalNumber, method, params);
 								}
@@ -120,7 +117,7 @@ namespace hbm {
 		{
 			m_streamSocket.stop();
 			m_availableSignals.clear();
-			m_signalProperties.clear();
+			m_subscribedSignals.clear();
 		}
 
 		int Stream::metaCb(const std::string& method, const Json::Value& params)
@@ -132,16 +129,11 @@ namespace hbm {
 				} else if(method=="init") {
 					m_streamId = params["streamId"].asString();
 					std::cout << "this is: " << m_streamId << std::endl;
-					const Json::Value& supported = params["supported"];
-					for (Json::ValueConstIterator iter = supported.begin(); iter!= supported.end(); ++iter) {
-						const Json::Value& element = *iter;
-						std::cout << Json::StyledWriter().write(element) << std::endl;
-					}
-
+					std::cout << "supported: " << params["supported"] << std::endl;
 					const Json::Value& commandInterfaces = params["commandInterfaces"];
 					for (Json::ValueConstIterator iter = commandInterfaces.begin(); iter!= commandInterfaces.end(); ++iter) {
 						const Json::Value& element = *iter;
-						std::cout << Json::StyledWriter().write(element) << std::endl;
+						std::cout << "command interfaces: " << element << std::endl;
 					}
 				} else if(method=="time") {
 					m_initialTime.set(params);

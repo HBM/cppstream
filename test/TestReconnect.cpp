@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
 
 	static const boost::chrono::milliseconds CYCLETIME(3000);
 	do {
-		boost::thread streamer = boost::thread(boost::bind(&hbm::streaming::Stream::start, boost::ref(stream), hbm::streaming::STREAM_DATA_PORT, controlPort));
+		boost::thread streamer = boost::thread(boost::bind(&hbm::streaming::Stream::start, boost::ref(stream), hbm::streaming::DAQSTREAM_PORT, controlPort));
 		std::cout << "started" << std::endl;
 		std::cout << "waiting some time (" << CYCLETIME.count() << "ms)" << std::endl;
 		boost::this_thread::sleep_for(CYCLETIME);

@@ -67,7 +67,7 @@ namespace hbm {
 			availableSignals_t m_availableSignals;
 
 			/// information about all subscribed signals
-			subscribedSignals_t m_signalProperties;
+			subscribedSignals_t m_subscribedSignals;
 
 			StreamMetaCb_t m_customStreamMetaCb;
 			SignalMetaCb_t m_customSignalMetaCb;

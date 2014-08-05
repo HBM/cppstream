@@ -25,13 +25,19 @@ void customStreamMetaCb(hbm::streaming::Stream& stream, const std::string& metho
 			signalReferences.push_back(element.asString());
 		}
 		stream.subscribe(signalReferences);
+
+		std::cout << __FUNCTION__ << "the following signal(s) were subscribed: ";
+		for(hbm::streaming::signalReferences_t::const_iterator iter=signalReferences.begin(); iter!=signalReferences.end(); ++iter) {
+			std::cout << "'" << *iter << "' ";
+		}
+		std::cout << std::endl;
 	}
 }
 
 
 void customSignalMetaCb(hbm::streaming::Stream& stream, int signalNumber, const std::string& method, const Json::Value params)
 {
-	std::cout << signalNumber << " " << method << std::endl;
+	std::cout << __FUNCTION__ << ": " << signalNumber << " " << method << std::endl;
 }
 
 
@@ -52,5 +58,5 @@ int main(int argc, char* argv[])
 
 	stream.setCustomStreamMetaCb(customStreamMetaCb);
 	stream.setCustomSignalMetaCb(customSignalMetaCb);
-	return stream.start(hbm::streaming::STREAM_DATA_PORT, controlPort);
+	return stream.start(hbm::streaming::DAQSTREAM_PORT, controlPort);
 }

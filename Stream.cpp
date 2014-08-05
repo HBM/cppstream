@@ -27,6 +27,12 @@ namespace hbm {
 		{
 		}
 
+		void Stream::setCustomDataCb(DataCb_t cb)
+		{
+			m_customDataCb = cb;
+		}
+
+
 		void Stream::setCustomStreamMetaCb(StreamMetaCb_t cb)
 		{
 			m_customStreamMetaCb = cb;
@@ -76,7 +82,11 @@ namespace hbm {
 					if(result!=size) {
 						break;
 					}
+
 					m_subscribedSignals[signalNumber].dataCb(dataRecvBuffer, result);
+					if(m_customDataCb) {
+						m_customDataCb(*this, signalNumber, dataRecvBuffer, result);
+					}
 				} else if(type==TYPE_META){
 					MetaInformation metaInformation(m_streamSocket, size);
 					if(metaInformation.type()!=METAINFORMATION_JSON) {
@@ -95,12 +105,15 @@ namespace hbm {
 						} else {
 							// signal related meta information
 							if(method=="subscribe") {
+								/// this is the first signal related meta information to arrive!
 								std::string signalReference = params[0].asString();
+
 								m_subscribedSignals[signalNumber].setSignalReference(signalReference);
 							} else if(method=="unsubscribe") {
 								m_subscribedSignals.erase(signalNumber);
 							} else {
 								m_subscribedSignals[signalNumber].metaCb(method, params);
+
 								if(m_customStreamMetaCb) {
 									m_customSignalMetaCb(*this, signalNumber, method, params);
 								}

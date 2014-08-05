@@ -25,12 +25,15 @@ namespace hbm {
 		/// signal number is the key
 		typedef std::unordered_map < unsigned int, SubscribedSignal > subscribedSignals_t;
 
+		typedef std::function<void(hbm::streaming::Stream& stream, unsigned int signalId, const unsigned char* pData, size_t size)> DataCb_t;
 		typedef std::function<void(hbm::streaming::Stream& stream, const std::string& method, const Json::Value& params)> StreamMetaCb_t;
 		typedef std::function<void(hbm::streaming::Stream& stream, int signalNumber, const std::string& method, const Json::Value& params)> SignalMetaCb_t;
 
 		class Stream {
 		public:
 			Stream(const std::string& address);
+
+			void setCustomDataCb(DataCb_t cb);
 
 			void setCustomStreamMetaCb(StreamMetaCb_t cb);
 
@@ -69,6 +72,7 @@ namespace hbm {
 			/// information about all subscribed signals
 			subscribedSignals_t m_subscribedSignals;
 
+			DataCb_t m_customDataCb;
 			StreamMetaCb_t m_customStreamMetaCb;
 			SignalMetaCb_t m_customSignalMetaCb;
 		};

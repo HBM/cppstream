@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <cstdlib> //atoi
 
 #include <boost/thread/thread.hpp>
 #include <boost/bind.hpp>
@@ -13,6 +14,7 @@
 
 static std::string streamId;
 static std::string controlPort;
+static size_t receivedDataByteCount;
 
 
 void customStreamMetaCb(hbm::streaming::Stream& stream, const std::string& method, const Json::Value params)
@@ -36,15 +38,22 @@ void customSignalMetaCb(hbm::streaming::Stream& stream, int signalNumber, const 
 	//	std::cout << signalNumber << " " << method << std::endl;
 }
 
+void customDataCb(hbm::streaming::Stream& stream, unsigned int signalId, const unsigned char* pData, size_t size)
+{
+	receivedDataByteCount += size;
+}
+
 
 int main(int argc, char* argv[])
 {
 	if((argc<2) || (std::string(argv[1])=="-h") ) {
-		std::cout << "syntax: " << argv[0] << " <stream server address>" << std::endl;
+		std::cout << "syntax: " << argv[0] << " <stream server address> < control port (default is http) > <cycle time in ms (default is 3000)>" << std::endl;
 		return EXIT_SUCCESS;
 	}
 
 	hbm::streaming::Stream stream(argv[1]);
+
+
 
 	// the control port might differ when communication runs via a router (CX27)
 	std::string controlPort = "http";
@@ -52,17 +61,24 @@ int main(int argc, char* argv[])
 		controlPort = argv[2];
 	}
 
+	boost::chrono::milliseconds cycleTime(3000);
+
+	if(argc>3) {
+		cycleTime = boost::chrono::milliseconds(atoi(argv[3]));
+	}
+
+
 	stream.setCustomStreamMetaCb(customStreamMetaCb);
 	stream.setCustomSignalMetaCb(customSignalMetaCb);
+	stream.setCustomDataCb(customDataCb);
 
-	static const boost::chrono::milliseconds CYCLETIME(3000);
 	do {
+		receivedDataByteCount = 0;
 		boost::thread streamer = boost::thread(boost::bind(&hbm::streaming::Stream::start, boost::ref(stream), hbm::streaming::DAQSTREAM_PORT, controlPort));
-		std::cout << "started" << std::endl;
-		std::cout << "waiting some time (" << CYCLETIME.count() << "ms)" << std::endl;
-		boost::this_thread::sleep_for(CYCLETIME);
+		std::cout << "Started" << std::endl;
+		boost::this_thread::sleep_for(cycleTime);
 		stream.stop();
 		streamer.join();
-		std::cout << "stopped" << std::endl;
+		std::cout << "Stopped! Received " << receivedDataByteCount << " byte of measured data" << std::endl;
 	} while(true);
 }

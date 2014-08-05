@@ -12,7 +12,6 @@
 static std::string streamId;
 static std::string controlPort;
 
-
 void customStreamMetaCb(hbm::streaming::Stream& stream, const std::string& method, const Json::Value params)
 {
 	// additional handling of meta information goes in here
@@ -39,7 +38,6 @@ void customSignalMetaCb(hbm::streaming::Stream& stream, int signalNumber, const 
 {
 	std::cout << __FUNCTION__ << ": " << signalNumber << " " << method << std::endl;
 }
-
 
 int main(int argc, char* argv[])
 {

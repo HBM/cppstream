@@ -24,10 +24,6 @@ namespace hbm {
 		// we use this as target for all values. Otherwise the compiler might optimize away a lot of functionality!
 		static double sum = 0;
 
-		SubscribedSignal::SubscribedSignal()
-		{
-		}
-
 		void SubscribedSignal::interpreteValues(unsigned char *pData, size_t size)
 		{
 			if(m_dataIsBigEndian) {

@@ -40,7 +40,8 @@ namespace hbm {
 
 			int unsubscribe(const signalReferences_t& signalReferences);
 
-			/// connects to a streaming server and processes all received data
+			/// connects to a streaming server and processes all received data.
+			/// Returns when stream is stopped by calling stop() or if loss of connection is recognized.
 			int start(const std::string &streamPort, const std::string& controlPort);
 
 			/// closes the stream socket.

@@ -5,6 +5,7 @@
 
 namespace hbm {
 	namespace streaming {
+		/// creates and send a HTTP post. Returns the response without HTTP post response header
 		class HttpPost
 		{
 		public:

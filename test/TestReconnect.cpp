@@ -44,6 +44,7 @@ void customDataCb(hbm::streaming::Stream& stream, unsigned int signalId, const u
 }
 
 
+/// periodically connects to a daq stream, subscribes all signals and disconnects after a specified time
 int main(int argc, char* argv[])
 {
 	if((argc<2) || (std::string(argv[1])=="-h") ) {

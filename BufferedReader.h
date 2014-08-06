@@ -30,6 +30,4 @@ namespace hbm {
 		size_t m_alreadyRead;
 	};
 }
-
-
 #endif // BUFFEREDREADER_H

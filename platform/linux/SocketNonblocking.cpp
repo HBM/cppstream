@@ -41,7 +41,7 @@ int hbm::SocketNonblocking::init()
 	if(m_fd==-1) {
 		retVal=-1;
 	} else {
-		// kein Delay, d.h. kein Nagle-Algorithmus
+		// turn off Nagle algorithm
 		setsockopt(m_fd, IPPROTO_TCP, TCP_NODELAY, reinterpret_cast<char*>(&opt), sizeof(opt));
 
 		opt = 12;

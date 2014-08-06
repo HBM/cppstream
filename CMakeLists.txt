@@ -1,4 +1,4 @@
-project(cppstream)
+project("HBM daq stream example")
 
 cmake_minimum_required(VERSION 2.8)
 

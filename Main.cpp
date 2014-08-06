@@ -54,7 +54,9 @@ int main(int argc, char* argv[])
 		controlPort = argv[2];
 	}
 
+	// we want to be informed about stream related meta information
 	stream.setCustomStreamMetaCb(customStreamMetaCb);
+	// we want to be informed about signal related meta information
 	stream.setCustomSignalMetaCb(customSignalMetaCb);
 	return stream.start(hbm::streaming::DAQSTREAM_PORT, controlPort);
 }

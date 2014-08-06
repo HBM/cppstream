@@ -38,6 +38,8 @@ void customSignalMetaCb(hbm::streaming::Stream& stream, int signalNumber, const 
 	//	std::cout << signalNumber << " " << method << std::endl;
 }
 
+
+/// we simply accumulate the amount of bytes received in measured data packages.
 void customDataCb(hbm::streaming::Stream& stream, unsigned int signalId, const unsigned char* pData, size_t size)
 {
 	receivedDataByteCount += size;

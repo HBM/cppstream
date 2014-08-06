@@ -1,5 +1,5 @@
-#ifndef __HBM__JET__SOCKETASYNC_H
-#define __HBM__JET__SOCKETASYNC_H
+#ifndef __HBM__SOCKETNONBLOCKING_H
+#define __HBM__SOCKETNONBLOCKING_H
 
 #include <string>
 

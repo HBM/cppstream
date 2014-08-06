@@ -1,4 +1,4 @@
-cppstream
+HBM daq stream example
 =========
 
 This is an example client for HBM Streaming protocol. 

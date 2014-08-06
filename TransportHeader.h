@@ -22,11 +22,13 @@ namespace hbm {
 			/// \return the number of bytes read or error
 			ssize_t receive();
 
+			/// of payload
 			size_t size() const
 			{
 				return m_dataByteCount;
 			}
 
+			/// only data and meta information is defined and supported in the moment.
 			type_t type() const
 			{
 				return m_type;

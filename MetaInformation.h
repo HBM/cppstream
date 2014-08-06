@@ -16,6 +16,7 @@ namespace hbm {
 	namespace streaming {
 		static const int METAINFORMATION_JSON = 1;
 
+		/// several types of meta information are defined. Type 1 means any meta data encoded using JSON.
 		class MetaInformation
 		{
 		public:
@@ -23,11 +24,20 @@ namespace hbm {
 
 			MetaInformation(hbm::SocketNonblocking& socket, size_t size);
 
+
+			/// \code
+			/// {
+			///   ”method”: < the type of meta data >,
+			///   ”params”: < value >
+			/// }
+			/// \endcode
+			/// \return meta data encoded in JSON; empty if this is meta data in binary form
 			Json::Value jsonContent() const
 			{
 				return m_jsonContent;
 			}
 
+			/// \return meta data in binray form; empty if this is meta data encoded in JSON
 			binaryContent_t binaryContent() const
 			{
 				return m_binaryContent;

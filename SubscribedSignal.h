@@ -25,6 +25,7 @@ namespace hbm {
 			/// process measured data
 			void dataCb(unsigned char* pData, size_t size);
 
+			/// process signal related meta information.
 			void metaCb(const std::string& method, const Json::Value& params);
 
 		private:

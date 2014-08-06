@@ -3,19 +3,20 @@
 
 #include <vector>
 #ifdef _WIN32
-#include "jsoncpp/include/json/reader.h"
+#include "jsoncpp/include/json/value.h"
 #else
-#include <jsoncpp/json/reader.h>
+#include <jsoncpp/json/value.h>
 #endif
 
 namespace hbm {
+	static const char PARAMS[] = "params";
+	static const char METHOD[] = "method";
+
+
 	namespace streaming {
 		typedef std::vector < std::string > signalReferences_t;
 
 		static const std::string DAQSTREAM_PORT = "7411";
-		static const char PARAMS[] = "params";
-		static const char METHOD[] = "method";
-
 		static const char SERVERPATH[] = "rpc";
 
 
@@ -24,23 +25,16 @@ namespace hbm {
 			unsigned int fraction;
 		};
 
-		struct timeInfo_t {
-			void set(const Json::Value& params)
-			{
-				const Json::Value& stampNode = params["stamp"];
-				if(stampNode["type"]=="ntp") {
-					stamp.fraction = stampNode["fraction"].asUInt();
-					stamp.seconds = stampNode["seconds"].asUInt();
-				}
-				epoch = params["epoch"].asString();
-				scale = params["scale"].asString();
-			}
+		class timeInfo_t {
+		public:
+			void set(const Json::Value& params);
+			void clear();
 
-			ntpTimeStamp_t stamp;
+		private:
+			ntpTimeStamp_t ntpStamp;
 			std::string scale;
 			std::string epoch;
 		};
 	}
 }
-
 #endif

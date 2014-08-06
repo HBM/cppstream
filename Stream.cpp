@@ -129,6 +129,12 @@ namespace hbm {
 		void Stream::stop()
 		{
 			m_streamSocket.stop();
+
+			m_address.clear();
+			m_apiVersion.clear();
+			m_streamId.clear();
+			m_controlPort.clear();
+			m_initialTime.clear();
 			m_availableSignals.clear();
 			m_subscribedSignals.clear();
 		}

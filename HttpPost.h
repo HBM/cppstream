@@ -1,24 +1,24 @@
-#ifndef _HBM__STREMAING__HTTPPOST_H
-#define _HBM__STREMAING__HTTPPOST_H
+#ifndef _HBM__HTTPPOST_H
+#define _HBM__HTTPPOST_H
 
 #include <string>
 
 namespace hbm {
-	namespace streaming {
-		/// creates and send a HTTP post. Returns the response without HTTP post response header
-		class HttpPost
-		{
-		public:
-			HttpPost(const std::string& address, const std::string& port, const std::string& httpPath);
+	/// Creates and send a HTTP post. Returns the response without HTTP post response header.
+	/// TCP Connection is opened with each execute() and is being closed afterwards.
+	class HttpPost
+	{
+	public:
+		HttpPost(const std::string& address, const std::string& port, const std::string& httpPath);
 
-			std::string execute(const std::string& request);
+		/// \return the response or an empty string on error
+		std::string execute(const std::string& request);
 
-		private:
-			std::string m_address;
-			std::string m_port;
-			std::string m_httpPath;
-			std::string m_httpVersion;
-		};
-	}
+	private:
+		std::string m_address;
+		std::string m_port;
+		std::string m_httpPath;
+		std::string m_httpVersion;
+	};
 }
 #endif // _HBM__STREMAING__HTTPPOST_H

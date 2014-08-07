@@ -85,7 +85,7 @@
     <ClCompile Include="test\TestReconnect.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\jsoncpp\jsoncpp.vcxproj">
+    <ProjectReference Include="..\jsoncpp\makefiles\msvc2010\lib_json.vcxproj">
       <Project>{1e6c2c1c-6453-4129-ae3f-0ee8e6599c89}</Project>
     </ProjectReference>
     <ProjectReference Include="DaqStreamClient.vcxproj">

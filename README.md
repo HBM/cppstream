@@ -9,7 +9,7 @@ It connects to a HBM Daq Streaming socket, receives everything that arrives, sub
 ## prerequisites
 
 ### Libraries
-The open source project jsoncpp is being used as JSON composer and parser. For Linux, simply install the jsoncpp development package of your distribution. For Windows, download the source from 'https://github.com/open-source-parsers/jsoncpp'
+The open source project jsoncpp is being used as JSON composer and parser. For Linux, simply install the jsoncpp development package of your distribution. For Windows, download the source from 'https://github.com/open-source-parsers/jsoncpp' and put them beside this project.
 
 Some example programs do use the Boost libraries. Refer to www.boost.org for details.
 For Linux, simply install the Boost development packages of your distribution. For Windows, the projects are tailored to link against the prebuilt boost binaries from www.boost.org.

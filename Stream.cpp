@@ -130,7 +130,6 @@ namespace hbm {
 		{
 			m_streamSocket.stop();
 
-			m_address.clear();
 			m_apiVersion.clear();
 			m_streamId.clear();
 			m_controlPort.clear();

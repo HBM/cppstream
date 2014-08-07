@@ -40,6 +40,11 @@ namespace hbm {
 
 			int unsubscribe(const signalReferences_t& signalReferences);
 
+			std::string address() const
+			{
+				return m_address;
+			}
+
 			/// connects to a streaming server and processes all received data.
 			/// Returns when stream is stopped by calling stop() or if loss of connection is recognized.
 			int start(const std::string& address, const std::string &streamPort, const std::string& controlPort);
@@ -52,6 +57,9 @@ namespace hbm {
 			typedef std::unordered_map < unsigned int, SubscribedSignal > subscribedSignals_t;
 
 			typedef std::set < std::string > availableSignals_t;
+
+			Stream(const Stream&);
+			Stream& operator= (const Stream&);
 
 			/// handle stream related meta information
 			int metaCb(const std::string& method, const Json::Value& params);

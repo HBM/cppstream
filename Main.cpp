@@ -10,15 +10,13 @@
 #include "Stream.h"
 #include "Types.h"
 
-static std::string streamId;
-static std::string controlPort;
 static hbm::streaming::Stream stream;
+static size_t receivedDataByteCount;
 
+/// additional handling of stream related meta information goes in here
+/// all signals that become available at any time are being subscribed
 void customStreamMetaCb(hbm::streaming::Stream& stream, const std::string& method, const Json::Value params)
 {
-	// additional handling of meta information goes in here
-
-	// all signals that become available at any time are being subscribed
 	if(method=="available") {
 		hbm::streaming::signalReferences_t signalReferences;
 		for (Json::ValueConstIterator iter = params.begin(); iter!= params.end(); ++iter) {
@@ -36,10 +34,18 @@ void customStreamMetaCb(hbm::streaming::Stream& stream, const std::string& metho
 }
 
 
+/// additional handling of signal related meta information goes in here
 void customSignalMetaCb(hbm::streaming::Stream& stream, int signalNumber, const std::string& method, const Json::Value params)
 {
 	std::cout << __FUNCTION__ << ": " << signalNumber << " " << method << std::endl;
 }
+
+/// we simply accumulate the amount of bytes received in measured data packages.
+void customDataCb(hbm::streaming::Stream& stream, unsigned int signalId, const unsigned char* pData, size_t size)
+{
+	receivedDataByteCount += size;
+}
+
 
 static void sigHandler(int)
 {
@@ -71,5 +77,8 @@ int main(int argc, char* argv[])
 	stream.setCustomSignalMetaCb(customSignalMetaCb);
 
 	// give control to the receiving function.
-	return stream.start(argv[1], hbm::streaming::DAQSTREAM_PORT, controlPort);
+	// returns on signal (terminate, interrupt) buffer overrun on the server side or loss of connection.
+	stream.start(argv[1], hbm::streaming::DAQSTREAM_PORT, controlPort);
+
+	std::cout << "Stopped! Received " << receivedDataByteCount << " byte of measured data" << std::endl;
 }

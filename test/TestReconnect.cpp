@@ -12,16 +12,13 @@
 #endif
 #include "Stream.h"
 
-static std::string streamId;
-static std::string controlPort;
 static size_t receivedDataByteCount;
 
 
+/// additional handling of stream related meta information goes in here
+/// all signals that become available at any time are being subscribed
 void customStreamMetaCb(hbm::streaming::Stream& stream, const std::string& method, const Json::Value params)
 {
-	// additional handling of meta information goes in here
-
-	// all signals that become available at any time are being subscribed
 	if(method=="available") {
 		hbm::streaming::signalReferences_t signalReferences;
 		for (Json::ValueConstIterator iter = params.begin(); iter!= params.end(); ++iter) {

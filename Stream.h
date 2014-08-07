@@ -47,7 +47,10 @@ namespace hbm {
 
 			/// connects to a streaming server and processes all received data.
 			/// Returns when stream is stopped by calling stop() or if loss of connection is recognized.
-			int start(const std::string& address, const std::string &streamPort, const std::string& controlPort);
+			/// @param address address of the HBM daq stream server
+			/// @param streamPort name or number of the HBM daq stream port. Might differ from default when communication runs via a router (CX27)
+			/// @param controlPort name or number of the HBM daq stream control port. Might differ from default when communication runs via a router (CX27)
+			int start(const std::string& address, const std::string &streamPort = "7411", const std::string& controlPort = "http");
 
 			/// closes the stream socket.
 			void stop();

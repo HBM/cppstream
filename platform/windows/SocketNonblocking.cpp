@@ -30,6 +30,7 @@ hbm::SocketNonblocking::SocketNonblocking()
 hbm::SocketNonblocking::~SocketNonblocking()
 {
 	stop();
+	WSACloseEvent(m_event);
 }
 
 int hbm::SocketNonblocking::init()
@@ -222,6 +223,5 @@ void hbm::SocketNonblocking::stop()
 {
 	::shutdown(m_fd, SD_BOTH);
 	::closesocket(m_fd);
-	WSACloseEvent(m_event);
 	m_fd = -1;
 }

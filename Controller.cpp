@@ -30,6 +30,9 @@ namespace hbm {
 
 		int Controller::subscribe(const signalReferences_t &signalReferences)
 		{
+			if(signalReferences.empty()) {
+				return 0;
+			}
 			Json::Value content;
 			content[JSONRPC] = "2.0";
 			content[METHOD] = m_streamId +".subscribe";
@@ -56,6 +59,9 @@ namespace hbm {
 
 		int Controller::unsubscribe(const signalReferences_t &signalReferences)
 		{
+			if(signalReferences.empty()) {
+				return 0;
+			}
 			Json::Value content;
 			content[JSONRPC] = "2.0";
 			content[METHOD] = m_streamId +".unsubscribe";

@@ -1,5 +1,4 @@
 #include <sstream>
-#include <cstring>
 
 #include "HttpPost.h"
 
@@ -33,16 +32,19 @@ namespace hbm {
 
 		char recvBuffer[1024];
 		ssize_t retVal = socket.receiveComplete(recvBuffer, sizeof(recvBuffer));
+		// ensure termination!
+		recvBuffer[sizeof(recvBuffer)-1] = '\0';
 		if(retVal>0) {
-			/// body with response is to be found after the first empty line
-			static const char NEEDLE[] = "\r\n\r\n";
+			static const std::string NEEDLE("\r\n\r\n");
 
-			char *pPos = strstr(recvBuffer, NEEDLE);
-			if(pPos==NULL) {
+			std::string response(recvBuffer, retVal);
+			/// body with response is to be found after the first empty line
+			size_t position = response.find(NEEDLE);
+			if(position == std::string::npos) {
 				return "";
+			} else {
+				return response.substr(position+NEEDLE.length());
 			}
-			pPos += sizeof(NEEDLE)-1;
-			return pPos;
 		}
 		return "";
 	}

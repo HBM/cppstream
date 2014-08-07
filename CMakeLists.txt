@@ -48,4 +48,17 @@ target_link_libraries( testreconnect.bin
   boost_thread
 )
 
+set(TESTMULTIPLE_SOURCES
+  test/TestMultiple.cpp
+)
+
+add_executable( testmultiple.bin ${TESTMULTIPLE_SOURCES} )
+
+target_link_libraries( testmultiple.bin
+  streamclient-static
+  jsoncpp
+  boost_system
+  boost_thread
+)
+
 

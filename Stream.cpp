@@ -143,7 +143,9 @@ namespace hbm {
 			try {
 				// stream related meta information
 				if(method=="apiVersion") {
-					m_apiVersion = params[0].asString();
+					if(params.empty()==false) {
+						m_apiVersion = params[0].asString();
+					}
 					std::cout << "daq stream version: " << m_apiVersion << std::endl;
 				} else if(method=="init") {
 					m_streamId = params["streamId"].asString();
@@ -159,9 +161,11 @@ namespace hbm {
 				} else if(method=="alive") {
 					// We do ignore this. We are using TCP keep alive in order to detect communication problems.
 				} else if(method=="fill") {
-					unsigned int fill = params[0].asUInt();
-					if(fill>25) {
-						std::cout << "ring buffer fill level is " << params[0].asUInt() << "%" << std::endl;
+					if(params.empty()==false) {
+						unsigned int fill = params[0].asUInt();
+						if(fill>25) {
+							std::cout << "ring buffer fill level is " << params[0].asUInt() << "%" << std::endl;
+						}
 					}
 				} else if(method=="available") {
 					std::string signalReference;

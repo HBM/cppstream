@@ -28,7 +28,7 @@ namespace hbm {
 
 		class Stream {
 		public:
-			Stream(const std::string& address);
+			Stream();
 
 			void setCustomDataCb(DataCb_t cb);
 
@@ -42,7 +42,7 @@ namespace hbm {
 
 			/// connects to a streaming server and processes all received data.
 			/// Returns when stream is stopped by calling stop() or if loss of connection is recognized.
-			int start(const std::string &streamPort, const std::string& controlPort);
+			int start(const std::string& address, const std::string &streamPort, const std::string& controlPort);
 
 			/// closes the stream socket.
 			void stop();

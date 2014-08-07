@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <signal.h>
 
 #ifdef _WIN32
 #include "jsoncpp/include/json/value.h"
@@ -11,6 +12,7 @@
 
 static std::string streamId;
 static std::string controlPort;
+static hbm::streaming::Stream stream;
 
 void customStreamMetaCb(hbm::streaming::Stream& stream, const std::string& method, const Json::Value params)
 {
@@ -39,14 +41,23 @@ void customSignalMetaCb(hbm::streaming::Stream& stream, int signalNumber, const 
 	std::cout << __FUNCTION__ << ": " << signalNumber << " " << method << std::endl;
 }
 
+static void sigHandler(int)
+{
+	stream.stop();
+}
+
 int main(int argc, char* argv[])
 {
+	// some signals should lead to a normal shutdown
+	signal( SIGTERM, &sigHandler);
+	signal( SIGINT, &sigHandler);
+
 	if((argc<2) || (std::string(argv[1])=="-h") ) {
 		std::cout << "syntax: " << argv[0] << " <stream server address>" << std::endl;
 		return EXIT_SUCCESS;
 	}
 
-	hbm::streaming::Stream stream(argv[1]);
+
 
 	// the control port might differ when communication runs via a router (CX27)
 	std::string controlPort = "http";
@@ -60,5 +71,5 @@ int main(int argc, char* argv[])
 	stream.setCustomSignalMetaCb(customSignalMetaCb);
 
 	// give control to the receiving function.
-	return stream.start(hbm::streaming::DAQSTREAM_PORT, controlPort);
+	return stream.start(argv[1], hbm::streaming::DAQSTREAM_PORT, controlPort);
 }

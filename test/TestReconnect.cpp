@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
 		return EXIT_SUCCESS;
 	}
 
-	hbm::streaming::Stream stream(argv[1]);
+	hbm::streaming::Stream stream;
 
 
 
@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
 
 	do {
 		receivedDataByteCount = 0;
-		boost::thread streamer = boost::thread(boost::bind(&hbm::streaming::Stream::start, boost::ref(stream), hbm::streaming::DAQSTREAM_PORT, controlPort));
+		boost::thread streamer = boost::thread(boost::bind(&hbm::streaming::Stream::start, boost::ref(stream), argv[1], hbm::streaming::DAQSTREAM_PORT, controlPort));
 		std::cout << "Started" << std::endl;
 		boost::this_thread::sleep_for(cycleTime);
 		stream.stop();

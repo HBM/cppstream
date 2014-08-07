@@ -22,8 +22,17 @@
 namespace hbm {
 	namespace streaming {
 
-		Stream::Stream(const std::string& address)
-			: m_address(address)
+		Stream::Stream()
+			: m_streamSocket()
+			, m_address()
+			, m_apiVersion()
+			, m_streamId()
+			, m_controlPort()
+			, m_initialTime()
+			, m_availableSignals()
+			, m_subscribedSignals()
+			, m_customDataCb()
+			, m_customStreamMetaCb()
 		{
 		}
 
@@ -56,8 +65,9 @@ namespace hbm {
 		}
 
 
-		int Stream::start(const std::string &streamPort, const std::string &controlPort)
+		int Stream::start(const std::string& address, const std::string &streamPort, const std::string &controlPort)
 		{
+			m_address = address;
 			m_controlPort = controlPort;
 			int result = m_streamSocket.connect(m_address.c_str(), streamPort);
 			if(result<0) {
@@ -106,9 +116,10 @@ namespace hbm {
 							// signal related meta information
 							if(method=="subscribe") {
 								/// this is the first signal related meta information to arrive!
-								std::string signalReference = params[0].asString();
-
-								m_subscribedSignals[signalNumber].setSignalReference(signalReference);
+								if(params.empty()==false) {
+									std::string signalReference = params[0].asString();
+									m_subscribedSignals[signalNumber].setSignalReference(signalReference);
+								}
 							} else if(method=="unsubscribe") {
 								m_subscribedSignals.erase(signalNumber);
 							} else {
@@ -129,7 +140,7 @@ namespace hbm {
 		void Stream::stop()
 		{
 			m_streamSocket.stop();
-
+			m_address.clear();
 			m_apiVersion.clear();
 			m_streamId.clear();
 			m_controlPort.clear();

@@ -24,13 +24,13 @@ add_library(streamclient-static  STATIC ${STREAMCLIENT_SOURCES})
 
 
 
-set(CPPSTREAM_SOURCES
-  Main.cpp
+set(EXAMPLECLIENT_SOURCES
+  ExampleClient.cpp
 )
 
-add_executable( cppstream.bin ${CPPSTREAM_SOURCES} )
+add_executable( exampleclient.bin ${EXAMPLECLIENT_SOURCES} )
 
-target_link_libraries( cppstream.bin
+target_link_libraries( exampleclient.bin
   streamclient-static
   jsoncpp
 )

@@ -9,6 +9,14 @@
 #include <boost/bind.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 
+#ifdef _WIN32
+#include "jsoncpp/include/json/value.h"
+#include "jsoncpp/include/json/writer.h"
+#else
+#include <jsoncpp/json/value.h>
+#include <jsoncpp/json/writer.h>
+#endif
+
 #include "Stream.h"
 
 
@@ -20,7 +28,7 @@ static streams_t streams;
 
 /// additional handling of stream related meta information goes in here
 /// all signals that become available at any time are being subscribed
-void customStreamMetaCb(hbm::streaming::Stream& stream, const std::string& method, const Json::Value params)
+void customStreamMetaCb(hbm::streaming::Stream& stream, const std::string& method, const Json::Value& params)
 {
 	if(method=="available") {
 		hbm::streaming::signalReferences_t signalReferences;
@@ -33,9 +41,9 @@ void customStreamMetaCb(hbm::streaming::Stream& stream, const std::string& metho
 }
 
 
-void customSignalMetaCb(hbm::streaming::Stream& stream, int signalNumber, const std::string& method, const Json::Value params)
+void customSignalMetaCb(hbm::streaming::Stream& stream, int signalNumber, const std::string& method, const Json::Value& params)
 {
-	//	std::cout << signalNumber << " " << method << std::endl;
+	std::cout << stream.address() << "." << signalNumber << " " << method << " " << Json::FastWriter().write(params) << std::endl;
 }
 
 
@@ -82,7 +90,7 @@ int main(int argc, char* argv[])
 		streams.push_back(streamPtr);
 	}
 
-	boost::chrono::milliseconds cycleTime(30000);
+	boost::chrono::milliseconds cycleTime(10000);
 
 	boost::this_thread::sleep_for(cycleTime);
 
@@ -96,5 +104,6 @@ int main(int argc, char* argv[])
 		std::cout << "received " << iter->second << " bytes of measured data from " << iter->first << std::endl;
 	}
 
+	std::cout << "finished!" << std::endl;
 }
 

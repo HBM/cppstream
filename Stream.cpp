@@ -157,15 +157,15 @@ namespace hbm {
 					if(params.empty()==false) {
 						m_apiVersion = params[0].asString();
 					}
-					std::cout << "daq stream version: " << m_apiVersion << std::endl;
+					std::cout << m_address << ": daq stream version: " << m_apiVersion << std::endl;
 				} else if(method=="init") {
 					m_streamId = params["streamId"].asString();
-					std::cout << "this is: " << m_streamId << std::endl;
-					std::cout << "supported features: " << params["supported"] << std::endl;
+					std::cout << m_address << ": this is " << m_streamId << std::endl;
+					std::cout << m_address << ": supported features: " << params["supported"] << std::endl;
 					const Json::Value& commandInterfaces = params["commandInterfaces"];
 					for (Json::ValueConstIterator iter = commandInterfaces.begin(); iter!= commandInterfaces.end(); ++iter) {
 						const Json::Value& element = *iter;
-						std::cout << "command interfaces: " << element << std::endl;
+						std::cout << m_address << ": command interfaces: " << element << std::endl;
 					}
 				} else if(method=="time") {
 					m_initialTime.set(params);
@@ -179,27 +179,17 @@ namespace hbm {
 						}
 					}
 				} else if(method=="available") {
-					std::string signalReference;
-					std::cout << "the following signal(s) became available: ";
 					for (Json::ValueConstIterator iter = params.begin(); iter!= params.end(); ++iter) {
 						const Json::Value& element = *iter;
-						signalReference = element.asString();
-						m_availableSignals.insert(signalReference);
-						std::cout << "'" << signalReference << "' ";
+						m_availableSignals.insert(element.asString());
 					}
-					std::cout << std::endl;
 				} else if(method=="unavailable") {
-					std::string signalReference;
-					std::cout << "the following signal(s) became unavailable: ";
 					for (Json::ValueConstIterator iter = params.begin(); iter!= params.end(); ++iter) {
 						const Json::Value& element = *iter;
-						signalReference = element.asString();
-						m_availableSignals.erase(signalReference);
-						std::cout << "'" << signalReference << "' ";
+						m_availableSignals.erase(element.asString());
 					}
-					std::cout << std::endl;
 				} else {
-					std::cout << "unhandled stream related meta information '" << method << "' with parameters: " << Json::StyledWriter().write(params) << std::endl;
+					std::cout << m_address << ": unhandled stream related meta information '" << method << "' with parameters: " << Json::StyledWriter().write(params) << std::endl;
 				}
 				return 0;
 			} catch(const std::runtime_error& e) {

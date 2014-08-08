@@ -16,7 +16,7 @@
 #include "MetaInformation.h"
 #include "SubscribedSignal.h"
 #include "Types.h"
-#include "Stream.h"
+#include "StreamClient.h"
 #include "Controller.h"
 
 namespace hbm {
@@ -36,6 +36,19 @@ namespace hbm {
 		{
 		}
 
+		StreamClient::StreamClient(const std::string& fileName)
+			: m_streamSocket(fileName)
+			, m_address()
+			, m_apiVersion()
+			, m_streamId()
+			, m_controlPort()
+			, m_initialTime()
+			, m_availableSignals()
+			, m_subscribedSignals()
+			, m_customDataCb()
+			, m_customStreamMetaCb()
+		{
+		}
 		void StreamClient::setCustomDataCb(DataCb_t cb)
 		{
 			m_customDataCb = cb;
@@ -125,7 +138,7 @@ namespace hbm {
 							} else {
 								m_subscribedSignals[signalNumber].metaCb(method, params);
 
-								if(m_customStreamMetaCb) {
+								if(m_customSignalMetaCb) {
 									m_customSignalMetaCb(*this, signalNumber, method, params);
 								}
 							}

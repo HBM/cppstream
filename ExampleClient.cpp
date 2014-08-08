@@ -7,7 +7,7 @@
 #else
 #include <jsoncpp/json/value.h>
 #endif
-#include "Stream.h"
+#include "StreamClient.h"
 #include "Types.h"
 
 /// this object represents

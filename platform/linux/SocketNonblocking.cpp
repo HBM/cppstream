@@ -27,6 +27,12 @@ hbm::SocketNonblocking::SocketNonblocking()
 {
 }
 
+hbm::SocketNonblocking::SocketNonblocking(const std::string& fileName)
+	: m_fd(-1)
+	, m_bufferedReader(fileName)
+{
+}
+
 hbm::SocketNonblocking::~SocketNonblocking()
 {
 	stop();

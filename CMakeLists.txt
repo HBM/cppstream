@@ -8,7 +8,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 include_directories(.)
 set(STREAMCLIENT_SOURCES
   Types.cpp
-  Stream.cpp
+  StreamClient.cpp
   TransportHeader.cpp
   SocketNonblocking.h
   MetaInformation.cpp

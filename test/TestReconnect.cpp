@@ -10,7 +10,7 @@
 #else
 #include <jsoncpp/json/value.h>
 #endif
-#include "Stream.h"
+#include "StreamClient.h"
 
 static size_t receivedDataByteCount;
 
@@ -32,7 +32,7 @@ void customStreamMetaCb(hbm::streaming::StreamClient& stream, const std::string&
 
 void customSignalMetaCb(hbm::streaming::StreamClient& stream, int signalNumber, const std::string& method, const Json::Value params)
 {
-	//	std::cout << signalNumber << " " << method << std::endl;
+	std::cout << stream.address() << ": " << signalNumber << " " << method << std::endl;
 }
 
 
@@ -69,7 +69,7 @@ int main(int argc, char* argv[])
 
 
 	stream.setCustomStreamMetaCb(customStreamMetaCb);
-	stream.setCustomSignalMetaCb(customSignalMetaCb);
+	//stream.setCustomSignalMetaCb(customSignalMetaCb);
 	stream.setCustomDataCb(customDataCb);
 
 	do {

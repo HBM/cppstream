@@ -32,6 +32,10 @@ namespace hbm {
 		public:
 			StreamClient();
 
+			/// use this variant to dump everything to a file
+			/// \throw std::runtime_error
+			StreamClient(const std::string& fileName);
+
 			/// The custom data callback notifies about meuasured data. This is going to be called very often!
 			void setCustomDataCb(DataCb_t cb);
 

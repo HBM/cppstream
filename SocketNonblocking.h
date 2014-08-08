@@ -21,6 +21,10 @@ namespace hbm
 	{
 	public:
 		SocketNonblocking();
+
+		/// use this variant to dump everything to a file
+		/// \throw std::runtime_error
+		SocketNonblocking(const std::string& fileName);
 		virtual ~SocketNonblocking();
 
 		/// \return 0: success; -1: error

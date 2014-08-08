@@ -17,7 +17,7 @@
 #include <jsoncpp/json/writer.h>
 #endif
 
-#include "Stream.h"
+#include "StreamClient.h"
 
 
 typedef boost::ptr_vector < hbm::streaming::StreamClient > streams_t;
@@ -79,7 +79,11 @@ int main(int argc, char* argv[])
 	std::string address;
 	while (std::getline(file, address))
 	{
-		hbm::streaming::StreamClient* streamPtr = new hbm::streaming::StreamClient;
+		// we dump into a file!
+		std::string dumpFileName;
+		dumpFileName = address + ".dump";
+		hbm::streaming::StreamClient* streamPtr = new hbm::streaming::StreamClient(dumpFileName);
+		//hbm::streaming::StreamClient* streamPtr = new hbm::streaming::StreamClient;
 
 		streamPtr->setCustomStreamMetaCb(customStreamMetaCb);
 		streamPtr->setCustomSignalMetaCb(customSignalMetaCb);

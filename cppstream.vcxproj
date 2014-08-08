@@ -14,6 +14,7 @@
     <ProjectGuid>{670E5C5D-4BC7-4275-AB32-AB5718695BB1}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>cppstream</RootNamespace>
+    <ProjectName>ExampleClient</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -80,15 +81,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\jsoncpp\makefiles\msvc2010\lib_json.vcxproj">
       <Project>{1e6c2c1c-6453-4129-ae3f-0ee8e6599c89}</Project>
     </ProjectReference>
     <ProjectReference Include="DaqStreamClient.vcxproj">
       <Project>{370ab3e4-8510-4d2e-8618-20327b6c77b4}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ExampleClient.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

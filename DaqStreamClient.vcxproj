@@ -83,7 +83,7 @@
     <ClCompile Include="HttpPost.cpp" />
     <ClCompile Include="MetaInformation.cpp" />
     <ClCompile Include="platform\windows\SocketNonblocking.cpp" />
-    <ClCompile Include="Stream.cpp" />
+    <ClCompile Include="StreamClient.cpp" />
     <ClCompile Include="SubscribedSignal.cpp" />
     <ClCompile Include="TransportHeader.cpp" />
     <ClCompile Include="Types.cpp" />

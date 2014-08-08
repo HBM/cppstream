@@ -27,6 +27,15 @@ hbm::SocketNonblocking::SocketNonblocking()
 	WSAStartup(2, &wsaData);
 }
 
+hbm::SocketNonblocking::SocketNonblocking(const std::string& fileName)
+	: m_fd(-1)
+	, m_event(WSACreateEvent())
+	, m_bufferedReader(fileName)
+{
+	WSADATA wsaData;
+	WSAStartup(2, &wsaData);
+}
+
 hbm::SocketNonblocking::~SocketNonblocking()
 {
 	stop();
@@ -142,7 +151,7 @@ ssize_t hbm::SocketNonblocking::receiveComplete(void* pBlock, size_t len)
 
 
   while (DataToGet > 0) {
-    numBytes = recv(m_fd, reinterpret_cast<char*>(pDat), static_cast < int >(DataToGet), 0);
+    numBytes = m_bufferedReader.recv(m_fd, reinterpret_cast<char*>(pDat), static_cast < int >(DataToGet), 0);
     if(numBytes>0) {
       pDat += numBytes;
       DataToGet -= numBytes;

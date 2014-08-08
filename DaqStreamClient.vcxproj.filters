@@ -39,13 +39,13 @@
     <ClCompile Include="MetaInformation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Stream.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SubscribedSignal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Types.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StreamClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

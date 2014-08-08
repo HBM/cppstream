@@ -10,12 +10,13 @@
 #include "Stream.h"
 #include "Types.h"
 
-static hbm::streaming::Stream stream;
+/// this object represents
+static hbm::streaming::StreamClient stream;
 static size_t receivedDataByteCount;
 
 /// additional handling of stream related meta information goes in here
 /// all signals that become available at any time are being subscribed
-void customStreamMetaCb(hbm::streaming::Stream& stream, const std::string& method, const Json::Value params)
+void customStreamMetaCb(hbm::streaming::StreamClient& stream, const std::string& method, const Json::Value params)
 {
 	if(method=="available") {
 		hbm::streaming::signalReferences_t signalReferences;
@@ -35,13 +36,13 @@ void customStreamMetaCb(hbm::streaming::Stream& stream, const std::string& metho
 
 
 /// additional handling of signal related meta information goes in here
-void customSignalMetaCb(hbm::streaming::Stream& stream, int signalNumber, const std::string& method, const Json::Value params)
+void customSignalMetaCb(hbm::streaming::StreamClient& stream, int signalNumber, const std::string& method, const Json::Value params)
 {
 	std::cout << __FUNCTION__ << ": " << signalNumber << " " << method << std::endl;
 }
 
 /// we simply accumulate the amount of bytes received in measured data packages.
-void customDataCb(hbm::streaming::Stream& stream, unsigned int signalId, const unsigned char* pData, size_t size)
+void customDataCb(hbm::streaming::StreamClient& stream, unsigned int signalId, const unsigned char* pData, size_t size)
 {
 	receivedDataByteCount += size;
 }
@@ -51,6 +52,8 @@ static void sigHandler(int)
 {
 	stream.stop();
 }
+
+
 
 int main(int argc, char* argv[])
 {
@@ -62,8 +65,6 @@ int main(int argc, char* argv[])
 		std::cout << "syntax: " << argv[0] << " <stream server address>" << std::endl;
 		return EXIT_SUCCESS;
 	}
-
-
 
 	// the control port might differ when communication runs via a router (CX27)
 	std::string controlPort = "http";

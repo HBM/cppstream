@@ -20,20 +20,25 @@
 namespace hbm {
 	namespace streaming {
 
-		class Stream;
+		class StreamClient;
 
-		typedef std::function<void(hbm::streaming::Stream& stream, unsigned int signalId, const unsigned char* pData, size_t size)> DataCb_t;
-		typedef std::function<void(hbm::streaming::Stream& stream, const std::string& method, const Json::Value& params)> StreamMetaCb_t;
-		typedef std::function<void(hbm::streaming::Stream& stream, int signalNumber, const std::string& method, const Json::Value& params)> SignalMetaCb_t;
+		typedef std::function<void(hbm::streaming::StreamClient& stream, unsigned int signalId, const unsigned char* pData, size_t size)> DataCb_t;
+		typedef std::function<void(hbm::streaming::StreamClient& stream, const std::string& method, const Json::Value& params)> StreamMetaCb_t;
+		typedef std::function<void(hbm::streaming::StreamClient& stream, int signalNumber, const std::string& method, const Json::Value& params)> SignalMetaCb_t;
 
-		class Stream {
+		/// Connects to on daq stream server. Receives and interpretes meta data. Subcribes signals. Receives measured data
+		/// some callback functions may be registered in order to get informed about meta information and measured data.
+		class StreamClient {
 		public:
-			Stream();
+			StreamClient();
 
+			/// The custom data callback notifies about meuasured data. This is going to be called very often!
 			void setCustomDataCb(DataCb_t cb);
 
+			/// The custom stream meta callback notifies about all stream related meta information
 			void setCustomStreamMetaCb(StreamMetaCb_t cb);
 
+			/// The custom signal meta callback notifies about all signal related meta information
 			void setCustomSignalMetaCb(SignalMetaCb_t cb);
 
 			int subscribe(const signalReferences_t& signalReferences);
@@ -61,8 +66,8 @@ namespace hbm {
 
 			typedef std::set < std::string > availableSignals_t;
 
-			Stream(const Stream&);
-			Stream& operator= (const Stream&);
+			StreamClient(const StreamClient&);
+			StreamClient& operator= (const StreamClient&);
 
 			/// handle stream related meta information
 			int metaCb(const std::string& method, const Json::Value& params);

@@ -20,7 +20,7 @@
 #include "Stream.h"
 
 
-typedef boost::ptr_vector < hbm::streaming::Stream > streams_t;
+typedef boost::ptr_vector < hbm::streaming::StreamClient > streams_t;
 typedef std::unordered_map < std::string , size_t > receivedDataByteCounts_t;
 
 static receivedDataByteCounts_t receivedDataByteCounts;
@@ -28,7 +28,7 @@ static streams_t streams;
 
 /// additional handling of stream related meta information goes in here
 /// all signals that become available at any time are being subscribed
-void customStreamMetaCb(hbm::streaming::Stream& stream, const std::string& method, const Json::Value& params)
+void customStreamMetaCb(hbm::streaming::StreamClient& stream, const std::string& method, const Json::Value& params)
 {
 	if(method=="available") {
 		hbm::streaming::signalReferences_t signalReferences;
@@ -41,14 +41,14 @@ void customStreamMetaCb(hbm::streaming::Stream& stream, const std::string& metho
 }
 
 
-void customSignalMetaCb(hbm::streaming::Stream& stream, int signalNumber, const std::string& method, const Json::Value& params)
+void customSignalMetaCb(hbm::streaming::StreamClient& stream, int signalNumber, const std::string& method, const Json::Value& params)
 {
 	std::cout << stream.address() << "." << signalNumber << " " << method << " " << Json::FastWriter().write(params) << std::endl;
 }
 
 
 /// we simply accumulate the amount of bytes received in measured data packages.
-void customDataCb(hbm::streaming::Stream& stream, unsigned int signalId, const unsigned char* pData, size_t size)
+void customDataCb(hbm::streaming::StreamClient& stream, unsigned int signalId, const unsigned char* pData, size_t size)
 {
 	receivedDataByteCounts[stream.address()] += size;
 }
@@ -79,13 +79,13 @@ int main(int argc, char* argv[])
 	std::string address;
 	while (std::getline(file, address))
 	{
-		hbm::streaming::Stream* streamPtr = new hbm::streaming::Stream;
+		hbm::streaming::StreamClient* streamPtr = new hbm::streaming::StreamClient;
 
 		streamPtr->setCustomStreamMetaCb(customStreamMetaCb);
 		streamPtr->setCustomSignalMetaCb(customSignalMetaCb);
 		streamPtr->setCustomDataCb(customDataCb);
 
-		boost::thread* pStreamer = new boost::thread(boost::bind(&hbm::streaming::Stream::start, streamPtr, address, hbm::streaming::DAQSTREAM_PORT, "http"));
+		boost::thread* pStreamer = new boost::thread(boost::bind(&hbm::streaming::StreamClient::start, streamPtr, address, hbm::streaming::DAQSTREAM_PORT, "http"));
 		threads.add_thread(pStreamer);
 		streams.push_back(streamPtr);
 	}

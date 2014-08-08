@@ -1,8 +1,7 @@
-# HBM Daq Stream Example
+# HBM Daq Stream Examples
 
-This is an example client for HBM Daq Stream protocol. 
 
-It connects to a HBM Daq Streaming socket, receives everything that arrives, subscribes signals, interprets meta information and measured data.
+
 
 
 
@@ -22,3 +21,10 @@ Download and install the binaries and set the BOOST_ROOT environment variable to
 
 ### Build System
 Under Linux the cmake build system is being used. A solution for MSVC2010 is provided.
+
+
+## ExampleClient
+This is a simple example client for HBM Daq Stream protocol. 
+
+It connects to a HBM Daq Streaming socket, receives everything that arrives, subscribes all signals, interprets stream and signal related meta information and measured data.
+

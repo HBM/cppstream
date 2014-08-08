@@ -17,7 +17,7 @@ static size_t receivedDataByteCount;
 
 /// additional handling of stream related meta information goes in here
 /// all signals that become available at any time are being subscribed
-void customStreamMetaCb(hbm::streaming::Stream& stream, const std::string& method, const Json::Value params)
+void customStreamMetaCb(hbm::streaming::StreamClient& stream, const std::string& method, const Json::Value params)
 {
 	if(method=="available") {
 		hbm::streaming::signalReferences_t signalReferences;
@@ -30,14 +30,14 @@ void customStreamMetaCb(hbm::streaming::Stream& stream, const std::string& metho
 }
 
 
-void customSignalMetaCb(hbm::streaming::Stream& stream, int signalNumber, const std::string& method, const Json::Value params)
+void customSignalMetaCb(hbm::streaming::StreamClient& stream, int signalNumber, const std::string& method, const Json::Value params)
 {
 	//	std::cout << signalNumber << " " << method << std::endl;
 }
 
 
 /// we simply accumulate the amount of bytes received in measured data packages.
-void customDataCb(hbm::streaming::Stream& stream, unsigned int signalId, const unsigned char* pData, size_t size)
+void customDataCb(hbm::streaming::StreamClient& stream, unsigned int signalId, const unsigned char* pData, size_t size)
 {
 	receivedDataByteCount += size;
 }
@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
 		return EXIT_SUCCESS;
 	}
 
-	hbm::streaming::Stream stream;
+	hbm::streaming::StreamClient stream;
 
 
 
@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
 
 	do {
 		receivedDataByteCount = 0;
-		boost::thread streamer = boost::thread(boost::bind(&hbm::streaming::Stream::start, boost::ref(stream), argv[1], hbm::streaming::DAQSTREAM_PORT, controlPort));
+		boost::thread streamer = boost::thread(boost::bind(&hbm::streaming::StreamClient::start, boost::ref(stream), argv[1], hbm::streaming::DAQSTREAM_PORT, controlPort));
 		std::cout << "Started" << std::endl;
 		boost::this_thread::sleep_for(cycleTime);
 		stream.stop();

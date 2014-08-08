@@ -22,7 +22,7 @@
 namespace hbm {
 	namespace streaming {
 
-		Stream::Stream()
+		StreamClient::StreamClient()
 			: m_streamSocket()
 			, m_address()
 			, m_apiVersion()
@@ -36,36 +36,36 @@ namespace hbm {
 		{
 		}
 
-		void Stream::setCustomDataCb(DataCb_t cb)
+		void StreamClient::setCustomDataCb(DataCb_t cb)
 		{
 			m_customDataCb = cb;
 		}
 
 
-		void Stream::setCustomStreamMetaCb(StreamMetaCb_t cb)
+		void StreamClient::setCustomStreamMetaCb(StreamMetaCb_t cb)
 		{
 			m_customStreamMetaCb = cb;
 		}
 
-		void Stream::setCustomSignalMetaCb(SignalMetaCb_t cb)
+		void StreamClient::setCustomSignalMetaCb(SignalMetaCb_t cb)
 		{
 			m_customSignalMetaCb = cb;
 		}
 
-		int Stream::subscribe(const signalReferences_t& signalReferences)
+		int StreamClient::subscribe(const signalReferences_t& signalReferences)
 		{
 			Controller controller(m_streamId, m_address.c_str(), m_controlPort);
 			return controller.subscribe(signalReferences);
 		}
 
-		int Stream::unsubscribe(const signalReferences_t& signalReferences)
+		int StreamClient::unsubscribe(const signalReferences_t& signalReferences)
 		{
 			Controller controller(m_streamId, m_address.c_str(), m_controlPort);
 			return controller.unsubscribe(signalReferences);
 		}
 
 
-		int Stream::start(const std::string& address, const std::string &streamPort, const std::string &controlPort)
+		int StreamClient::start(const std::string& address, const std::string &streamPort, const std::string &controlPort)
 		{
 			m_address = address;
 			m_controlPort = controlPort;
@@ -137,7 +137,7 @@ namespace hbm {
 			return 0;
 		}
 
-		void Stream::stop()
+		void StreamClient::stop()
 		{
 			m_streamSocket.stop();
 			m_address.clear();
@@ -149,7 +149,7 @@ namespace hbm {
 			m_subscribedSignals.clear();
 		}
 
-		int Stream::metaCb(const std::string& method, const Json::Value& params)
+		int StreamClient::metaCb(const std::string& method, const Json::Value& params)
 		{
 			try {
 				// stream related meta information

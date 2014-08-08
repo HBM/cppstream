@@ -175,7 +175,7 @@ namespace hbm {
 					if(params.empty()==false) {
 						unsigned int fill = params[0].asUInt();
 						if(fill>25) {
-							std::cout << "ring buffer fill level is " << params[0].asUInt() << "%" << std::endl;
+							std::cout << m_address << ": ring buffer fill level is " << params[0].asUInt() << "%" << std::endl;
 						}
 					}
 				} else if(method=="available") {

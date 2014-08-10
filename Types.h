@@ -13,7 +13,7 @@ namespace hbm {
 	static const char METHOD[] = "method";
 
 
-	namespace streaming {		
+	namespace streaming {
 		typedef std::vector < std::string > signalReferences_t;
 
 		static const std::string DAQSTREAM_PORT = "7411";

@@ -16,6 +16,8 @@ namespace hbm {
 		/// \warning for windows, this class works on little endian machines only. this is because of endian issues.
 		class SubscribedSignal {
 		public:
+			SubscribedSignal();
+
 			void setSignalReference(const std::string& signalReference) {
 				m_signalReference = signalReference;
 			}
@@ -52,7 +54,10 @@ namespace hbm {
 
 			std::string m_signalReference;
 			timeInfo_t m_startTime;
-			Json::Value m_signalRate;
+
+			//Json::Value m_signalRate;
+			unsigned int m_signalRateSamples;
+			timeInfo_t m_signalRateDelta;
 
 
 			pattern_t m_dataFormatPattern;

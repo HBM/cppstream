@@ -24,6 +24,23 @@ namespace hbm {
 		// we use this as target for all values. Otherwise the compiler might optimize away a lot of functionality!
 		static double sum = 0;
 
+		SubscribedSignal::SubscribedSignal()
+			: m_signalReference()
+			, m_startTime()
+
+			, m_signalRateSamples(0)
+			, m_signalRateDelta()
+
+
+			, m_dataFormatPattern()
+			, m_dataIsBigEndian(false)
+			, m_dataValueType()
+			, m_dataValueSize(0)
+			, m_dataTimeType()
+			, m_dataTimeSize(0)
+	{
+		}
+
 		void SubscribedSignal::interpreteValues(unsigned char *pData, size_t size)
 		{
 			if(m_dataIsBigEndian) {
@@ -225,7 +242,12 @@ namespace hbm {
 			} else if(method=="data") {
 				setDataFormat(params);
 			} else if(method=="signalRate") {
-				m_signalRate = params;
+				try {
+					m_signalRateSamples = params["samples"].asUInt();
+					m_signalRateDelta.set(params["delta"]);
+				} catch(const std::runtime_error& e) {
+					std::cerr << e.what();
+				}
 			} else {
 				std::cout << "unhandled signal related meta information '" << method << "' for signal " << m_signalReference << " with parameters: " << Json::StyledWriter().write(params) << std::endl;
 			}

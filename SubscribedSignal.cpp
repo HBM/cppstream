@@ -41,14 +41,13 @@ namespace hbm {
 	{
 		}
 
-		void SubscribedSignal::interpreteValues(unsigned char *pData, size_t size)
+		void SubscribedSignal::interpreteValues(unsigned char *pData, size_t count)
 		{
 			if(m_dataIsBigEndian) {
 				if(m_dataValueType==DATATYPE_REAL32) {
 					uint32_t* pPos = reinterpret_cast < uint32_t* > (pData);
 					uint32_t targetUint32;
 					float* pTarget;
-					size_t count = size >> 2;
 					for(size_t i=0; i<count; ++i) {
 						targetUint32 = ntohl(*pPos);
 						// this is it!
@@ -60,7 +59,6 @@ namespace hbm {
 					uint64_t* pPos = reinterpret_cast < uint64_t* > (pData);
 					uint64_t targetUint64;
 					double* pTarget;
-					size_t count = size >> 4;
 					for(size_t i=0; i<count; ++i) {
 #ifdef _WIN32
 						// this will create a mess on big endian machines
@@ -76,7 +74,6 @@ namespace hbm {
 				} else if(m_dataValueType==DATATYPE_U32) {
 					uint32_t* pPos = reinterpret_cast < uint32_t* > (pData);
 					uint32_t target;
-					size_t count = size >> 2;
 					for(size_t i=0; i<count; ++i) {
 						// this is it!
 						target = ntohl(*pPos);
@@ -86,7 +83,6 @@ namespace hbm {
 				} else if(m_dataValueType==DATATYPE_S32) {
 					int32_t* pPos = reinterpret_cast < int32_t* > (pData);
 					int32_t target;
-					size_t count = size >> 2;
 					for(size_t i=0; i<count; ++i) {
 						// this is it!
 						target = ntohl(*pPos);
@@ -96,7 +92,6 @@ namespace hbm {
 				} else if(m_dataValueType==DATATYPE_U64) {
 					uint64_t* pPos = reinterpret_cast < uint64_t* > (pData);
 					uint64_t target;
-					size_t count = size >> 4;
 					for(size_t i=0; i<count; ++i) {
 #ifdef _WIN32
 						// this will create a mess on big endian machines
@@ -110,7 +105,6 @@ namespace hbm {
 				} else if(m_dataValueType==DATATYPE_S64) {
 					int64_t* pPos = reinterpret_cast < int64_t* > (pData);
 					int64_t target;
-					size_t count = size >> 4;
 					for(size_t i=0; i<count; ++i) {
 #ifdef _WIN32
 						// this will create a mess on big endian machines
@@ -128,7 +122,6 @@ namespace hbm {
 					uint32_t* pPos = reinterpret_cast < uint32_t* > (pData);
 					uint32_t targetUint32;
 					float* pTarget;
-					size_t count = size >> 2;
 					for(size_t i=0; i<count; ++i) {
 #ifdef _WIN32
 						targetUint32 =*pPos;
@@ -144,7 +137,6 @@ namespace hbm {
 					uint64_t* pPos = reinterpret_cast < uint64_t* > (pData);
 					uint64_t targetUint64;
 					double* pTarget;
-					size_t count = size >> 4;
 					for(size_t i=0; i<count; ++i) {
 #ifdef _WIN32
 						targetUint64 =*pPos;
@@ -159,7 +151,6 @@ namespace hbm {
 				} else if(m_dataValueType==DATATYPE_U32) {
 					uint32_t* pPos = reinterpret_cast < uint32_t* > (pData);
 					uint32_t target;
-					size_t count = size >> 2;
 					for(size_t i=0; i<count; ++i) {
 #ifdef _WIN32
 						target =*pPos;
@@ -172,7 +163,6 @@ namespace hbm {
 				} else if(m_dataValueType==DATATYPE_S32) {
 					int32_t* pPos = reinterpret_cast < int32_t* > (pData);
 					int32_t target;
-					size_t count = size >> 2;
 					for(size_t i=0; i<count; ++i) {
 #ifdef _WIN32
 						target =*pPos;
@@ -185,7 +175,6 @@ namespace hbm {
 				} else if(m_dataValueType==DATATYPE_U64) {
 					uint64_t* pPos = reinterpret_cast < uint64_t* > (pData);
 					uint64_t target;
-					size_t count = size >> 4;
 					for(size_t i=0; i<count; ++i) {
 #ifdef _WIN32
 						target =*pPos;
@@ -198,7 +187,6 @@ namespace hbm {
 				} else if(m_dataValueType==DATATYPE_S64) {
 					int64_t* pPos = reinterpret_cast < int64_t* > (pData);
 					int64_t target;
-					size_t count = size >> 4;
 					for(size_t i=0; i<count; ++i) {
 #ifdef _WIN32
 						target =*pPos;
@@ -212,24 +200,86 @@ namespace hbm {
 			}
 		}
 
+		void SubscribedSignal::interpreteTimestamp(unsigned char* pData)
+		{
+			if(m_dataTimeSize==4) {
+				uint32_t target;
+#ifdef _WIN32
+				if(m_dataIsBigEndian) {
+					target = ntohl(*pPos);
+				} else {
+					target = *pData;
+				}
+#else
+				if(m_dataIsBigEndian) {
+					target = be32toh(*pData);
+				} else {
+					target = le32toh(*pData);
+				}
+#endif
+			} else if(m_dataTimeSize==8) {
+				uint64_t target;
+#ifdef _WIN32
+				if(m_dataIsBigEndian) {
+					// this will create a mess on big endian machines
+					target = _byteswap_uint64(*pPos);
+				} else {
+					target = *pData;
+				}
+#else
+				if(m_dataIsBigEndian) {
+					target = be64toh(*pData);
+				} else {
+					target = le64toh(*pData);
+				}
+#endif
+			}
+		}
+
+
 
 		void SubscribedSignal::dataCb(unsigned char* pData, size_t size)
 		{
 			switch(m_dataFormatPattern) {
 				case PATTERN_V:
-					interpreteValues(pData, size);
+					{
+						size_t valueCount;
+						if(m_dataValueSize==4) {
+							valueCount = size >> 2;
+						} else if(m_dataValueSize==8) {
+							valueCount = size >> 4;
+						} else {
+							valueCount / m_dataValueSize;
+						}
+						interpreteValues(pData, valueCount);
+					}
 					break;
 				case PATTERN_TV:
-					// 1 time stamp, 1 value
-					// there might be an optimized version here that expects only one value.
-					if(size>=m_dataTimeSize) {
-						interpreteValues(pData+m_dataTimeSize, size-m_dataTimeSize);
+					{
+						// 1 time stamp, 1 value
+						size_t tupleSize = m_dataTimeSize+m_dataValueSize;
+						while(size>=tupleSize) {
+							interpreteTimestamp(pData);
+							pData += m_dataTimeSize;
+							interpreteValues(pData, 1);
+							pData += m_dataValueSize;
+							size -= tupleSize;
+						}
 					}
 					break;
 				case PATTERN_TB:
 					// 1 time stamp n values
-					if(size>=m_dataTimeSize) {
-						interpreteValues(pData+m_dataTimeSize, size-m_dataTimeSize);
+					if(size>=m_dataTimeSize+m_dataValueSize) {
+						size_t valueCount;
+						if(m_dataValueSize==4) {
+							valueCount = (size-m_dataTimeSize) >> 2;
+						} else if(m_dataValueSize==8) {
+							valueCount = (size-m_dataTimeSize) >> 4;
+						} else {
+							valueCount / m_dataValueSize;
+						}
+						interpreteTimestamp(pData);
+						interpreteValues(pData+m_dataTimeSize, valueCount);
 					}
 					break;
 			}

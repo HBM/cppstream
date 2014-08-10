@@ -32,7 +32,11 @@ namespace hbm {
 
 		private:
 
-			void interpreteValues(unsigned char* pData, size_t size);
+			/// @param count number of values
+			void interpreteValues(unsigned char* pData, size_t count);
+
+			void interpreteTimestamp(unsigned char* pData);
+
 
 			enum pattern_t {
 				/// "V"; No timestamps, values only.

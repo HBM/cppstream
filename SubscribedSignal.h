@@ -39,9 +39,12 @@ namespace hbm {
 
 
 			enum pattern_t {
-				/// "V"; No timestamps, values only.
+				/// "V"; No timestamps, values only. Signal rate is recieved first.
+				/// Time stamp of first value is received as meat information before value.
+				/// Increment with delta time from signal rate for each value.
 				PATTERN_V,
-				/// "TV"; One timestamp per value, first comes the timestamp, then the value. This pattern is highly recommended for asynchonous values.
+				/// "TV"; One timestamp per value, first comes the timestamp, then the value.
+				/// This pattern is used for asynchonous values.
 				PATTERN_TV,
 				/// "TB"; One timestamp per signal block. The timestamp corresponds to the first sample in the signal block.
 				PATTERN_TB,
@@ -59,7 +62,6 @@ namespace hbm {
 			std::string m_signalReference;
 			timeInfo_t m_startTime;
 
-			//Json::Value m_signalRate;
 			unsigned int m_signalRateSamples;
 			timeInfo_t m_signalRateDelta;
 

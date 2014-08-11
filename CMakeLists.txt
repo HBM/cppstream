@@ -25,7 +25,7 @@ add_library(streamclient-static  STATIC ${STREAMCLIENT_SOURCES})
 
 
 set(EXAMPLECLIENT_SOURCES
-  ExampleClient.cpp
+  tool/ExampleClient.cpp
 )
 
 add_executable( exampleclient.bin ${EXAMPLECLIENT_SOURCES} )
@@ -36,7 +36,7 @@ target_link_libraries( exampleclient.bin
 )
 
 set(TESTRECONNECT_SOURCES
-  test/TestReconnect.cpp
+  tool/TestReconnect.cpp
 )
 
 add_executable( testreconnect.bin ${TESTRECONNECT_SOURCES} )
@@ -49,7 +49,7 @@ target_link_libraries( testreconnect.bin
 )
 
 set(TESTMULTIPLE_SOURCES
-  test/TestMultiple.cpp
+  tool/TestMultiple.cpp
 )
 
 add_executable( testmultiple.bin ${TESTMULTIPLE_SOURCES} )

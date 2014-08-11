@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cppstream", "cppstream.vcxproj", "{670E5C5D-4BC7-4275-AB32-AB5718695BB1}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExampleClient", "cppstream.vcxproj", "{670E5C5D-4BC7-4275-AB32-AB5718695BB1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestReconnect", "TestReconnect.vcxproj", "{D8C7EFBC-2BE9-4A45-A5B0-4A6C34E61305}"
 EndProject

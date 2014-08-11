@@ -181,7 +181,9 @@ namespace hbm {
 						std::cout << m_address << ": command interfaces: " << element << std::endl;
 					}
 				} else if(method=="time") {
-					m_initialTime.set(params);
+					m_initialTime.set(params["stamp"]);
+					m_timeEpoch = params["epoch"].asString();
+					m_timeScale = params["scale"].asString();
 				} else if(method=="alive") {
 					// We do ignore this. We are using TCP keep alive in order to detect communication problems.
 				} else if(method=="fill") {

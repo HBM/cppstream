@@ -63,6 +63,7 @@ namespace hbm {
 			timeInfo_t m_startTime;
 
 			unsigned int m_signalRateSamples;
+			/// the time between m_signalRateSamples samples
 			timeInfo_t m_signalRateDelta;
 
 

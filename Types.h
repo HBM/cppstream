@@ -22,18 +22,19 @@ namespace hbm {
 
 		struct ntpTimeStamp_t {
 			unsigned int seconds;
+			/// this is best to be understood if represented as binary or hexadecimal number.
+			/// 0x8 does mean half a second.
+			/// 0x4 does mean a quarter second
 			unsigned int fraction;
 		};
 
 		class timeInfo_t {
 		public:
-			void set(const Json::Value& params);
+			void set(const Json::Value& StampNode);
 			void clear();
 
 		private:
 			ntpTimeStamp_t ntpStamp;
-			std::string scale;
-			std::string epoch;
 		};
 	}
 }

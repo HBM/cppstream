@@ -11,16 +11,13 @@
 
 namespace hbm {
 	namespace streaming {
-		void timeInfo_t::set(const Json::Value& params)
+		void timeInfo_t::set(const Json::Value& timeObject)
 		{
 			try {
-				const Json::Value& ntpStampNode = params["stamp"];
-				if(ntpStampNode["type"]=="ntp") {
-					ntpStamp.fraction = ntpStampNode["fraction"].asUInt();
-					ntpStamp.seconds = ntpStampNode["seconds"].asUInt();
+				if(timeObject["type"]=="ntp") {
+					ntpStamp.fraction = timeObject["fraction"].asUInt();
+					ntpStamp.seconds = timeObject["seconds"].asUInt();
 				}
-				epoch = params["epoch"].asString();
-				scale = params["scale"].asString();
 			} catch(const std::runtime_error& e) {
 				std::cerr << e.what();
 			}
@@ -30,8 +27,6 @@ namespace hbm {
 		{
 			ntpStamp.fraction = 0;
 			ntpStamp.seconds = 0;
-			scale.clear();
-			epoch.clear();
 		}
 	}
 }

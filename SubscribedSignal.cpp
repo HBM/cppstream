@@ -293,6 +293,7 @@ namespace hbm {
 				setDataFormat(params);
 			} else if(method=="signalRate") {
 				try {
+					std::cout << Json::StyledWriter().write(params) << std::endl;
 					m_signalRateSamples = params["samples"].asUInt();
 					m_signalRateDelta.set(params["delta"]);
 				} catch(const std::runtime_error& e) {

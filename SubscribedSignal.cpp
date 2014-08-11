@@ -214,7 +214,7 @@ namespace hbm {
 #ifdef _WIN32
 				// this will create a mess on big endian machines
 				if(m_dataIsBigEndian) {
-					ntpTimestamp = _byteswap_uint64(*pPos);
+					ntpTimestamp = _byteswap_uint64(*pData);
 				} else {
 					ntpTimestamp = *pData;
 				}

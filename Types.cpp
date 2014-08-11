@@ -57,6 +57,7 @@ namespace hbm {
 		timeInfo_t& timeInfo_t::operator+ (const timeInfo_t& op)
 		{
 			m_ntpTimestamp += op.m_ntpTimestamp;
+			return *this;
 		}
 	}
 }

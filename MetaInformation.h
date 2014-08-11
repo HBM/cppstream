@@ -17,6 +17,7 @@ namespace hbm {
 		static const int METAINFORMATION_JSON = 1;
 
 		/// several types of meta information are defined. Type 1 means any meta data encoded using JSON.
+		/// meta information is received from the socket. Its content can be retrieved as JSON or in binary form depending on the type
 		class MetaInformation
 		{
 		public:
@@ -25,13 +26,13 @@ namespace hbm {
 			MetaInformation(hbm::SocketNonblocking& socket, size_t size);
 
 
+			/// \return meta data encoded in JSON; empty if this is meta data in binary form or contains invalid JSON
 			/// \code
 			/// {
 			///   ”method”: < the type of meta data >,
 			///   ”params”: < value >
 			/// }
 			/// \endcode
-			/// \return meta data encoded in JSON; empty if this is meta data in binary form
 			Json::Value jsonContent() const
 			{
 				return m_jsonContent;

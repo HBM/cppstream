@@ -102,7 +102,7 @@ namespace hbm {
 				if(type==TYPE_DATA) {
 					// read measured data. This happens really often! Be sure to be as efficient as possible here.
 					result = m_streamSocket.receiveComplete(dataRecvBuffer, size);
-					if(result!=size) {
+					if(static_cast < size_t >(result)!=size) {
 						break;
 					}
 

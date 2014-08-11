@@ -206,7 +206,7 @@ namespace hbm {
 				uint32_t target;
 #ifdef _WIN32
 				if(m_dataIsBigEndian) {
-					target = ntohl(*pPos);
+					target = ntohl(*pData);
 				} else {
 					target = *pData;
 				}
@@ -222,7 +222,7 @@ namespace hbm {
 #ifdef _WIN32
 				if(m_dataIsBigEndian) {
 					// this will create a mess on big endian machines
-					target = _byteswap_uint64(*pPos);
+					target = _byteswap_uint64(*pData);
 				} else {
 					target = *pData;
 				}
@@ -249,7 +249,7 @@ namespace hbm {
 						} else if(m_dataValueSize==8) {
 							valueCount = size >> 4;
 						} else {
-							valueCount / m_dataValueSize;
+							valueCount = size / m_dataValueSize;
 						}
 						interpreteValues(pData, valueCount);
 					}
@@ -276,7 +276,7 @@ namespace hbm {
 						} else if(m_dataValueSize==8) {
 							valueCount = (size-m_dataTimeSize) >> 4;
 						} else {
-							valueCount / m_dataValueSize;
+							valueCount = size / m_dataValueSize;
 						}
 						interpreteTimestamp(pData);
 						interpreteValues(pData+m_dataTimeSize, valueCount);

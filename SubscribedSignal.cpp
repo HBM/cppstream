@@ -125,6 +125,7 @@ namespace hbm {
 					float* pTarget;
 					for(size_t i=0; i<count; ++i) {
 #ifdef _WIN32
+						// this will create a mess on big endian machines
 						targetUint32 =*pPos;
 #else
 						targetUint32 = le32toh(*pPos);
@@ -140,6 +141,7 @@ namespace hbm {
 					double* pTarget;
 					for(size_t i=0; i<count; ++i) {
 #ifdef _WIN32
+						// this will create a mess on big endian machines
 						targetUint64 =*pPos;
 #else
 						targetUint64 = le64toh(*pPos);
@@ -154,6 +156,7 @@ namespace hbm {
 					uint32_t target;
 					for(size_t i=0; i<count; ++i) {
 #ifdef _WIN32
+						// this will create a mess on big endian machines
 						target =*pPos;
 #else
 						target = le32toh(*pPos);
@@ -166,6 +169,7 @@ namespace hbm {
 					int32_t target;
 					for(size_t i=0; i<count; ++i) {
 #ifdef _WIN32
+						// this will create a mess on big endian machines
 						target =*pPos;
 #else
 						target = le32toh(*pPos);
@@ -178,6 +182,7 @@ namespace hbm {
 					uint64_t target;
 					for(size_t i=0; i<count; ++i) {
 #ifdef _WIN32
+						// this will create a mess on big endian machines
 						target =*pPos;
 #else
 						target = le64toh(*pPos);
@@ -190,6 +195,7 @@ namespace hbm {
 					int64_t target;
 					for(size_t i=0; i<count; ++i) {
 #ifdef _WIN32
+						// this will create a mess on big endian machines
 						target =*pPos;
 #else
 						target = le64toh(*pPos);
@@ -206,8 +212,8 @@ namespace hbm {
 			if(m_dataTimeType == TIMETYPE_NTP) {
 				uint64_t ntpTimestamp;
 #ifdef _WIN32
+				// this will create a mess on big endian machines
 				if(m_dataIsBigEndian) {
-					// this will create a mess on big endian machines
 					ntpTimestamp = _byteswap_uint64(*pPos);
 				} else {
 					ntpTimestamp = *pData;

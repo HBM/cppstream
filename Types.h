@@ -23,6 +23,7 @@ namespace hbm {
 		class timeInfo_t {
 		public:
 			timeInfo_t();
+			timeInfo_t(uint64_t ntpTimeStamp);
 			uint64_t ntpTimeStamp() const;
 			uint32_t seconds() const;
 			uint32_t fractions() const;

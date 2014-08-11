@@ -214,24 +214,23 @@ namespace hbm {
 #ifdef _WIN32
 				// this will create a mess on big endian machines
 				if(m_dataIsBigEndian) {
-					ntpTimestamp = _byteswap_uint64(*pData);
+					ntpTimestamp = _byteswap_uint64(*reinterpret_cast < uint64_t* > (pData));
 				} else {
-					ntpTimestamp = *pData;
+					ntpTimestamp = *reinterpret_cast < uint64_t* > (pData));
 				}
 #else
 				if(m_dataIsBigEndian) {
-					ntpTimestamp = be64toh(*pData);
+					ntpTimestamp = be64toh(*reinterpret_cast < uint64_t* > (pData));
 				} else {
-					ntpTimestamp = le64toh(*pData);
+					ntpTimestamp = le64toh(*reinterpret_cast < uint64_t* > (pData));
 				}
 #endif
 			}
 		}
 
-		void SubscribedSignal::calculateFirstTimestamp()
+		void SubscribedSignal::calculateTimestamp()
 		{
-			timeInfo_t delta;
-			delta.setNtpTimestamp(m_signalRateDelta.ntpTimeStamp()*m_valueCount);
+			timeInfo_t delta(m_signalRateDelta.ntpTimeStamp()*m_valueCount);
 			timeInfo_t time = m_startTime + delta;
 		}
 
@@ -251,7 +250,7 @@ namespace hbm {
 						} else {
 							valueCount = size / m_dataValueSize;
 						}
-						calculateFirstTimestamp();
+						calculateTimestamp();
 						interpreteValues(pData, valueCount);
 						m_valueCount += valueCount;
 					}

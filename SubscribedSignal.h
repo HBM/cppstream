@@ -38,7 +38,7 @@ namespace hbm {
 			void interpreteTimestamp(unsigned char* pData);
 
 			/// for Pattern V: If timestamp is not provided with the value(s), we calulate the time
-			void calculateFirstTimestamp();
+			void calculateTimestamp();
 
 
 			enum pattern_t {

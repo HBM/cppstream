@@ -23,19 +23,19 @@ namespace hbm {
 			ssize_t receive();
 
 			/// of payload
-			size_t size() const
+			inline size_t size() const
 			{
 				return m_dataByteCount;
 			}
 
 			/// only data and meta information is defined and supported in the moment.
-			type_t type() const
+			inline type_t type() const
 			{
 				return m_type;
 			}
 
 			/// \return 0 tells, that this is stream related.
-			unsigned int signalNumber() const
+			inline unsigned int signalNumber() const
 			{
 				return m_signalNumber;
 			}

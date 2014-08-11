@@ -16,6 +16,11 @@ namespace hbm {
 		{
 		}
 
+		timeInfo_t::timeInfo_t(uint64_t ntpTimeStamp)
+			: m_ntpTimestamp(ntpTimeStamp)
+		{
+		}
+
 		uint64_t timeInfo_t::ntpTimeStamp() const
 		{
 			return m_ntpTimestamp;

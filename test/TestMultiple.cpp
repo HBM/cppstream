@@ -62,6 +62,10 @@ static void sigHandler(int)
 
 int main(int argc, char* argv[])
 {
+	// some signals should lead to a normal shutdown
+	signal( SIGTERM, &sigHandler);
+	signal( SIGINT, &sigHandler);
+
 	boost::thread_group threads;
 
 	static const std::string& fileName("Addresses.txt");
@@ -92,14 +96,6 @@ int main(int argc, char* argv[])
 		boost::thread* pStreamer = new boost::thread(boost::bind(&hbm::streaming::StreamClient::start, streamPtr, address, hbm::streaming::DAQSTREAM_PORT, "http"));
 		threads.add_thread(pStreamer);
 		streams.push_back(streamPtr);
-	}
-
-	boost::chrono::milliseconds cycleTime(10000);
-
-	boost::this_thread::sleep_for(cycleTime);
-
-	for(streams_t::iterator iter = streams.begin(); iter!=streams.end(); ++iter) {
-		(*iter).stop();
 	}
 
 	threads.join_all();

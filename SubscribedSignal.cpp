@@ -29,8 +29,7 @@ namespace hbm {
 			, m_startTime()
 
 			, m_signalRateSamples(0)
-			, m_signalRateDelta()
-
+			, m_signalRateSamplesDelta()
 
 			, m_dataFormatPattern()
 			, m_dataIsBigEndian(false)
@@ -38,6 +37,8 @@ namespace hbm {
 			, m_dataValueSize(0)
 			, m_dataTimeType()
 			, m_dataTimeSize(0)
+
+			, m_valueCount(0)
 	{
 		}
 
@@ -202,39 +203,32 @@ namespace hbm {
 
 		void SubscribedSignal::interpreteTimestamp(unsigned char* pData)
 		{
-			if(m_dataTimeSize==4) {
-				uint32_t target;
-#ifdef _WIN32
-				if(m_dataIsBigEndian) {
-					target = ntohl(*pPos);
-				} else {
-					target = *pData;
-				}
-#else
-				if(m_dataIsBigEndian) {
-					target = be32toh(*pData);
-				} else {
-					target = le32toh(*pData);
-				}
-#endif
-			} else if(m_dataTimeSize==8) {
-				uint64_t target;
+			if(m_dataTimeType == TIMETYPE_NTP) {
+				uint64_t ntpTimestamp;
 #ifdef _WIN32
 				if(m_dataIsBigEndian) {
 					// this will create a mess on big endian machines
-					target = _byteswap_uint64(*pPos);
+					ntpTimestamp = _byteswap_uint64(*pPos);
 				} else {
-					target = *pData;
+					ntpTimestamp = *pData;
 				}
 #else
 				if(m_dataIsBigEndian) {
-					target = be64toh(*pData);
+					ntpTimestamp = be64toh(*pData);
 				} else {
-					target = le64toh(*pData);
+					ntpTimestamp = le64toh(*pData);
 				}
 #endif
 			}
 		}
+
+		void SubscribedSignal::calculateFirstTimestamp()
+		{
+			timeInfo_t delta;
+			delta.setNtpTimestamp(m_signalRateDelta.ntpTimeStamp()*m_valueCount);
+			timeInfo_t time = m_startTime + delta;
+		}
+
 
 
 
@@ -251,7 +245,9 @@ namespace hbm {
 						} else {
 							valueCount / m_dataValueSize;
 						}
+						calculateFirstTimestamp();
 						interpreteValues(pData, valueCount);
+						m_valueCount += valueCount;
 					}
 					break;
 				case PATTERN_TV:
@@ -264,6 +260,7 @@ namespace hbm {
 							interpreteValues(pData, 1);
 							pData += m_dataValueSize;
 							size -= tupleSize;
+							++m_valueCount;
 						}
 					}
 					break;
@@ -280,6 +277,7 @@ namespace hbm {
 						}
 						interpreteTimestamp(pData);
 						interpreteValues(pData+m_dataTimeSize, valueCount);
+						m_valueCount += valueCount;
 					}
 					break;
 			}
@@ -295,7 +293,8 @@ namespace hbm {
 				try {
 					std::cout << Json::StyledWriter().write(params) << std::endl;
 					m_signalRateSamples = params["samples"].asUInt();
-					m_signalRateDelta.set(params["delta"]);
+					m_signalRateSamplesDelta.set(params["delta"]);
+					m_signalRateDelta.setNtpTimestamp(m_signalRateSamplesDelta.ntpTimeStamp()/m_signalRateSamples);
 				} catch(const std::runtime_error& e) {
 					std::cerr << e.what();
 				}
@@ -346,8 +345,12 @@ namespace hbm {
 				}
 
 
-				m_dataTimeType = params["time"]["type"].asString();
+				std::string dataTimeType = params["time"]["type"].asString();
+				if(dataTimeType=="ntp") {
+					m_dataTimeType = TIMETYPE_NTP;
+				}
 				m_dataTimeSize = params["time"]["size"].asUInt();
+
 				return 0;
 			} catch(const std::runtime_error& e) {
 				std::cerr << e.what();

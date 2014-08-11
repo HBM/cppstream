@@ -37,6 +37,9 @@ namespace hbm {
 
 			void interpreteTimestamp(unsigned char* pData);
 
+			/// for Pattern V: If timestamp is not provided with the value(s), we calulate the time
+			void calculateFirstTimestamp();
+
 
 			enum pattern_t {
 				/// "V"; No timestamps, values only. Signal rate is recieved first.
@@ -59,20 +62,30 @@ namespace hbm {
 				DATATYPE_REAL64,
 			};
 
+			enum timeType_t {
+				TIMETYPE_NTP
+			};
+
 			std::string m_signalReference;
+
+			/// For synchronuous signals (Pattern V): time of the first measured value of this channel.
 			timeInfo_t m_startTime;
 
 			unsigned int m_signalRateSamples;
-			/// the time between m_signalRateSamples samples
-			timeInfo_t m_signalRateDelta;
+			/// For synchronuous signals (Pattern V): The time between m_signalRateSamples samples. Use this to omit rounding errors.
+			timeInfo_t m_signalRateSamplesDelta;
 
+			/// using this may cause rounding errors.
+			timeInfo_t m_signalRateDelta;
 
 			pattern_t m_dataFormatPattern;
 			bool m_dataIsBigEndian;
 			dataType_t m_dataValueType;
 			size_t m_dataValueSize;
-			std::string m_dataTimeType;
+			timeType_t m_dataTimeType;
 			size_t m_dataTimeSize;
+
+			size_t m_valueCount;
 		};
 	}
 }

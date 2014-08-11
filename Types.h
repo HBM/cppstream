@@ -1,6 +1,7 @@
 #ifndef _HBM__STREAMING__TYPES
 #define _HBM__STREAMING__TYPES
 
+#include <stdint.h>
 #include <vector>
 #ifdef _WIN32
 #include "jsoncpp/include/json/value.h"
@@ -19,22 +20,22 @@ namespace hbm {
 		static const std::string DAQSTREAM_PORT = "7411";
 		static const char SERVERPATH[] = "rpc";
 
-
-		struct ntpTimeStamp_t {
-			unsigned int seconds;
-			/// this is best to be understood if represented as binary or hexadecimal number.
-			/// 0x8 does mean half a second.
-			/// 0x4 does mean a quarter second
-			unsigned int fraction;
-		};
-
 		class timeInfo_t {
 		public:
+			timeInfo_t();
+			uint64_t ntpTimeStamp() const;
+			uint32_t seconds() const;
+			uint32_t fractions() const;
 			void set(const Json::Value& StampNode);
+			void setNtpTimestamp(uint64_t ntpTimeStamp);
 			void clear();
 
+			timeInfo_t& operator+ (const timeInfo_t& op);
+
 		private:
-			ntpTimeStamp_t ntpStamp;
+			/// the upper 32 byte are seconds
+			/// the lower 32 bytes are fractions of seconds (0.5, 0.25, 0.125...)
+			uint64_t m_ntpTimestamp;
 		};
 	}
 }

@@ -249,7 +249,7 @@ namespace hbm {
 						} else if(m_dataValueSize==8) {
 							valueCount = size >> 4;
 						} else {
-							valueCount / m_dataValueSize;
+							valueCount = size / m_dataValueSize;
 						}
 						calculateFirstTimestamp();
 						interpreteValues(pData, valueCount);
@@ -279,7 +279,7 @@ namespace hbm {
 						} else if(m_dataValueSize==8) {
 							valueCount = (size-m_dataTimeSize) >> 4;
 						} else {
-							valueCount / m_dataValueSize;
+							valueCount = size / m_dataValueSize;
 						}
 						interpreteTimestamp(pData);
 						interpreteValues(pData+m_dataTimeSize, valueCount);

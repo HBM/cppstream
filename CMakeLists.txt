@@ -36,12 +36,12 @@ target_link_libraries( exampleclient.bin
 )
 
 set(TESTRECONNECT_SOURCES
-  tool/TestReconnect.cpp
+  tool/Reconnect.cpp
 )
 
-add_executable( testreconnect.bin ${TESTRECONNECT_SOURCES} )
+add_executable( reconnect.bin ${TESTRECONNECT_SOURCES} )
 
-target_link_libraries( testreconnect.bin
+target_link_libraries( reconnect.bin
   streamclient-static
   jsoncpp
   boost_system
@@ -49,12 +49,12 @@ target_link_libraries( testreconnect.bin
 )
 
 set(TESTMULTIPLE_SOURCES
-  tool/TestMultiple.cpp
+  tool/Multiple.cpp
 )
 
-add_executable( testmultiple.bin ${TESTMULTIPLE_SOURCES} )
+add_executable( multiple.bin ${TESTMULTIPLE_SOURCES} )
 
-target_link_libraries( testmultiple.bin
+target_link_libraries( multiple.bin
   streamclient-static
   jsoncpp
   boost_system

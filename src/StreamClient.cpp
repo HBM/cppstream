@@ -182,8 +182,8 @@ namespace hbm {
 					}
 				} else if(method=="time") {
 					m_initialTime.set(params["stamp"]);
-					m_timeEpoch = params["epoch"].asString();
-					m_timeScale = params["scale"].asString();
+					m_initialTimeEpoch = params["epoch"].asString();
+					m_initialTimeScale = params["scale"].asString();
 				} else if(method=="alive") {
 					// We do ignore this. We are using TCP keep alive in order to detect communication problems.
 				} else if(method=="fill") {

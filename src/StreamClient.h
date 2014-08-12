@@ -86,8 +86,8 @@ namespace hbm {
 
 			/// initial time received when opening the stream
 			timeInfo_t m_initialTime;
-			std::string m_timeScale;
-			std::string m_timeEpoch;
+			std::string m_initialTimeScale;
+			std::string m_initialTimeEpoch;
 
 			/// signal references of all available signals
 			availableSignals_t m_availableSignals;

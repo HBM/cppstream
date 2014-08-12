@@ -31,7 +31,6 @@ namespace hbm {
 			, m_streamId()
 			, m_controlPort()
 			, m_initialTime()
-			, m_availableSignals()
 			, m_subscribedSignals()
 			, m_customDataCb()
 			, m_customStreamMetaCb()
@@ -45,7 +44,6 @@ namespace hbm {
 			, m_streamId()
 			, m_controlPort()
 			, m_initialTime()
-			, m_availableSignals()
 			, m_subscribedSignals()
 			, m_customDataCb()
 			, m_customStreamMetaCb()
@@ -163,7 +161,6 @@ namespace hbm {
 			m_streamId.clear();
 			m_controlPort.clear();
 			m_initialTime.clear();
-			m_availableSignals.clear();
 			m_subscribedSignals.clear();
 		}
 
@@ -202,18 +199,8 @@ namespace hbm {
 							std::cout << m_address << ": ring buffer fill level is " << params[0].asUInt() << "%" << std::endl;
 						}
 					}
-				} else if(method=="available") {
-					for (Json::ValueConstIterator iter = params.begin(); iter!= params.end(); ++iter) {
-						const Json::Value& element = *iter;
-						m_availableSignals.insert(element.asString());
-					}
-				} else if(method=="unavailable") {
-					for (Json::ValueConstIterator iter = params.begin(); iter!= params.end(); ++iter) {
-						const Json::Value& element = *iter;
-						m_availableSignals.erase(element.asString());
-					}
 				} else {
-					std::cout << m_address << ": unhandled stream related meta information '" << method << "' with parameters: " << Json::StyledWriter().write(params) << std::endl;
+					std::cout << m_address << ": Stream related meta information '" << method << "' with parameters: " << Json::StyledWriter().write(params) << std::endl;
 				}
 				return 0;
 			} catch(const std::runtime_error& e) {

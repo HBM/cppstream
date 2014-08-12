@@ -56,7 +56,7 @@ namespace hbm {
 				return m_address;
 			}
 
-			/// connects to a streaming server and processes all received data.
+			/// connects to a streaming server, receives and processes all meta information and data.
 			/// Returns when stream is stopped by calling stop() or if loss of connection is recognized.
 			/// @param address address of the HBM daq stream server
 			/// @param streamPort name or number of the HBM daq stream port. Might differ from default when communication runs via a router (CX27)
@@ -69,8 +69,6 @@ namespace hbm {
 		private:
 			/// signal number is the key
 			typedef std::unordered_map < unsigned int, SubscribedSignal > subscribedSignals_t;
-
-			typedef std::set < std::string > availableSignals_t;
 
 			StreamClient(const StreamClient&);
 			StreamClient& operator= (const StreamClient&);
@@ -91,9 +89,6 @@ namespace hbm {
 			timeInfo_t m_initialTime;
 			std::string m_initialTimeScale;
 			std::string m_initialTimeEpoch;
-
-			/// signal references of all available signals
-			availableSignals_t m_availableSignals;
 
 			/// information about all subscribed signals
 			subscribedSignals_t m_subscribedSignals;

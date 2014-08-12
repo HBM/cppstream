@@ -45,9 +45,11 @@ namespace hbm {
 			/// The custom signal meta callback notifies about all signal related meta information
 			void setCustomSignalMetaCb(SignalMetaCb_t cb);
 
-			int subscribe(const signalReferences_t& signalReferences);
+			/// \throws std::runtime_error
+			void subscribe(const signalReferences_t& signalReferences);
 
-			int unsubscribe(const signalReferences_t& signalReferences);
+			/// \throws std::runtime_error
+			void unsubscribe(const signalReferences_t& signalReferences);
 
 			std::string address() const
 			{

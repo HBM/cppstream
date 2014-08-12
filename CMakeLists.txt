@@ -79,3 +79,16 @@ target_link_libraries( testhttppost.bin
   jsoncpp
 )
 
+set(TEST_STREAMCLIENT_SOURCES
+  test/TestStreamClient.cpp
+)
+
+add_executable( teststreamclient.bin ${TEST_STREAMCLIENT_SOURCES} )
+
+target_link_libraries( teststreamclient.bin
+  streamclient-static
+  jsoncpp
+  boost_system
+  boost_thread
+)
+

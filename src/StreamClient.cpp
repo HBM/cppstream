@@ -67,16 +67,16 @@ namespace hbm {
 			m_customSignalMetaCb = cb;
 		}
 
-		int StreamClient::subscribe(const signalReferences_t& signalReferences)
+		void StreamClient::subscribe(const signalReferences_t& signalReferences)
 		{
 			Controller controller(m_streamId, m_address.c_str(), m_controlPort, m_httpPath);
-			return controller.subscribe(signalReferences);
+			controller.subscribe(signalReferences);
 		}
 
-		int StreamClient::unsubscribe(const signalReferences_t& signalReferences)
+		void StreamClient::unsubscribe(const signalReferences_t& signalReferences)
 		{
 			Controller controller(m_streamId, m_address.c_str(), m_controlPort, m_httpPath);
-			return controller.unsubscribe(signalReferences);
+			controller.unsubscribe(signalReferences);
 		}
 
 

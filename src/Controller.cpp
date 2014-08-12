@@ -1,3 +1,5 @@
+#include <sstream>
+
 #ifdef _WIN32
 #include "json/value.h"
 #include "json/reader.h"
@@ -26,12 +28,24 @@ namespace hbm {
 			, m_port(port)
 			, m_path(path)
 		{
+			if(m_streamId.empty()) {
+				throw std::runtime_error("no stream id provided");
+			}
+			if(m_address.empty()) {
+				throw std::runtime_error("no stream server address provided");
+			}
+			if(m_port.empty()) {
+				throw std::runtime_error("no stream server control port provided");
+			}
+			if(m_path.empty()) {
+				throw std::runtime_error("no stream server path id provided");
+			}
 		}
 
-		int Controller::subscribe(const signalReferences_t &signalReferences)
+		void Controller::subscribe(const signalReferences_t &signalReferences)
 		{
 			if(signalReferences.empty()) {
-				return 0;
+				return;
 			}
 			Json::Value content;
 			content[JSONRPC] = "2.0";
@@ -48,19 +62,21 @@ namespace hbm {
 
 			Json::Value result;
 			if(Json::Reader().parse(response, result)==false) {
-				return -1;
+				throw std::runtime_error("http response is not valid JSON");
 			}
 			if(result.isMember(ERROR)) {
-				return -1;
-			}
+				std::ostringstream msg;
 
-			return 0;
+				msg << "http response contains error: code=" << result[ERROR]["code"].asInt() << " '" << result[ERROR]["message"].asString() << "'";
+
+				throw std::runtime_error(msg.str());
+			}
 		}
 
-		int Controller::unsubscribe(const signalReferences_t &signalReferences)
+		void Controller::unsubscribe(const signalReferences_t &signalReferences)
 		{
 			if(signalReferences.empty()) {
-				return 0;
+				return;
 			}
 			Json::Value content;
 			content[JSONRPC] = "2.0";
@@ -77,13 +93,15 @@ namespace hbm {
 
 			Json::Value result;
 			if(Json::Reader().parse(response, result)==false) {
-				return -1;
+				throw std::runtime_error("http response is not valid JSON");
 			}
 			if(result.isMember(ERROR)) {
-				return -1;
-			}
+				std::ostringstream msg;
 
-			return 0;
+				msg << "http response contains error: code=" << result[ERROR]["code"].asInt() << " '" << result[ERROR]["message"].asString() << "'";
+
+				throw std::runtime_error(msg.str());
+			}
 		}
 
 	}

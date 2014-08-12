@@ -20,4 +20,4 @@ namespace hbm {
 		std::string m_httpPath;
 	};
 }
-#endif // _HBM__STREMAING__HTTPPOST_H
+#endif // _HBM__HTTPPOST_H

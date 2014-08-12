@@ -77,6 +77,8 @@ int main(int argc, char* argv[])
 	// we want to be informed about signal related meta information
 	stream.setCustomSignalMetaCb(customSignalMetaCb);
 
+	stream.setCustomDataCb(customDataCb);
+
 	// give control to the receiving function.
 	// returns on signal (terminate, interrupt) buffer overrun on the server side or loss of connection.
 	stream.start(argv[1], hbm::streaming::DAQSTREAM_PORT, controlPort);

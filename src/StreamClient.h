@@ -1,5 +1,5 @@
-#ifndef _HBM__STREAMING__STREAM_H
-#define _HBM__STREAMING__STREAM_H
+#ifndef _HBM__STREAMING__STREAMCLIENT_H
+#define _HBM__STREAMING__STREAMCLIENT_H
 
 #include <string>
 #include <set>

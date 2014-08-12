@@ -18,7 +18,6 @@ namespace hbm {
 		typedef std::vector < std::string > signalReferences_t;
 
 		static const std::string DAQSTREAM_PORT = "7411";
-		static const char SERVERPATH[] = "rpc";
 
 		class timeInfo_t {
 		public:

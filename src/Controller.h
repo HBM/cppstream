@@ -12,7 +12,7 @@ namespace hbm {
 		class Controller
 		{
 		public:
-			Controller(const std::string& streamId, const std::string& address, const std::string& port);
+			Controller(const std::string& streamId, const std::string& address, const std::string& port, const std::string &path);
 
 			/// \param signalReferences several signals might be subscribed with one request to the control port.
 			int subscribe(const signalReferences_t& signalReferences);
@@ -23,6 +23,7 @@ namespace hbm {
 			std::string m_streamId;
 			std::string m_address;
 			std::string m_port;
+			std::string m_path;
 
 			static unsigned int s_id;
 		};

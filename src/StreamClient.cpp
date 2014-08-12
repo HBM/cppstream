@@ -3,10 +3,12 @@
 #include <iostream>
 #include <unordered_map>
 #include <stdexcept>
+#include <cstring>
 
 #ifdef _WIN32
 #include "json/reader.h"
 #include "json/writer.h"
+#define strncasecmp _strnicmp
 #else
 #include <jsoncpp/json/reader.h>
 #include <jsoncpp/json/writer.h>
@@ -67,13 +69,13 @@ namespace hbm {
 
 		int StreamClient::subscribe(const signalReferences_t& signalReferences)
 		{
-			Controller controller(m_streamId, m_address.c_str(), m_controlPort);
+			Controller controller(m_streamId, m_address.c_str(), m_controlPort, m_httpPath);
 			return controller.subscribe(signalReferences);
 		}
 
 		int StreamClient::unsubscribe(const signalReferences_t& signalReferences)
 		{
-			Controller controller(m_streamId, m_address.c_str(), m_controlPort);
+			Controller controller(m_streamId, m_address.c_str(), m_controlPort, m_httpPath);
 			return controller.unsubscribe(signalReferences);
 		}
 
@@ -179,6 +181,9 @@ namespace hbm {
 					for (Json::ValueConstIterator iter = commandInterfaces.begin(); iter!= commandInterfaces.end(); ++iter) {
 						const Json::Value& element = *iter;
 						std::cout << m_address << ": command interfaces: " << element << std::endl;
+						if(strcasecmp(element["httpMethod"].asString().c_str(), "post")==0) {
+							m_httpPath = element["httpPath"].asString();
+						}
 					}
 				} else if(method=="time") {
 					m_initialTime.set(params["stamp"]);

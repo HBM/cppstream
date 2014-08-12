@@ -79,6 +79,7 @@ namespace hbm {
 			hbm::SocketNonblocking m_streamSocket;
 
 			std::string m_address;
+			std::string m_httpPath;
 
 			std::string m_apiVersion;
 			std::string m_streamId;

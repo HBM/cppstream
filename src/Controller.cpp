@@ -20,10 +20,11 @@ namespace hbm {
 
 		unsigned int Controller::s_id = 0;
 
-		Controller::Controller(const std::string& streamId, const std::string& address, const std::string& port)
+		Controller::Controller(const std::string& streamId, const std::string& address, const std::string& port, const std::string& path)
 			: m_streamId(streamId)
 			, m_address(address)
 			, m_port(port)
+			, m_path(path)
 		{
 		}
 
@@ -42,7 +43,7 @@ namespace hbm {
 
 			std::string request = Json::FastWriter().write(content);
 
-			HttpPost httpPost(m_address, m_port, SERVERPATH);
+			HttpPost httpPost(m_address, m_port, m_path);
 			std::string response = httpPost.execute(request);
 
 			Json::Value result;
@@ -71,7 +72,7 @@ namespace hbm {
 
 			std::string request = Json::FastWriter().write(content);
 
-			HttpPost httpPost(m_address, m_port, SERVERPATH);
+			HttpPost httpPost(m_address, m_port, m_path);
 			std::string response = httpPost.execute(request);
 
 			Json::Value result;

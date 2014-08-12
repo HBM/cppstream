@@ -82,7 +82,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="tool\Multiple.cpp" />
+    <ClCompile Include="src\tool\Multiple.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\jsoncpp\makefiles\msvc2010\lib_json.vcxproj">

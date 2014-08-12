@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -78,23 +78,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BufferedReader.cpp" />
-    <ClCompile Include="Controller.cpp" />
-    <ClCompile Include="HttpPost.cpp" />
-    <ClCompile Include="MetaInformation.cpp" />
-    <ClCompile Include="platform\windows\SocketNonblocking.cpp" />
-    <ClCompile Include="StreamClient.cpp" />
-    <ClCompile Include="SubscribedSignal.cpp" />
-    <ClCompile Include="TransportHeader.cpp" />
-    <ClCompile Include="Types.cpp" />
+    <ClCompile Include="src/BufferedReader.cpp" />
+    <ClCompile Include="src/Controller.cpp" />
+    <ClCompile Include="src/HttpPost.cpp" />
+    <ClCompile Include="src/MetaInformation.cpp" />
+    <ClCompile Include="src/platform/windows/SocketNonblocking.cpp" />
+    <ClCompile Include="src/StreamClient.cpp" />
+    <ClCompile Include="src/SubscribedSignal.cpp" />
+    <ClCompile Include="src/TransportHeader.cpp" />
+    <ClCompile Include="src/Types.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Controller.h" />
-    <ClInclude Include="HttpPost.h" />
-    <ClInclude Include="MetaInformation.h" />
-    <ClInclude Include="Signal.h" />
-    <ClInclude Include="SocketNonblocking.h" />
-    <ClInclude Include="Types.h" />
+    <ClInclude Include="src/Controller.h" />
+    <ClInclude Include="src/HttpPost.h" />
+    <ClInclude Include="src/MetaInformation.h" />
+    <ClInclude Include="src/Signal.h" />
+    <ClInclude Include="src/SocketNonblocking.h" />
+    <ClInclude Include="src/Types.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

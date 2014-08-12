@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="tool\Reconnect.cpp">
+    <ClCompile Include="src\tool\Reconnect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

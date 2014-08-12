@@ -8,18 +8,20 @@ SET(WARN_SWITCHES "${WARN_SWITCHES} -Wno-unused-local-typedefs -Wno-unused-but-s
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x ${WARN_SWITCHES}")
 
 
+INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/src )
+
 include_directories(.)
 set(STREAMCLIENT_SOURCES
-  Types.cpp
-  StreamClient.cpp
-  TransportHeader.cpp
-  SocketNonblocking.h
-  MetaInformation.cpp
-  Controller.cpp
-  HttpPost.cpp
-  SubscribedSignal.cpp
-  platform/linux/SocketNonblocking.cpp
-  BufferedReader.cpp
+  src/Types.cpp
+  src/StreamClient.cpp
+  src/TransportHeader.cpp
+  src/SocketNonblocking.h
+  src/MetaInformation.cpp
+  src/Controller.cpp
+  src/HttpPost.cpp
+  src/SubscribedSignal.cpp
+  src/platform/linux/SocketNonblocking.cpp
+  src/BufferedReader.cpp
 )
 
 
@@ -28,7 +30,7 @@ add_library(streamclient-static  STATIC ${STREAMCLIENT_SOURCES})
 
 
 set(EXAMPLECLIENT_SOURCES
-  tool/ExampleClient.cpp
+  src/tool/ExampleClient.cpp
 )
 
 add_executable( exampleclient.bin ${EXAMPLECLIENT_SOURCES} )
@@ -39,7 +41,7 @@ target_link_libraries( exampleclient.bin
 )
 
 set(TESTRECONNECT_SOURCES
-  tool/Reconnect.cpp
+  src/tool/Reconnect.cpp
 )
 
 add_executable( reconnect.bin ${TESTRECONNECT_SOURCES} )
@@ -52,7 +54,7 @@ target_link_libraries( reconnect.bin
 )
 
 set(TESTMULTIPLE_SOURCES
-  tool/Multiple.cpp
+  src/tool/Multiple.cpp
 )
 
 add_executable( multiple.bin ${TESTMULTIPLE_SOURCES} )

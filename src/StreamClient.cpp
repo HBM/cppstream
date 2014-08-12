@@ -181,7 +181,8 @@ namespace hbm {
 					for (Json::ValueConstIterator iter = commandInterfaces.begin(); iter!= commandInterfaces.end(); ++iter) {
 						const Json::Value& element = *iter;
 						std::cout << m_address << ": command interfaces: " << element << std::endl;
-						if(strcasecmp(element["httpMethod"].asString().c_str(), "post")==0) {
+						static const char POST[] = "post";
+						if(strncasecmp(element["httpMethod"].asString().c_str(), POST, sizeof(POST))==0) {
 							m_httpPath = element["httpPath"].asString();
 						}
 					}

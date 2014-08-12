@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
 	}
 
 
-	boost::thread streamer = boost::thread(boost::bind(&hbm::streaming::StreamClient::start, boost::ref(stream), argv[1], hbm::streaming::DAQSTREAM_PORT, controlPort));
+	boost::thread streamer = boost::thread(boost::bind(&hbm::streaming::StreamClient::start, &stream, argv[1], hbm::streaming::DAQSTREAM_PORT, controlPort));
 
 	boost::this_thread::sleep_for(boost::chrono::milliseconds(500));
 

@@ -18,6 +18,7 @@ namespace hbm {
 		message << "POST /" << m_httpPath << " HTTP/1.1\r\n";
 		message << "Host: " << m_address << "\r\n";
 		message << "Accept: */*\r\n";
+		message << "Connection: close\r\n";
 		message << "Content-Type: application/json; charset=utf-8" << "\r\n";
 		message << "Content-Length: " << request.length() << "\r\n";
 		message << "\r\n";

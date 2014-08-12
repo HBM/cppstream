@@ -40,11 +40,11 @@ target_link_libraries( exampleclient.bin
   jsoncpp
 )
 
-set(TESTRECONNECT_SOURCES
+set(RECONNECT_SOURCES
   src/tool/Reconnect.cpp
 )
 
-add_executable( reconnect.bin ${TESTRECONNECT_SOURCES} )
+add_executable( reconnect.bin ${RECONNECT_SOURCES} )
 
 target_link_libraries( reconnect.bin
   streamclient-static
@@ -53,11 +53,11 @@ target_link_libraries( reconnect.bin
   boost_thread
 )
 
-set(TESTMULTIPLE_SOURCES
+set(MULTIPLE_SOURCES
   src/tool/Multiple.cpp
 )
 
-add_executable( multiple.bin ${TESTMULTIPLE_SOURCES} )
+add_executable( multiple.bin ${MULTIPLE_SOURCES} )
 
 target_link_libraries( multiple.bin
   streamclient-static
@@ -66,4 +66,16 @@ target_link_libraries( multiple.bin
   boost_thread
 )
 
+set(TEST_HTTPPOST_SOURCES
+  src/HttpPost.cpp
+  src/platform/linux/SocketNonblocking.cpp
+  src/BufferedReader.cpp
+  test/TestHttpPost.cpp
+)
+
+add_executable( testhttppost.bin ${TEST_HTTPPOST_SOURCES} )
+
+target_link_libraries( testhttppost.bin
+  jsoncpp
+)
 

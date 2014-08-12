@@ -24,9 +24,13 @@ void customStreamMetaCb(hbm::streaming::StreamClient& stream, const std::string&
 			const Json::Value& element = *iter;
 			signalReferences.push_back(element.asString());
 		}
-		stream.subscribe(signalReferences);
+		int retVal = stream.subscribe(signalReferences);
+		if(retVal==0) {
+			std::cout << __FUNCTION__ << "the following signal(s) were subscribed: ";
+		} else {
+			std::cout << __FUNCTION__ << "error " << retVal << " subscribing the following signal(s): ";
+		}
 
-		std::cout << __FUNCTION__ << "the following signal(s) were subscribed: ";
 		for(hbm::streaming::signalReferences_t::const_iterator iter=signalReferences.begin(); iter!=signalReferences.end(); ++iter) {
 			std::cout << "'" << *iter << "' ";
 		}

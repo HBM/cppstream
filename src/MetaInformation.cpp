@@ -1,6 +1,6 @@
 #ifdef _WIN32
 #include <WinSock2.h>
-#include "jsoncpp/include/json/reader.h"
+#include "json/reader.h"
 #else
 #include <arpa/inet.h>
 #include <jsoncpp/json/reader.h>

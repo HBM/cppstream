@@ -1,7 +1,7 @@
 #ifdef _WIN32
-#include "jsoncpp/include/json/value.h"
-#include "jsoncpp/include/json/reader.h"
-#include "jsoncpp/include/json/writer.h"
+#include "json/value.h"
+#include "json/reader.h"
+#include "json/writer.h"
 #else
 #include <jsoncpp/json/value.h>
 #include <jsoncpp/json/reader.h>

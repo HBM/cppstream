@@ -11,7 +11,7 @@
 #endif
 
 #ifdef _WIN32
-#include "jsoncpp/include/json/writer.h"
+#include "json/writer.h"
 #else
 #include <jsoncpp/json/writer.h>
 #endif
@@ -216,7 +216,7 @@ namespace hbm {
 				if(m_dataIsBigEndian) {
 					ntpTimestamp = _byteswap_uint64(*reinterpret_cast < uint64_t* > (pData));
 				} else {
-					ntpTimestamp = *reinterpret_cast < uint64_t* > (pData));
+					ntpTimestamp = *reinterpret_cast < uint64_t* > (pData);
 				}
 #else
 				if(m_dataIsBigEndian) {

@@ -7,7 +7,7 @@
 #include <functional>
 
 #ifdef _WIN32
-#include "jsoncpp/include/json/value.h"
+#include "json/value.h"
 #else
 #include <jsoncpp/json/value.h>
 #endif

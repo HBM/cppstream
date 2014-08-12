@@ -51,6 +51,7 @@ namespace hbm {
 			, m_customStreamMetaCb()
 		{
 		}
+
 		void StreamClient::setCustomDataCb(DataCb_t cb)
 		{
 			m_customDataCb = cb;
@@ -82,12 +83,14 @@ namespace hbm {
 
 		int StreamClient::start(const std::string& address, const std::string &streamPort, const std::string &controlPort)
 		{
-			m_address = address;
-			m_controlPort = controlPort;
-			int result = m_streamSocket.connect(m_address.c_str(), streamPort);
+			int result = m_streamSocket.connect(address.c_str(), streamPort);
 			if(result<0) {
 				return -1;
 			}
+
+			m_address = address;
+			m_controlPort = controlPort;
+
 
 			unsigned char dataRecvBuffer[8192];
 

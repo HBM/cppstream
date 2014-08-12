@@ -18,7 +18,6 @@ namespace hbm {
 		std::string m_address;
 		std::string m_port;
 		std::string m_httpPath;
-		std::string m_httpVersion;
 	};
 }
 #endif // _HBM__STREMAING__HTTPPOST_H

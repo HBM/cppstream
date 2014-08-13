@@ -9,14 +9,6 @@
 #include <boost/bind.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 
-#ifdef _WIN32
-#include "json/value.h"
-#include "json/writer.h"
-#else
-#include <jsoncpp/json/value.h>
-#include <jsoncpp/json/writer.h>
-#endif
-
 #include "StreamClient.h"
 
 
@@ -32,7 +24,7 @@ static void sigHandler(int)
 
 int main(int argc, char* argv[])
 {
-	// some signals should lead to a normal shutdown
+	// Some signals should lead to a normal shutdown of the daq stream client. Afterwards the program exists.
 	signal( SIGTERM, &sigHandler);
 	signal( SIGINT, &sigHandler);
 
@@ -40,7 +32,8 @@ int main(int argc, char* argv[])
 
 	static const std::string& fileName("Addresses.txt");
 	if(argc>1) {
-		std::cout << "opens daq stream of addresses defined in file " << fileName << std::endl;
+		std::cout << "Opens daq stream of addresses defined in file (one address per line) " << fileName << std::endl;
+		std::cout << "Data received from stream is dumped into one for each daq stream server <address>.dump" << std::endl;
 		return EXIT_SUCCESS;
 	}
 

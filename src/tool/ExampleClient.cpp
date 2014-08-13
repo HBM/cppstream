@@ -2,11 +2,6 @@
 #include <string>
 #include <signal.h>
 
-#ifdef _WIN32
-#include "json/value.h"
-#else
-#include <jsoncpp/json/value.h>
-#endif
 #include "StreamClient.h"
 #include "Types.h"
 
@@ -20,7 +15,7 @@ static void sigHandler(int)
 
 int main(int argc, char* argv[])
 {
-	// some signals should lead to a normal shutdown
+	// Some signals should lead to a normal shutdown of the daq stream client. Afterwards the program exists.
 	signal( SIGTERM, &sigHandler);
 	signal( SIGINT, &sigHandler);
 
@@ -38,4 +33,5 @@ int main(int argc, char* argv[])
 	// give control to the receiving function.
 	// returns on signal (terminate, interrupt) buffer overrun on the server side or loss of connection.
 	stream.start(argv[1], hbm::streaming::DAQSTREAM_PORT, controlPort);
+	return EXIT_SUCCESS;
 }

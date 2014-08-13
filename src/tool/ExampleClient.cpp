@@ -78,11 +78,11 @@ int main(int argc, char* argv[])
 	}
 
 	// we want to be informed about stream related meta information
-	stream.setCustomStreamMetaCb(customStreamMetaCb);
+	stream.setStreamMetaCb(customStreamMetaCb);
 	// we want to be informed about signal related meta information
-	stream.setCustomSignalMetaCb(customSignalMetaCb);
+	stream.setSignalMetaCb(customSignalMetaCb);
 
-	stream.setCustomDataCb(customDataCb);
+	stream.setDataCb(customDataCb);
 
 	// give control to the receiving function.
 	// returns on signal (terminate, interrupt) buffer overrun on the server side or loss of connection.

@@ -68,9 +68,9 @@ int main(int argc, char* argv[])
 	}
 
 
-	stream.setCustomStreamMetaCb(customStreamMetaCb);
+	stream.setStreamMetaCb(customStreamMetaCb);
 	//stream.setCustomSignalMetaCb(customSignalMetaCb);
-	stream.setCustomDataCb(customDataCb);
+	stream.setDataCb(customDataCb);
 
 	do {
 		receivedDataByteCount = 0;

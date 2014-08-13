@@ -89,9 +89,9 @@ int main(int argc, char* argv[])
 		hbm::streaming::StreamClient* streamPtr = new hbm::streaming::StreamClient(dumpFileName);
 		//hbm::streaming::StreamClient* streamPtr = new hbm::streaming::StreamClient;
 
-		streamPtr->setCustomStreamMetaCb(customStreamMetaCb);
-		streamPtr->setCustomSignalMetaCb(customSignalMetaCb);
-		streamPtr->setCustomDataCb(customDataCb);
+		streamPtr->setStreamMetaCb(customStreamMetaCb);
+		streamPtr->setSignalMetaCb(customSignalMetaCb);
+		streamPtr->setDataCb(customDataCb);
 
 		boost::thread* pStreamer = new boost::thread(boost::bind(&hbm::streaming::StreamClient::start, streamPtr, address, hbm::streaming::DAQSTREAM_PORT, "http"));
 		threads.add_thread(pStreamer);

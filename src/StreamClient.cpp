@@ -50,18 +50,18 @@ namespace hbm {
 		{
 		}
 
-		void StreamClient::setCustomDataCb(DataCb_t cb)
+		void StreamClient::setDataCb(DataCb_t cb)
 		{
 			m_customDataCb = cb;
 		}
 
 
-		void StreamClient::setCustomStreamMetaCb(StreamMetaCb_t cb)
+		void StreamClient::setStreamMetaCb(StreamMetaCb_t cb)
 		{
 			m_customStreamMetaCb = cb;
 		}
 
-		void StreamClient::setCustomSignalMetaCb(SignalMetaCb_t cb)
+		void StreamClient::setSignalMetaCb(SignalMetaCb_t cb)
 		{
 			m_customSignalMetaCb = cb;
 		}

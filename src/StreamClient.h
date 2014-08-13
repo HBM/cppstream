@@ -27,23 +27,23 @@ namespace hbm {
 		typedef std::function<void(hbm::streaming::StreamClient& stream, int signalNumber, const std::string& method, const Json::Value& params)> SignalMetaCb_t;
 
 		/// Connects to on daq stream server. Receives and interpretes meta data. Subcribes signals. Receives measured data
-		/// some callback functions may be registered in order to get informed about meta information and measured data.
+		/// Callback functions may be registered in order to get informed about meta information and measured data.
 		class StreamClient {
 		public:
 			StreamClient();
 
-			/// use this variant to dump everything to a file
-			/// \throw std::runtime_error
+			/// use this variant to dump everything received to a file
+			/// \throw std::runtime_error if file could not be opened
 			StreamClient(const std::string& fileName);
 
-			/// The custom data callback notifies about meuasured data. This is going to be called very often!
-			void setCustomDataCb(DataCb_t cb);
+			/// The data callback notifies about meuasured data. This is going to be called very often!
+			void setDataCb(DataCb_t cb);
 
-			/// The custom stream meta callback notifies about all stream related meta information
-			void setCustomStreamMetaCb(StreamMetaCb_t cb);
+			/// The stream meta callback notifies about all stream related meta information
+			void setStreamMetaCb(StreamMetaCb_t cb);
 
-			/// The custom signal meta callback notifies about all signal related meta information
-			void setCustomSignalMetaCb(SignalMetaCb_t cb);
+			/// The signal meta callback notifies about all signal related meta information
+			void setSignalMetaCb(SignalMetaCb_t cb);
 
 			/// \throws std::runtime_error
 			void subscribe(const signalReferences_t& signalReferences);

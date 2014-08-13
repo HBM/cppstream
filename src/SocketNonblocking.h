@@ -23,7 +23,7 @@ namespace hbm
 		SocketNonblocking();
 
 		/// use this variant to dump everything to a file
-		/// \throw std::runtime_error
+		/// \throw std::runtime_error if file could not be opened
 		SocketNonblocking(const std::string& fileName);
 		virtual ~SocketNonblocking();
 

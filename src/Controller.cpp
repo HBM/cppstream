@@ -24,21 +24,10 @@ namespace hbm {
 
 		Controller::Controller(const std::string& streamId, const std::string& address, const std::string& port, const std::string& path)
 			: m_streamId(streamId)
-			, m_address(address)
-			, m_port(port)
-			, m_path(path)
+			, m_httpPost(address, port, path)
 		{
 			if(m_streamId.empty()) {
 				throw std::runtime_error("no stream id provided");
-			}
-			if(m_address.empty()) {
-				throw std::runtime_error("no stream server address provided");
-			}
-			if(m_port.empty()) {
-				throw std::runtime_error("no stream server control port provided");
-			}
-			if(m_path.empty()) {
-				throw std::runtime_error("no stream server path id provided");
 			}
 		}
 
@@ -57,8 +46,7 @@ namespace hbm {
 
 			std::string request = Json::FastWriter().write(content);
 
-			HttpPost httpPost(m_address, m_port, m_path);
-			std::string response = httpPost.execute(request);
+			std::string response = m_httpPost.execute(request);
 
 			Json::Value result;
 			if(Json::Reader().parse(response, result)==false) {
@@ -88,8 +76,7 @@ namespace hbm {
 
 			std::string request = Json::FastWriter().write(content);
 
-			HttpPost httpPost(m_address, m_port, m_path);
-			std::string response = httpPost.execute(request);
+			std::string response = m_httpPost.execute(request);
 
 			Json::Value result;
 			if(Json::Reader().parse(response, result)==false) {

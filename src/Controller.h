@@ -5,7 +5,8 @@
 #include <vector>
 #include <stdexcept>
 
-#include <Types.h>
+#include "Types.h"
+#include "HttpPost.h"
 
 namespace hbm {
 	namespace streaming {
@@ -25,9 +26,7 @@ namespace hbm {
 			void unsubscribe(const signalReferences_t& signalReferences);
 		private:
 			std::string m_streamId;
-			std::string m_address;
-			std::string m_port;
-			std::string m_path;
+			HttpPost m_httpPost;
 
 			static unsigned int s_id;
 		};

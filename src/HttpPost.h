@@ -6,9 +6,12 @@
 namespace hbm {
 	/// Creates and send a HTTP post. Returns the response without HTTP post response header.
 	/// TCP Connection is opened with each execute() and is being closed afterwards.
+
+	/// We use HTTP version 1.0 in order to force pipelining not to be used.
 	class HttpPost
 	{
 	public:
+		/// \throws std::runtime_error
 		HttpPost(const std::string& address, const std::string& port, const std::string& httpPath);
 
 		/// \return the response or an empty string on error

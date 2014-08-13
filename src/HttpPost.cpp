@@ -1,4 +1,5 @@
 #include <sstream>
+#include <stdexcept>
 
 #include "HttpPost.h"
 
@@ -10,6 +11,16 @@ namespace hbm {
 		, m_port(port)
 		, m_httpPath(httpPath)
 	{
+		if(m_address.empty()) {
+			throw std::runtime_error("no stream server address provided");
+		}
+		if(m_port.empty()) {
+			throw std::runtime_error("no stream server control port provided");
+		}
+		if(m_httpPath.empty()) {
+			throw std::runtime_error("no stream server path id provided");
+		}
+
 	}
 
 	std::string HttpPost::execute(const std::string& request)

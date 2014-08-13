@@ -32,8 +32,7 @@ namespace hbm {
 			, m_controlPort()
 			, m_initialTime()
 			, m_subscribedSignals()
-			, m_customDataCb()
-			, m_customStreamMetaCb()
+			, m_receivedDataByteCount(0)
 		{
 		}
 
@@ -45,25 +44,8 @@ namespace hbm {
 			, m_controlPort()
 			, m_initialTime()
 			, m_subscribedSignals()
-			, m_customDataCb()
-			, m_customStreamMetaCb()
+			, m_receivedDataByteCount(0)
 		{
-		}
-
-		void StreamClient::setDataCb(DataCb_t cb)
-		{
-			m_customDataCb = cb;
-		}
-
-
-		void StreamClient::setStreamMetaCb(StreamMetaCb_t cb)
-		{
-			m_customStreamMetaCb = cb;
-		}
-
-		void StreamClient::setSignalMetaCb(SignalMetaCb_t cb)
-		{
-			m_customSignalMetaCb = cb;
 		}
 
 		void StreamClient::subscribe(const signalReferences_t& signalReferences)
@@ -81,6 +63,7 @@ namespace hbm {
 
 		int StreamClient::start(const std::string& address, const std::string &streamPort, const std::string &controlPort)
 		{
+			m_receivedDataByteCount = 0;
 			int result = m_streamSocket.connect(address.c_str(), streamPort);
 			if(result<0) {
 				return -1;
@@ -110,9 +93,6 @@ namespace hbm {
 					}
 
 					m_subscribedSignals[signalNumber].dataCb(dataRecvBuffer, result);
-					if(m_customDataCb) {
-						m_customDataCb(*this, signalNumber, dataRecvBuffer, result);
-					}
 				} else if(type==TYPE_META){
 					MetaInformation metaInformation(m_streamSocket, size);
 					if(metaInformation.type()!=METAINFORMATION_JSON) {
@@ -125,9 +105,6 @@ namespace hbm {
 						if(signalNumber==0) {
 							// stream related meta information
 							metaCb(method, params);
-							if(m_customStreamMetaCb) {
-								m_customStreamMetaCb(*this, method, params);
-							}
 						} else {
 							// signal related meta information
 							if(method=="subscribe") {
@@ -140,10 +117,6 @@ namespace hbm {
 								m_subscribedSignals.erase(signalNumber);
 							} else {
 								m_subscribedSignals[signalNumber].metaCb(method, params);
-
-								if(m_customSignalMetaCb) {
-									m_customSignalMetaCb(*this, signalNumber, method, params);
-								}
 							}
 						}
 					}
@@ -200,6 +173,24 @@ namespace hbm {
 							std::cout << m_address << ": ring buffer fill level is " << params[0].asUInt() << "%" << std::endl;
 						}
 					}
+				} else if(method=="available") {
+					hbm::streaming::signalReferences_t signalReferences;
+					for (Json::ValueConstIterator iter = params.begin(); iter!= params.end(); ++iter) {
+						const Json::Value& element = *iter;
+						signalReferences.push_back(element.asString());
+					}
+
+					try {
+						subscribe(signalReferences);
+						std::cout << __FUNCTION__ << "the following signal(s) were subscribed: ";
+					} catch(const std::runtime_error& e) {
+						std::cerr << __FUNCTION__ << "error '" << e.what() << "' subscribing the following signal(s): ";
+					}
+
+					for(hbm::streaming::signalReferences_t::const_iterator iter=signalReferences.begin(); iter!=signalReferences.end(); ++iter) {
+						std::cout << "'" << *iter << "' ";
+					}
+					std::cout << std::endl;
 				} else {
 					std::cout << m_address << ": Stream related meta information '" << method << "' with parameters: " << Json::StyledWriter().write(params) << std::endl;
 				}

@@ -1,8 +1,11 @@
 # HBM Daq Stream Examples
 
 ## Structure
-The most important class is `StreamClient`. It encapsulates the communication with a Daq Stream server. It collects and keeps meta information received from the Daq Stream Server.
-Callback functions may be registered to be notified about stream related meta information, signal related meta information and about measured values. Furthermore it provides methods for subscribe and unsunscribe signals from the Daq Stream Server.
+The most important class is `StreamClient`. It encapsulates the communication with a Daq Stream server. 
+
+It collects and keeps stream related meta information received from the Daq Stream Server. It provides methods for subscribing and unsubscribing signals from the Daq Stream Server. 
+
+Furthermore it holds a container of objects representing subscribed signals. Those process signal related meta information and measured values.
 
 ## Prerequisites
 

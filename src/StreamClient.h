@@ -36,15 +36,6 @@ namespace hbm {
 			/// \throw std::runtime_error if file could not be opened
 			StreamClient(const std::string& fileName);
 
-			/// The data callback notifies about meuasured data. This is going to be called very often!
-			void setDataCb(DataCb_t cb);
-
-			/// The stream meta callback notifies about all stream related meta information
-			void setStreamMetaCb(StreamMetaCb_t cb);
-
-			/// The signal meta callback notifies about all signal related meta information
-			void setSignalMetaCb(SignalMetaCb_t cb);
-
 			/// \throws std::runtime_error
 			void subscribe(const signalReferences_t& signalReferences);
 
@@ -92,10 +83,7 @@ namespace hbm {
 
 			/// information about all subscribed signals
 			subscribedSignals_t m_subscribedSignals;
-
-			DataCb_t m_customDataCb;
-			StreamMetaCb_t m_customStreamMetaCb;
-			SignalMetaCb_t m_customSignalMetaCb;
+			size_t m_receivedDataByteCount;
 		};
 	}
 }

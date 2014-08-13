@@ -1,6 +1,10 @@
 # HBM Daq Stream Examples
 
-## prerequisites
+## Structure
+The most important class is `StreamClient`. It encapsulates the communication with a Daq Stream server. It collects and keeps meta information received from the Daq Stream Server.
+Callback functions may be registered to be notified about stream related meta information, signal related meta information and about measured values. Furthermore it provides methods for subscribe and unsunscribe signals from the Daq Stream Server.
+
+## Prerequisites
 
 ### Sources 
 All sources of the example programs are to be found on the [HBM Daq Stream Examples github project page](https://github.com/HBM-Team/cppstream "")
@@ -13,7 +17,6 @@ For Linux, simply install the Boost development packages of your distribution. F
 Download and install the binaries and set the '`BOOST_ROOT`' environment variable to the installation directory.
 
 
-
 ### Build System
 #### Linux
 Under Linux the cmake build system is being used. Install it using your distribution package system. Create a sub directory inside the project directory. change into this subdirectory and call '`cmake ..`'. Execute '`make`' afterwards to build all libraries and executables.
@@ -23,19 +26,19 @@ Tested with gcc 4.6
 #### Windows
 A solution for MSVC2010 is provided.
 
+## Examples
 
-## Example Client
+### Example Client
 This is a simple example client for HBM Daq Stream protocol. 
 
-This program connects to a HBM Daq Streaming socket, receives everything that arrives, subscribes all signals, interprets stream and signal related meta information and measured data.
+This program connects to a HBM Daq Streaming socket, receives everything that arrives, subscribes all signals, interprets stream and signal related meta information and measured data. The Stream Client 
 It is started with at least one paramter telling about the address of the HBM Daq Stream server. 
 '`./exampleclient.bin 172.19.3.4`'
 
 call without parameter or with parameter '`-h`' to get help.
 
-
-## Test Reconnect
+### Reconnect
 Works as example client but stops and restarts the streaming client periodically.
 
-## Test Multiple
+### Multiple
 Works as example client but creates several instances of the streaming client in order to connect to several streaming servers.

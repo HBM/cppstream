@@ -174,6 +174,7 @@ namespace hbm {
 					}
 					std::cout << m_address << ": daq stream version: " << m_apiVersion << std::endl;
 				} else if(method=="init") {
+					// this gives important information needed to control the daq stream.
 					m_streamId = params["streamId"].asString();
 					std::cout << m_address << ": this is " << m_streamId << std::endl;
 					std::cout << m_address << ": supported features: " << params["supported"] << std::endl;

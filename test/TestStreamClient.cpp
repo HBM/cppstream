@@ -1,57 +1,44 @@
-#include <iostream>
-//#include <string>
-//#include <signal.h>
+#ifndef _WIN32
+#define BOOST_TEST_DYN_LINK
+#endif
+#define BOOST_TEST_MAIN
 
+
+#define BOOST_TEST_MODULE Scan Client Test
+
+#include <iostream>
 #include <stdexcept>
+
+#include <boost/test/unit_test.hpp>
 #include <boost/thread/thread.hpp>
 #include <boost/bind.hpp>
 
-
-//#ifdef _WIN32
-//#include "json/value.h"
-//#else
-//#include <jsoncpp/json/value.h>
-//#endif
 #include "StreamClient.h"
-//#include "Types.h"
+#include "TestStreamClient.h"
 
-/// this object represents
-static hbm::streaming::StreamClient stream;
-
-int main(int argc, char* argv[])
+DeviceFixture::DeviceFixture()
+	: m_address("hbm-00087b")
+	, m_controlPort("http")
 {
-	if((argc<2) || (std::string(argv[1])=="-h") ) {
-		std::cout << "syntax: " << argv[0] << " <stream server address>" << std::endl;
-		return EXIT_SUCCESS;
-	}
+	m_streamer = boost::thread(boost::bind(&hbm::streaming::StreamClient::start, &m_streamClient, m_address, hbm::streaming::DAQSTREAM_PORT, m_controlPort));
+}
 
-	// the control port might differ when communication runs via a router (CX27)
-	std::string controlPort = "http";
-	if(argc>2) {
-		controlPort = argv[2];
-	}
+DeviceFixture::~DeviceFixture()
+{
+	m_streamClient.stop();
+	m_streamer.join();
+}
 
+BOOST_FIXTURE_TEST_SUITE(test, DeviceFixture)
 
-	boost::thread streamer = boost::thread(boost::bind(&hbm::streaming::StreamClient::start, &stream, argv[1], hbm::streaming::DAQSTREAM_PORT, controlPort));
-
+BOOST_AUTO_TEST_CASE (test_subscribe)
+{
 	boost::this_thread::sleep_for(boost::chrono::milliseconds(500));
 
 	hbm::streaming::signalReferences_t signalReferences;
 	signalReferences.push_back("aninvalidsignalreference");
-	try {
-		stream.subscribe(signalReferences);
-	} catch(const std::runtime_error& e) {
-		std::cerr << e.what() << std::endl;
-	}
-
-
-	try {
-		stream.unsubscribe(signalReferences);
-	} catch(const std::runtime_error& e) {
-		std::cerr << e.what() << std::endl;
-	}
-
-	stream.stop();
-	streamer.join();
-
+	BOOST_CHECK_THROW(m_streamClient.subscribe(signalReferences), std::runtime_error);
+	BOOST_CHECK_THROW(m_streamClient.unsubscribe(signalReferences), std::runtime_error);
 }
+
+BOOST_AUTO_TEST_SUITE_END()

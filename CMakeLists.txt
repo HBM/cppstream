@@ -90,5 +90,6 @@ target_link_libraries( teststreamclient.bin
   jsoncpp
   boost_system
   boost_thread
+  boost_unit_test_framework
 )
 

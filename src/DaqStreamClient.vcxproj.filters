@@ -21,51 +21,51 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src/platform/windows/SocketNonblocking.cpp">
+    <ClCompile Include="platform/windows/SocketNonblocking.cpp">
       <Filter>Source Files\platform\windows</Filter>
     </ClCompile>
-    <ClCompile Include="src/BufferedReader.cpp">
+    <ClCompile Include="BufferedReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src/TransportHeader.cpp">
+    <ClCompile Include="TransportHeader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src/Controller.cpp">
+    <ClCompile Include="Controller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src/HttpPost.cpp">
+    <ClCompile Include="HttpPost.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src/MetaInformation.cpp">
+    <ClCompile Include="MetaInformation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src/SubscribedSignal.cpp">
+    <ClCompile Include="SubscribedSignal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src/Types.cpp">
+    <ClCompile Include="Types.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src/StreamClient.cpp">
+    <ClCompile Include="StreamClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src/Controller.h">
+    <ClInclude Include="Controller.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src/Types.h">
+    <ClInclude Include="Types.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src/HttpPost.h">
+    <ClInclude Include="HttpPost.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src/MetaInformation.h">
+    <ClInclude Include="MetaInformation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src/Signal.h">
+    <ClInclude Include="Signal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src/SocketNonblocking.h">
+    <ClInclude Include="SocketNonblocking.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

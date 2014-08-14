@@ -11,19 +11,18 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{670E5C5D-4BC7-4275-AB32-AB5718695BB1}</ProjectGuid>
+    <ProjectGuid>{370AB3E4-8510-4D2E-8618-20327B6C77B4}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>cppstream</RootNamespace>
-    <ProjectName>ExampleClient</ProjectName>
+    <RootNamespace>DaqStreamClient</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
@@ -51,13 +50,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;../jsoncpp/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;../../jsoncpp/include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>ws2_32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -69,7 +67,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;../jsoncpp/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;../../jsoncpp/include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -77,19 +75,29 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>ws2_32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\jsoncpp\makefiles\msvc2010\lib_json.vcxproj">
-      <Project>{1e6c2c1c-6453-4129-ae3f-0ee8e6599c89}</Project>
-    </ProjectReference>
-    <ProjectReference Include="DaqStreamClient.vcxproj">
-      <Project>{370ab3e4-8510-4d2e-8618-20327b6c77b4}</Project>
-    </ProjectReference>
+    <ClCompile Include="BufferedReader.cpp" />
+    <ClCompile Include="Controller.cpp" />
+    <ClCompile Include="HttpPost.cpp" />
+    <ClCompile Include="MetaInformation.cpp" />
+    <ClCompile Include="platform/windows/SocketNonblocking.cpp" />
+    <ClCompile Include="StreamClient.cpp" />
+    <ClCompile Include="SubscribedSignal.cpp" />
+    <ClCompile Include="TransportHeader.cpp" />
+    <ClCompile Include="Types.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src/tool/ExampleClient.cpp" />
+    <ClInclude Include="Controller.h" />
+    <ClInclude Include="HttpPost.h" />
+    <ClInclude Include="MetaInformation.h" />
+    <ClInclude Include="Signal.h" />
+    <ClInclude Include="SocketNonblocking.h" />
+    <ClInclude Include="Types.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

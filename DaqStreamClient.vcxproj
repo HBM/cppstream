@@ -96,6 +96,9 @@
     <ClInclude Include="src/SocketNonblocking.h" />
     <ClInclude Include="src/Types.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

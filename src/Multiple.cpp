@@ -9,7 +9,7 @@
 #include <boost/bind.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 
-#include "StreamClient.h"
+#include "StreamClient/StreamClient.h"
 
 
 typedef boost::ptr_vector < hbm::streaming::StreamClient > streams_t;

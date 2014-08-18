@@ -3,7 +3,7 @@
 
 #include <boost/thread/thread.hpp>
 
-#include "StreamClient.h"
+#include "StreamClient/StreamClient.h"
 
 class DeviceFixture {
 public:

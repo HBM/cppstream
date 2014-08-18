@@ -2,8 +2,8 @@
 #include <string>
 #include <signal.h>
 
-#include "StreamClient.h"
-#include "Types.h"
+#include "StreamClient/StreamClient.h"
+#include "StreamClient/Types.h"
 
 /// this object represents
 static hbm::streaming::StreamClient stream;

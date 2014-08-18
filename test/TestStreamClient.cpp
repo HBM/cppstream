@@ -13,7 +13,7 @@
 #include <boost/thread/thread.hpp>
 #include <boost/bind.hpp>
 
-#include "StreamClient.h"
+#include "StreamClient/StreamClient.h"
 #include "TestStreamClient.h"
 
 DeviceFixture::DeviceFixture()

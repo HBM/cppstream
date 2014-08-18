@@ -1,4 +1,4 @@
-project("HBM daq stream client")
+project("HBM daq stream examples")
 
 cmake_minimum_required(VERSION 2.8)
 
@@ -7,19 +7,41 @@ SET(WARN_SWITCHES "${WARN_SWITCHES} -Wno-unused-local-typedefs -Wno-unused-but-s
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x ${WARN_SWITCHES}")
 
-include_directories(.)
-set(STREAMCLIENT_SOURCES
-  Types.cpp
-  StreamClient.cpp
-  TransportHeader.cpp
-  SocketNonblocking.h
-  MetaInformation.cpp
-  Controller.cpp
-  HttpPost.cpp
-  SubscribedSignal.cpp
-  platform/linux/SocketNonblocking.cpp
-  BufferedReader.cpp
+include_directories(../include)
+
+set(EXAMPLECLIENT_SOURCES
+  ExampleClient.cpp
 )
 
-add_library(streamclient-static  STATIC ${STREAMCLIENT_SOURCES})
+add_executable( exampleclient.bin ${EXAMPLECLIENT_SOURCES} )
 
+target_link_libraries( exampleclient.bin
+  streamclient-static
+  jsoncpp
+)
+
+set(RECONNECT_SOURCES
+  Reconnect.cpp
+)
+
+add_executable( reconnect.bin ${RECONNECT_SOURCES} )
+
+target_link_libraries( reconnect.bin
+  streamclient-static
+  jsoncpp
+  boost_system
+  boost_thread
+)
+
+set(MULTIPLE_SOURCES
+  Multiple.cpp
+)
+
+add_executable( multiple.bin ${MULTIPLE_SOURCES} )
+
+target_link_libraries( multiple.bin
+  streamclient-static
+  jsoncpp
+  boost_system
+  boost_thread
+)

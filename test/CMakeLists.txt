@@ -7,7 +7,7 @@ SET(WARN_SWITCHES "${WARN_SWITCHES} -Wno-unused-local-typedefs -Wno-unused-but-s
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x ${WARN_SWITCHES}")
 
-include_directories("../src")
+include_directories(../include)
 
 set(TEST_STREAMCLIENT_SOURCES
   TestStreamClient.cpp

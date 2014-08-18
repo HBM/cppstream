@@ -1,18 +1,14 @@
-# HBM Daq Stream Examples
-
-## Structure
-The most important class is `StreamClient`. It encapsulates the communication with a Daq Stream server. 
-
-It collects and keeps stream related meta information received from the Daq Stream Server. It provides methods for subscribing and unsubscribing signals from the Daq Stream Server. 
-
-Furthermore it holds a container of objects representing subscribed signals. Those process signal related meta information and measured values.
+# HBM Daq Stream Client Examples
+Implements an HBM Daq Stream Client using C++
 
 ## Prerequisites
 
 ### Sources 
 All sources of the example programs are to be found on the [HBM Daq Stream Examples github project page](https://github.com/HBM-Team/cppstream "")
 
-### Libraries
+### Used Libraries
+We try to use as much existing and prooved software as possbile in order to keep implementation and testing effort as low as possible.
+
 The open source project jsoncpp is being used as JSON composer and parser. For Linux, simply install the jsoncpp development package of your distribution. For Windows, download the source from the [jsoncpp github project page](https://github.com/open-source-parsers/jsoncpp "") and put them beside the directory of this project.
 
 Some example programs do use the Boost libraries. Refer to [boost](http://www.boost.org/ "") for details.
@@ -29,7 +25,15 @@ Tested with gcc 4.6
 #### Windows
 A solution for MSVC2010 is provided.
 
+## Library
+Center of all is a library containing everything needed to implement an HBM Daq Stream Client. 
+The most important class of it library is `StreamClient`. It encapsulates the communication with a Daq Stream server.
+It collects and keeps stream related meta information received from the Daq Stream Server. It provides methods for subscribing and unsubscribing signals from the Daq Stream Server. 
+
+Furthermore it holds a container of objects representing subscribed signals. The `SubScribedSignal` class processes signal related meta information and measured values.
+
 ## Examples
+There are simple example programs using the library.
 
 ### Example Client
 This is a simple example client for HBM Daq Stream protocol. 

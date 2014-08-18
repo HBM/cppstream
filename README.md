@@ -1,5 +1,5 @@
 # HBM Daq Stream Client Examples
-Implements an HBM Daq Stream Client using C++
+Implements an HBM Daq Stream Client and some simple example programs using C++
 
 ## Prerequisites
 

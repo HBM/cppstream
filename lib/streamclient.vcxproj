@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -78,15 +78,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BufferedReader.cpp" />
-    <ClCompile Include="Controller.cpp" />
-    <ClCompile Include="HttpPost.cpp" />
-    <ClCompile Include="MetaInformation.cpp" />
-    <ClCompile Include="platform/windows/SocketNonblocking.cpp" />
-    <ClCompile Include="StreamClient.cpp" />
-    <ClCompile Include="SubscribedSignal.cpp" />
-    <ClCompile Include="TransportHeader.cpp" />
-    <ClCompile Include="Types.cpp" />
+    <ClCompile Include="bufferedreader.cpp" />
+    <ClCompile Include="controller.cpp" />
+    <ClCompile Include="httppost.cpp" />
+    <ClCompile Include="metainformation.cpp" />
+    <ClCompile Include="platform/windows/socketnonblocking.cpp" />
+    <ClCompile Include="streamclient.cpp" />
+    <ClCompile Include="subscribedsignal.cpp" />
+    <ClCompile Include="transportheader.cpp" />
+    <ClCompile Include="types.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Controller.h" />

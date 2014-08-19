@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source Files">
@@ -21,51 +21,51 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="platform/windows/SocketNonblocking.cpp">
+    <ClCompile Include="platform/windows/socketnonblocking.cpp">
       <Filter>Source Files\platform\windows</Filter>
     </ClCompile>
-    <ClCompile Include="BufferedReader.cpp">
+    <ClCompile Include="bufferedreader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TransportHeader.cpp">
+    <ClCompile Include="transportheader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Controller.cpp">
+    <ClCompile Include="controller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="HttpPost.cpp">
+    <ClCompile Include="httppost.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MetaInformation.cpp">
+    <ClCompile Include="metainformation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SubscribedSignal.cpp">
+    <ClCompile Include="subscribedsignal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Types.cpp">
+    <ClCompile Include="types.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StreamClient.cpp">
+    <ClCompile Include="streamclient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Controller.h">
+    <ClInclude Include="controller.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Types.h">
+    <ClInclude Include="types.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="HttpPost.h">
+    <ClInclude Include="hHttppost.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MetaInformation.h">
+    <ClInclude Include="metainformation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Signal.h">
+    <ClInclude Include="signal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SocketNonblocking.h">
+    <ClInclude Include="socketnonblocking.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

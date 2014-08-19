@@ -12,7 +12,7 @@
 
 
 
-#include "BufferedReader.h"
+#include "bufferedreader.h"
 
 namespace hbm
 {

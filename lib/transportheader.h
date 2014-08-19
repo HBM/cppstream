@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#include "SocketNonblocking.h"
+#include "socketnonblocking.h"
 
 namespace hbm {
 	namespace streaming {

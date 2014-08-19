@@ -14,7 +14,7 @@
 #include <syslog.h>
 #include <poll.h>
 
-#include "SocketNonblocking.h"
+#include "socketnonblocking.h"
 
 
 /// Maximum time to wait for connecting

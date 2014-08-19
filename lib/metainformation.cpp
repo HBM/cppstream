@@ -6,7 +6,7 @@
 #include <jsoncpp/json/reader.h>
 #endif
 
-#include "MetaInformation.h"
+#include "metainformation.h"
 
 namespace hbm {
 	namespace streaming {

@@ -1,9 +1,9 @@
-#ifndef _HBM__STREAMING__TESTSTREAMCLIENT_H
-#define _HBM__STREAMING__TESTSTREAMCLIENT_H
+#ifndef _TESTSTREAMCLIENT_H
+#define _TESTSTREAMCLIENT_H
 
 #include <boost/thread/thread.hpp>
 
-#include "StreamClient/StreamClient.h"
+#include "streamclient/streamclient.h"
 
 class DeviceFixture {
 public:

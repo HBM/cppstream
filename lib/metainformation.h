@@ -11,7 +11,7 @@
 #include "jsoncpp/json/value.h"
 #endif
 
-#include "SocketNonblocking.h"
+#include "socketnonblocking.h"
 namespace hbm {
 	namespace streaming {
 		static const int METAINFORMATION_JSON = 1;

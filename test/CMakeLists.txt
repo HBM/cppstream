@@ -10,7 +10,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x ${WARN_SWITCHES}")
 include_directories(../include)
 
 set(TEST_STREAMCLIENT_SOURCES
-  TestStreamClient.cpp
+  teststreamclient.cpp
 )
 
 add_executable( teststreamclient.bin ${TEST_STREAMCLIENT_SOURCES} )

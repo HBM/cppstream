@@ -1,9 +1,9 @@
 #include <sstream>
 #include <stdexcept>
 
-#include "HttpPost.h"
+#include "httppost.h"
 
-#include "SocketNonblocking.h"
+#include "socketnonblocking.h"
 
 namespace hbm {
 	HttpPost::HttpPost(const std::string &address, const std::string &port, const std::string &httpPath)

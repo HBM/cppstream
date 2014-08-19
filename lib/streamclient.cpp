@@ -14,12 +14,12 @@
 #include <jsoncpp/json/writer.h>
 #endif
 
-#include "TransportHeader.h"
-#include "MetaInformation.h"
-#include "SubscribedSignal.h"
-#include "Types.h"
-#include "StreamClient.h"
-#include "Controller.h"
+#include "transportheader.h"
+#include "metainformation.h"
+#include "subscribedsignal.h"
+#include "types.h"
+#include "streamclient.h"
+#include "controller.h"
 
 namespace hbm {
 	namespace streaming {

@@ -5,7 +5,7 @@
 #include <boost/thread/thread.hpp>
 #include <boost/bind.hpp>
 
-#include "StreamClient/StreamClient.h"
+#include "streamclient/streamclient.h"
 
 
 int main(int argc, char* argv[])

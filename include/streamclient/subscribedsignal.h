@@ -7,7 +7,7 @@
 #include <jsoncpp/json/value.h>
 #endif
 
-#include "Types.h"
+#include "types.h"
 
 namespace hbm {
 	namespace streaming {

@@ -10,9 +10,9 @@
 #include <jsoncpp/json/writer.h>
 #endif
 
-#include "Controller.h"
-#include "HttpPost.h"
-#include "Types.h"
+#include "controller.h"
+#include "httppost.h"
+#include "types.h"
 
 namespace hbm {
 	namespace streaming {

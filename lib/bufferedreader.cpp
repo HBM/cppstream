@@ -15,7 +15,7 @@
 
 #include <iostream>
 
-#include "BufferedReader.h"
+#include "bufferedreader.h"
 
 namespace hbm {
 	BufferedReader::BufferedReader()

@@ -12,9 +12,8 @@
 #include <jsoncpp/json/value.h>
 #endif
 
-//#include "Types.h"
-#include "SubscribedSignal.h"
-#include "SocketNonblocking.h"
+#include "subscribedsignal.h"
+#include "socketnonblocking.h"
 
 
 namespace hbm {

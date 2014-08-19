@@ -16,7 +16,7 @@
 #include <jsoncpp/json/writer.h>
 #endif
 
-#include "SubscribedSignal.h"
+#include "subscribedsignal.h"
 
 namespace hbm {
 	namespace streaming {

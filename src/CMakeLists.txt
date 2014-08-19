@@ -10,7 +10,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x ${WARN_SWITCHES}")
 include_directories(../include)
 
 set(EXAMPLECLIENT_SOURCES
-  ExampleClient.cpp
+  exampleclient.cpp
 )
 
 add_executable( exampleclient.bin ${EXAMPLECLIENT_SOURCES} )
@@ -21,7 +21,7 @@ target_link_libraries( exampleclient.bin
 )
 
 set(RECONNECT_SOURCES
-  Reconnect.cpp
+  reconnect.cpp
 )
 
 add_executable( reconnect.bin ${RECONNECT_SOURCES} )
@@ -34,7 +34,7 @@ target_link_libraries( reconnect.bin
 )
 
 set(MULTIPLE_SOURCES
-  Multiple.cpp
+  multiple.cpp
 )
 
 add_executable( multiple.bin ${MULTIPLE_SOURCES} )

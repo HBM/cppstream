@@ -7,30 +7,30 @@ SET(WARN_SWITCHES "${WARN_SWITCHES} -Wno-unused-local-typedefs -Wno-unused-but-s
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x ${WARN_SWITCHES}")
 
-set( INTERFACE_INCLUDE_DIR ../include/StreamClient)
+set( INTERFACE_INCLUDE_DIR ../include/streamclient)
 
 include_directories(${INTERFACE_INCLUDE_DIR})
 
 SET( INTERFADE_HEADERS
-    ${INTERFACE_INCLUDE_DIR}/BufferedReader.h
-    ${INTERFACE_INCLUDE_DIR}/SocketNonblocking.h
-    ${INTERFACE_INCLUDE_DIR}/StreamClient.h
-    ${INTERFACE_INCLUDE_DIR}/SubscribedSignal.h
-    ${INTERFACE_INCLUDE_DIR}/Types.h
+    ${INTERFACE_INCLUDE_DIR}/bufferedreader.h
+    ${INTERFACE_INCLUDE_DIR}/socketnonblocking.h
+    ${INTERFACE_INCLUDE_DIR}/streamclient.h
+    ${INTERFACE_INCLUDE_DIR}/subscribedsignal.h
+    ${INTERFACE_INCLUDE_DIR}/types.h
 )
 
 
 set(STREAMCLIENT_SOURCES
   ${INTERFADE_HEADERS}
-  Types.cpp
-  StreamClient.cpp
-  TransportHeader.cpp
-  MetaInformation.cpp
-  Controller.cpp
-  HttpPost.cpp
-  SubscribedSignal.cpp
-  platform/linux/SocketNonblocking.cpp
-  BufferedReader.cpp
+  types.cpp
+  streamclient.cpp
+  transportheader.cpp
+  metainformation.cpp
+  controller.cpp
+  httppost.cpp
+  subscribedsignal.cpp
+  platform/linux/socketnonblocking.cpp
+  bufferedreader.cpp
 )
 
 add_library(streamclient-static  STATIC ${STREAMCLIENT_SOURCES})

@@ -6,7 +6,7 @@
 #include <arpa/inet.h>
 #endif
 
-#include "TransportHeader.h"
+#include "transportheader.h"
 
 namespace hbm {
 	namespace streaming {

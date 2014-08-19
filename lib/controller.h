@@ -5,8 +5,8 @@
 #include <vector>
 #include <stdexcept>
 
-#include "Types.h"
-#include "HttpPost.h"
+#include "types.h"
+#include "httppost.h"
 
 namespace hbm {
 	namespace streaming {

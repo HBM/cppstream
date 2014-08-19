@@ -13,8 +13,8 @@
 #include <boost/thread/thread.hpp>
 #include <boost/bind.hpp>
 
-#include "StreamClient/StreamClient.h"
-#include "TestStreamClient.h"
+#include "streamclient/streamclient.h"
+#include "teststreamclient.h"
 
 DeviceFixture::DeviceFixture()
 	: m_address("hbm-00087b")

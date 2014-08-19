@@ -88,7 +88,7 @@
     <ProjectReference Include="..\..\jsoncpp\makefiles\msvc2010\lib_json.vcxproj">
       <Project>{1e6c2c1c-6453-4129-ae3f-0ee8e6599c89}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\lib\DaqStreamClient.vcxproj">
+    <ProjectReference Include="..\lib\streamclient.vcxproj">
       <Project>{370ab3e4-8510-4d2e-8618-20327b6c77b4}</Project>
     </ProjectReference>
   </ItemGroup>

@@ -173,7 +173,7 @@ ssize_t hbm::SocketNonblocking::receiveComplete(void* pBlock, size_t len)
       }
     }
   }
-  return len;
+  return static_cast < ssize_t > (len);
 }
 
 

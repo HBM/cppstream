@@ -51,7 +51,7 @@ namespace hbm {
 				m_dataByteCount = ntohl(additionalSizeBig);
 			}
 
-			return bytesRead;
+			return static_cast < ssize_t > (bytesRead);
 		}
 	}
 }

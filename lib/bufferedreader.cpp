@@ -45,12 +45,12 @@ namespace hbm {
 			// there is more than desired
 			memcpy(buf, m_buffer+m_alreadyRead, desiredLen);
 			m_alreadyRead += desiredLen;
-			return desiredLen;
+			return static_cast < ssize_t > (desiredLen);
 		} else if(bytesLeft>0) {
 			// return the rest which is less than desired (a short read)
 			memcpy(buf, m_buffer+m_alreadyRead, bytesLeft);
 			m_alreadyRead = m_fillLevel;
-			return bytesLeft;
+			return static_cast < ssize_t > (bytesLeft);
 		}
 
 		// try to read as much as possible into the empty buffer space
@@ -77,6 +77,6 @@ namespace hbm {
 			m_alreadyRead = m_fillLevel;
 		}
 		memcpy(buf, m_buffer, m_alreadyRead);
-		return m_alreadyRead;
+		return static_cast < ssize_t > (m_alreadyRead);
 	}
 }

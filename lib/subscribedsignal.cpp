@@ -1,3 +1,4 @@
+#include <cstring>
 #include <stdint.h>
 #include <iostream>
 #include <stdexcept>
@@ -41,22 +42,21 @@ namespace hbm {
 			, m_dataTimeSize(0)
 
 			, m_valueCount(0)
-	{
+		{
 		}
 
 		void SubscribedSignal::interpretValues(unsigned char *pData, size_t count)
 		{
 			if(m_dataIsBigEndian) {
 				if(m_dataValueType==DATATYPE_REAL32) {
-					uint32_t* pPos = reinterpret_cast < uint32_t* > (pData);
-					uint32_t targetUint32;
-					float* pTarget;
 					for(size_t i=0; i<count; ++i) {
-						targetUint32 = ntohl(*pPos);
-						// this is it!
-						pTarget = reinterpret_cast < float* >(&targetUint32);
-						sum += *pTarget;
-						++pPos;
+						uint32_t targetUint32;
+						std::memcpy(&targetUint32, &pData, sizeof(targetUint32));
+						targetUint32 = be32toh(targetUint32);
+						float target;
+						std::memcpy(&target, &targetUint32, sizeof(target));
+						sum += target;
+						pData += sizeof(target);
 					}
 				} else if(m_dataValueType==DATATYPE_REAL64) {
 					uint64_t* pPos = reinterpret_cast < uint64_t* > (pData);
@@ -88,7 +88,8 @@ namespace hbm {
 						++pPos;
 					}
 				} else if(m_dataValueType==DATATYPE_U64) {
-					uint64_t* pPos = reinterpret_cast < uint64_t* > (pData);
+					uint64_t* pPos =  (uint64_t*)pData;
+					//uint64_t* pPos = reinterpret_cast < uint64_t* > (pData);
 					uint64_t target;
 					for(size_t i=0; i<count; ++i) {
 						target = be64toh(*pPos);

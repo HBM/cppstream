@@ -227,7 +227,7 @@ namespace hbm {
 						} else if(m_dataValueSize==8) {
 							valueCount = (size-m_dataTimeSize) >> 4;
 						} else {
-							valueCount = size / m_dataValueSize;
+							valueCount = (size-m_dataTimeSize) / m_dataValueSize;
 						}
 						interpreteTimestamp(pData);
 						interpretValues(pData+m_dataTimeSize, valueCount);

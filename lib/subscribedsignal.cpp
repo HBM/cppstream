@@ -43,7 +43,7 @@ namespace hbm {
 	{
 		}
 
-		void SubscribedSignal::interpreteValues(unsigned char *pData, size_t count)
+		void SubscribedSignal::interpretValues(unsigned char *pData, size_t count)
 		{
 			if(m_dataIsBigEndian) {
 				if(m_dataValueType==DATATYPE_REAL32) {
@@ -252,7 +252,7 @@ namespace hbm {
 							valueCount = size / m_dataValueSize;
 						}
 						calculateTimestamp();
-						interpreteValues(pData, valueCount);
+						interpretValues(pData, valueCount);
 						m_valueCount += valueCount;
 					}
 					break;
@@ -263,7 +263,7 @@ namespace hbm {
 						while(size>=tupleSize) {
 							interpreteTimestamp(pData);
 							pData += m_dataTimeSize;
-							interpreteValues(pData, 1);
+							interpretValues(pData, 1);
 							pData += m_dataValueSize;
 							size -= tupleSize;
 							++m_valueCount;
@@ -282,7 +282,7 @@ namespace hbm {
 							valueCount = size / m_dataValueSize;
 						}
 						interpreteTimestamp(pData);
-						interpreteValues(pData+m_dataTimeSize, valueCount);
+						interpretValues(pData+m_dataTimeSize, valueCount);
 						m_valueCount += valueCount;
 					}
 					break;

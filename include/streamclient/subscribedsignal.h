@@ -33,7 +33,7 @@ namespace hbm {
 		private:
 
 			/// @param count number of values
-			void interpreteValues(unsigned char* pData, size_t count);
+			void interpretValues(unsigned char* pData, size_t count);
 
 			void interpreteTimestamp(unsigned char* pData);
 

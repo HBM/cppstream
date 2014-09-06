@@ -59,107 +59,109 @@ namespace hbm {
 						pData += sizeof(target);
 					}
 				} else if(m_dataValueType==DATATYPE_REAL64) {
-					uint64_t* pPos = reinterpret_cast < uint64_t* > (pData);
-					uint64_t targetUint64;
-					double* pTarget;
 					for(size_t i=0; i<count; ++i) {
-						targetUint64 = be64toh(*pPos);
-						// this is it!
-						pTarget = reinterpret_cast < double* >(&targetUint64);
-						sum += *pTarget;
-						++pPos;
+						uint64_t targetUint64;
+						std::memcpy(&targetUint64, &pData, sizeof(targetUint64));
+						targetUint64 = be64toh(targetUint64);
+						double target;
+						std::memcpy(&target, &targetUint64, sizeof(target));
+						sum += target;
+						pData += sizeof(target);
 					}
 				} else if(m_dataValueType==DATATYPE_U32) {
-					uint32_t* pPos = reinterpret_cast < uint32_t* > (pData);
-					uint32_t target;
 					for(size_t i=0; i<count; ++i) {
-						// this is it!
-						target = ntohl(*pPos);
+						uint32_t target;
+						std::memcpy(&target, &pData, sizeof(target));
+						target = be32toh(target);
 						sum += target;
-						++pPos;
+						pData += sizeof(target);
 					}
 				} else if(m_dataValueType==DATATYPE_S32) {
-					int32_t* pPos = reinterpret_cast < int32_t* > (pData);
-					int32_t target;
 					for(size_t i=0; i<count; ++i) {
-						// this is it!
-						target = ntohl(*pPos);
+						uint32_t targetUint32;
+						std::memcpy(&targetUint32, &pData, sizeof(targetUint32));
+						targetUint32 = be32toh(targetUint32);
+						int32_t target;
+						std::memcpy(&target, &targetUint32, sizeof(target));
 						sum += target;
-						++pPos;
+						pData += sizeof(target);
 					}
 				} else if(m_dataValueType==DATATYPE_U64) {
-					uint64_t* pPos =  (uint64_t*)pData;
-					//uint64_t* pPos = reinterpret_cast < uint64_t* > (pData);
-					uint64_t target;
 					for(size_t i=0; i<count; ++i) {
-						target = be64toh(*pPos);
+						uint64_t target;
+						std::memcpy(&target, &pData, sizeof(target));
+						target = be64toh(target);
 						sum += target;
-						++pPos;
+						pData += sizeof(target);
 					}
 				} else if(m_dataValueType==DATATYPE_S64) {
-					int64_t* pPos = reinterpret_cast < int64_t* > (pData);
-					int64_t target;
 					for(size_t i=0; i<count; ++i) {
-						target = be64toh(*pPos);
+						uint64_t targetUint64;
+						std::memcpy(&targetUint64, &pData, sizeof(targetUint64));
+						targetUint64 = be64toh(targetUint64);
+						int64_t target;
+						std::memcpy(&target, &targetUint64, sizeof(target));
 						sum += target;
-						++pPos;
+						pData += sizeof(target);
 					}
 				}
 			} else {
 				// handle little endian to host here...
 				if(m_dataValueType==DATATYPE_REAL32) {
-					uint32_t* pPos = reinterpret_cast < uint32_t* > (pData);
-					uint32_t targetUint32;
-					float* pTarget;
 					for(size_t i=0; i<count; ++i) {
-						targetUint32 = le32toh(*pPos);
-						// this is it!
-						pTarget = reinterpret_cast < float* >(&targetUint32);
-						sum += *pTarget;
-						++pPos;
+						uint32_t targetUint32;
+						std::memcpy(&targetUint32, &pData, sizeof(targetUint32));
+						targetUint32 = le32toh(targetUint32);
+						float target;
+						std::memcpy(&target, &targetUint32, sizeof(target));
+						sum += target;
+						pData += sizeof(target);
 					}
 				} else if(m_dataValueType==DATATYPE_REAL64) {
-					uint64_t* pPos = reinterpret_cast < uint64_t* > (pData);
-					uint64_t targetUint64;
-					double* pTarget;
 					for(size_t i=0; i<count; ++i) {
-						targetUint64 = le64toh(*pPos);
-						// this is it!
-						pTarget = reinterpret_cast < double* >(&targetUint64);
-						sum += *pTarget;
-						++pPos;
+						uint64_t targetUint64;
+						std::memcpy(&targetUint64, &pData, sizeof(targetUint64));
+						targetUint64 = le64toh(targetUint64);
+						double target;
+						std::memcpy(&target, &targetUint64, sizeof(target));
+						sum += target;
+						pData += sizeof(target);
 					}
 				} else if(m_dataValueType==DATATYPE_U32) {
-					uint32_t* pPos = reinterpret_cast < uint32_t* > (pData);
-					uint32_t target;
 					for(size_t i=0; i<count; ++i) {
-						target = le32toh(*pPos);
+						uint32_t target;
+						std::memcpy(&target, &pData, sizeof(target));
+						target = le32toh(target);
 						sum += target;
-						++pPos;
+						pData += sizeof(target);
 					}
 				} else if(m_dataValueType==DATATYPE_S32) {
-					int32_t* pPos = reinterpret_cast < int32_t* > (pData);
-					int32_t target;
 					for(size_t i=0; i<count; ++i) {
-						target = le32toh(*pPos);
+						uint32_t targetUint32;
+						std::memcpy(&targetUint32, &pData, sizeof(targetUint32));
+						targetUint32 = le32toh(targetUint32);
+						int32_t target;
+						std::memcpy(&target, &targetUint32, sizeof(target));
 						sum += target;
-						++pPos;
+						pData += sizeof(target);
 					}
 				} else if(m_dataValueType==DATATYPE_U64) {
-					uint64_t* pPos = reinterpret_cast < uint64_t* > (pData);
-					uint64_t target;
 					for(size_t i=0; i<count; ++i) {
-						target = le64toh(*pPos);
+						uint64_t target;
+						std::memcpy(&target, &pData, sizeof(target));
+						target = le64toh(target);
 						sum += target;
-						++pPos;
+						pData += sizeof(target);
 					}
 				} else if(m_dataValueType==DATATYPE_S64) {
-					int64_t* pPos = reinterpret_cast < int64_t* > (pData);
-					int64_t target;
 					for(size_t i=0; i<count; ++i) {
-						target = le64toh(*pPos);
+						uint64_t targetUint64;
+						std::memcpy(&targetUint64, &pData, sizeof(targetUint64));
+						targetUint64 = le64toh(targetUint64);
+						int64_t target;
+						std::memcpy(&target, &targetUint64, sizeof(target));
 						sum += target;
-						++pPos;
+						pData += sizeof(target);
 					}
 				}
 			}

@@ -30,6 +30,7 @@ namespace hbm {
 
 			, m_signalRateSamples(0)
 			, m_signalRateSamplesDelta()
+			, m_signalRateDelta()
 
 			, m_dataFormatPattern()
 			, m_dataIsBigEndian(false)

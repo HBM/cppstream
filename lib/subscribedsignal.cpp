@@ -232,7 +232,8 @@ namespace hbm {
 		void SubscribedSignal::calculateTimestamp()
 		{
 			timeInfo_t delta(m_signalRateDelta.ntpTimeStamp()*m_valueCount);
-			timeInfo_t time = m_startTime + delta;
+			m_startTime.increment(delta);
+			timeInfo_t time = m_startTime;
 		}
 
 

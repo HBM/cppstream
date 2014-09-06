@@ -29,8 +29,7 @@ namespace hbm {
 			void set(const Json::Value& StampNode);
 			void setNtpTimestamp(uint64_t ntpTimeStamp);
 			void clear();
-
-			timeInfo_t& operator+ (const timeInfo_t& op);
+			void increment(const timeInfo_t& op);
 
 		private:
 			/// the upper 32 byte are seconds

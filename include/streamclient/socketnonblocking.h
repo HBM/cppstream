@@ -44,12 +44,6 @@ namespace hbm
 			return m_fd;
 		}
 
-#ifdef _WIN32
-		WSAEVENT getEvent() const
-		{
-			return m_event;
-		}
-#endif
 		void stop();
 
 	private:

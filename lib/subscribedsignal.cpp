@@ -16,6 +16,7 @@
 #include <jsoncpp/json/writer.h>
 #endif
 
+#include "endianess.h"
 #include "subscribedsignal.h"
 
 namespace hbm {
@@ -62,12 +63,7 @@ namespace hbm {
 					uint64_t targetUint64;
 					double* pTarget;
 					for(size_t i=0; i<count; ++i) {
-#ifdef _WIN32
-						// this will create a mess on big endian machines
-						targetUint64 = _byteswap_uint64(*pPos);
-#else
 						targetUint64 = be64toh(*pPos);
-#endif
 						// this is it!
 						pTarget = reinterpret_cast < double* >(&targetUint64);
 						sum += *pTarget;
@@ -95,12 +91,7 @@ namespace hbm {
 					uint64_t* pPos = reinterpret_cast < uint64_t* > (pData);
 					uint64_t target;
 					for(size_t i=0; i<count; ++i) {
-#ifdef _WIN32
-						// this will create a mess on big endian machines
-						target = _byteswap_uint64(*pPos);
-#else
 						target = be64toh(*pPos);
-#endif
 						sum += target;
 						++pPos;
 					}
@@ -108,12 +99,7 @@ namespace hbm {
 					int64_t* pPos = reinterpret_cast < int64_t* > (pData);
 					int64_t target;
 					for(size_t i=0; i<count; ++i) {
-#ifdef _WIN32
-						// this will create a mess on big endian machines
-						target = _byteswap_uint64(*pPos);
-#else
 						target = be64toh(*pPos);
-#endif
 						sum += target;
 						++pPos;
 					}
@@ -125,12 +111,7 @@ namespace hbm {
 					uint32_t targetUint32;
 					float* pTarget;
 					for(size_t i=0; i<count; ++i) {
-#ifdef _WIN32
-						// this will create a mess on big endian machines
-						targetUint32 =*pPos;
-#else
 						targetUint32 = le32toh(*pPos);
-#endif
 						// this is it!
 						pTarget = reinterpret_cast < float* >(&targetUint32);
 						sum += *pTarget;
@@ -141,12 +122,7 @@ namespace hbm {
 					uint64_t targetUint64;
 					double* pTarget;
 					for(size_t i=0; i<count; ++i) {
-#ifdef _WIN32
-						// this will create a mess on big endian machines
-						targetUint64 =*pPos;
-#else
 						targetUint64 = le64toh(*pPos);
-#endif
 						// this is it!
 						pTarget = reinterpret_cast < double* >(&targetUint64);
 						sum += *pTarget;
@@ -156,12 +132,7 @@ namespace hbm {
 					uint32_t* pPos = reinterpret_cast < uint32_t* > (pData);
 					uint32_t target;
 					for(size_t i=0; i<count; ++i) {
-#ifdef _WIN32
-						// this will create a mess on big endian machines
-						target =*pPos;
-#else
 						target = le32toh(*pPos);
-#endif
 						sum += target;
 						++pPos;
 					}
@@ -169,12 +140,7 @@ namespace hbm {
 					int32_t* pPos = reinterpret_cast < int32_t* > (pData);
 					int32_t target;
 					for(size_t i=0; i<count; ++i) {
-#ifdef _WIN32
-						// this will create a mess on big endian machines
-						target =*pPos;
-#else
 						target = le32toh(*pPos);
-#endif
 						sum += target;
 						++pPos;
 					}
@@ -182,12 +148,7 @@ namespace hbm {
 					uint64_t* pPos = reinterpret_cast < uint64_t* > (pData);
 					uint64_t target;
 					for(size_t i=0; i<count; ++i) {
-#ifdef _WIN32
-						// this will create a mess on big endian machines
-						target =*pPos;
-#else
 						target = le64toh(*pPos);
-#endif
 						sum += target;
 						++pPos;
 					}
@@ -195,12 +156,7 @@ namespace hbm {
 					int64_t* pPos = reinterpret_cast < int64_t* > (pData);
 					int64_t target;
 					for(size_t i=0; i<count; ++i) {
-#ifdef _WIN32
-						// this will create a mess on big endian machines
-						target =*pPos;
-#else
 						target = le64toh(*pPos);
-#endif
 						sum += target;
 						++pPos;
 					}
@@ -212,20 +168,11 @@ namespace hbm {
 		{
 			if(m_dataTimeType == TIMETYPE_NTP) {
 				uint64_t ntpTimestamp;
-#ifdef _WIN32
-				// this will create a mess on big endian machines
-				if(m_dataIsBigEndian) {
-					ntpTimestamp = _byteswap_uint64(*reinterpret_cast < uint64_t* > (pData));
-				} else {
-					ntpTimestamp = *reinterpret_cast < uint64_t* > (pData);
-				}
-#else
 				if(m_dataIsBigEndian) {
 					ntpTimestamp = be64toh(*reinterpret_cast < uint64_t* > (pData));
 				} else {
 					ntpTimestamp = le64toh(*reinterpret_cast < uint64_t* > (pData));
 				}
-#endif
 			}
 		}
 

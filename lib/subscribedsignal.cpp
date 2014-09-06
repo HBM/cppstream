@@ -191,14 +191,7 @@ namespace hbm {
 			switch(m_dataFormatPattern) {
 				case PATTERN_V:
 					{
-						size_t valueCount;
-						if(m_dataValueSize==4) {
-							valueCount = size >> 2;
-						} else if(m_dataValueSize==8) {
-							valueCount = size >> 4;
-						} else {
-							valueCount = size / m_dataValueSize;
-						}
+						size_t valueCount = size / m_dataValueSize;
 						calculateTimestamp();
 						interpretValues(pData, valueCount);
 						m_valueCount += valueCount;
@@ -221,14 +214,7 @@ namespace hbm {
 				case PATTERN_TB:
 					// 1 time stamp n values
 					if(size>=m_dataTimeSize+m_dataValueSize) {
-						size_t valueCount;
-						if(m_dataValueSize==4) {
-							valueCount = (size-m_dataTimeSize) >> 2;
-						} else if(m_dataValueSize==8) {
-							valueCount = (size-m_dataTimeSize) >> 4;
-						} else {
-							valueCount = (size-m_dataTimeSize) / m_dataValueSize;
-						}
+						size_t valueCount = (size-m_dataTimeSize) / m_dataValueSize;
 						interpreteTimestamp(pData);
 						interpretValues(pData+m_dataTimeSize, valueCount);
 						m_valueCount += valueCount;

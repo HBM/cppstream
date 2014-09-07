@@ -45,8 +45,7 @@ namespace hbm {
 		struct extract {
 			inline RET operator()(unsigned char **p) const
 			{
-				typedef copy_traits<RET> traits;
-				typename traits::copy_type temp;
+				typename copy_traits<RET>::copy_type temp;
 				std::memcpy(&temp, *p, sizeof(temp));
 				swap_impl<sizeof(temp), e> swapper;
 				temp = swapper.swap(temp);

@@ -33,44 +33,27 @@ namespace hbm {
 			static inline uint64_t swap(uint64_t value) { return le64toh(value); }
 		};
 
-		template<typename RET, size_t size, endian e>
-		struct extract_impl {};
-
-		template<typename RET, endian e>
-		struct extract_impl<RET, 4, e> {
-			inline RET operator()(unsigned char **p) const
-			{
-				uint32_t temp;
-				std::memcpy(&temp, *p, sizeof(temp));
-				swap_impl<sizeof(temp), e> swapper;
-				temp = swapper.swap(temp);
-				RET value;
-				std::memcpy(&value, &temp, sizeof(value));
-				*p = (*p) + sizeof(RET);
-				return value;
-			}
-		};
-
-		template<typename RET, endian e>
-		struct extract_impl<RET, 8, e> {
-			inline RET operator()(unsigned char **p) const
-			{
-				uint64_t temp;
-				std::memcpy(&temp, *p, sizeof(temp));
-				swap_impl<sizeof(temp), e> swapper;
-				temp = swapper.swap(temp);
-				RET value;
-				std::memcpy(&value, &temp, sizeof(value));
-				*p = (*p) + sizeof(RET);
-				return value;
-			}
-		};
+		template<typename T> struct copy_traits;
+		template<> struct copy_traits<uint32_t> {typedef uint32_t copy_type;};
+		template<> struct copy_traits<int32_t> {typedef uint32_t copy_type;};
+		template<> struct copy_traits<uint64_t> {typedef uint64_t copy_type;};
+		template<> struct copy_traits<int64_t> {typedef uint64_t copy_type;};
+		template<> struct copy_traits<float> {typedef uint32_t copy_type;};
+		template<> struct copy_traits<double> {typedef uint64_t copy_type;};
 
 		template<typename RET, endian e>
 		struct extract {
 			inline RET operator()(unsigned char **p) const
 			{
-				return extract_impl<RET, sizeof(RET), e>()(p);
+				typedef copy_traits<RET> traits;
+				typename traits::copy_type temp;
+				std::memcpy(&temp, *p, sizeof(temp));
+				swap_impl<sizeof(temp), e> swapper;
+				temp = swapper.swap(temp);
+				RET value;
+				std::memcpy(&value, &temp, sizeof(value));
+				*p = (*p) + sizeof(RET);
+				return value;
 			}
 		};
 	}

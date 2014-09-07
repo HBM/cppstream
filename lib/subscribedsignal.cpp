@@ -51,7 +51,7 @@ namespace hbm {
 				if(m_dataValueType==DATATYPE_REAL32) {
 					for(size_t i=0; i<count; ++i) {
 						uint32_t targetUint32;
-						std::memcpy(&targetUint32, &pData, sizeof(targetUint32));
+						std::memcpy(&targetUint32, pData, sizeof(targetUint32));
 						targetUint32 = be32toh(targetUint32);
 						float target;
 						std::memcpy(&target, &targetUint32, sizeof(target));
@@ -61,7 +61,7 @@ namespace hbm {
 				} else if(m_dataValueType==DATATYPE_REAL64) {
 					for(size_t i=0; i<count; ++i) {
 						uint64_t targetUint64;
-						std::memcpy(&targetUint64, &pData, sizeof(targetUint64));
+						std::memcpy(&targetUint64, pData, sizeof(targetUint64));
 						targetUint64 = be64toh(targetUint64);
 						double target;
 						std::memcpy(&target, &targetUint64, sizeof(target));
@@ -71,7 +71,7 @@ namespace hbm {
 				} else if(m_dataValueType==DATATYPE_U32) {
 					for(size_t i=0; i<count; ++i) {
 						uint32_t target;
-						std::memcpy(&target, &pData, sizeof(target));
+						std::memcpy(&target, pData, sizeof(target));
 						target = be32toh(target);
 						sum += target;
 						pData += sizeof(target);
@@ -79,7 +79,7 @@ namespace hbm {
 				} else if(m_dataValueType==DATATYPE_S32) {
 					for(size_t i=0; i<count; ++i) {
 						uint32_t targetUint32;
-						std::memcpy(&targetUint32, &pData, sizeof(targetUint32));
+						std::memcpy(&targetUint32, pData, sizeof(targetUint32));
 						targetUint32 = be32toh(targetUint32);
 						int32_t target;
 						std::memcpy(&target, &targetUint32, sizeof(target));
@@ -89,7 +89,7 @@ namespace hbm {
 				} else if(m_dataValueType==DATATYPE_U64) {
 					for(size_t i=0; i<count; ++i) {
 						uint64_t target;
-						std::memcpy(&target, &pData, sizeof(target));
+						std::memcpy(&target, pData, sizeof(target));
 						target = be64toh(target);
 						sum += target;
 						pData += sizeof(target);
@@ -97,7 +97,7 @@ namespace hbm {
 				} else if(m_dataValueType==DATATYPE_S64) {
 					for(size_t i=0; i<count; ++i) {
 						uint64_t targetUint64;
-						std::memcpy(&targetUint64, &pData, sizeof(targetUint64));
+						std::memcpy(&targetUint64, pData, sizeof(targetUint64));
 						targetUint64 = be64toh(targetUint64);
 						int64_t target;
 						std::memcpy(&target, &targetUint64, sizeof(target));
@@ -110,7 +110,7 @@ namespace hbm {
 				if(m_dataValueType==DATATYPE_REAL32) {
 					for(size_t i=0; i<count; ++i) {
 						uint32_t targetUint32;
-						std::memcpy(&targetUint32, &pData, sizeof(targetUint32));
+						std::memcpy(&targetUint32, pData, sizeof(targetUint32));
 						targetUint32 = le32toh(targetUint32);
 						float target;
 						std::memcpy(&target, &targetUint32, sizeof(target));
@@ -120,7 +120,7 @@ namespace hbm {
 				} else if(m_dataValueType==DATATYPE_REAL64) {
 					for(size_t i=0; i<count; ++i) {
 						uint64_t targetUint64;
-						std::memcpy(&targetUint64, &pData, sizeof(targetUint64));
+						std::memcpy(&targetUint64, pData, sizeof(targetUint64));
 						targetUint64 = le64toh(targetUint64);
 						double target;
 						std::memcpy(&target, &targetUint64, sizeof(target));
@@ -130,7 +130,7 @@ namespace hbm {
 				} else if(m_dataValueType==DATATYPE_U32) {
 					for(size_t i=0; i<count; ++i) {
 						uint32_t target;
-						std::memcpy(&target, &pData, sizeof(target));
+						std::memcpy(&target, pData, sizeof(target));
 						target = le32toh(target);
 						sum += target;
 						pData += sizeof(target);
@@ -138,7 +138,7 @@ namespace hbm {
 				} else if(m_dataValueType==DATATYPE_S32) {
 					for(size_t i=0; i<count; ++i) {
 						uint32_t targetUint32;
-						std::memcpy(&targetUint32, &pData, sizeof(targetUint32));
+						std::memcpy(&targetUint32, pData, sizeof(targetUint32));
 						targetUint32 = le32toh(targetUint32);
 						int32_t target;
 						std::memcpy(&target, &targetUint32, sizeof(target));
@@ -148,7 +148,7 @@ namespace hbm {
 				} else if(m_dataValueType==DATATYPE_U64) {
 					for(size_t i=0; i<count; ++i) {
 						uint64_t target;
-						std::memcpy(&target, &pData, sizeof(target));
+						std::memcpy(&target, pData, sizeof(target));
 						target = le64toh(target);
 						sum += target;
 						pData += sizeof(target);
@@ -156,7 +156,7 @@ namespace hbm {
 				} else if(m_dataValueType==DATATYPE_S64) {
 					for(size_t i=0; i<count; ++i) {
 						uint64_t targetUint64;
-						std::memcpy(&targetUint64, &pData, sizeof(targetUint64));
+						std::memcpy(&targetUint64, pData, sizeof(targetUint64));
 						targetUint64 = le64toh(targetUint64);
 						int64_t target;
 						std::memcpy(&target, &targetUint64, sizeof(target));

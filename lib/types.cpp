@@ -59,10 +59,9 @@ namespace hbm {
 			m_ntpTimestamp = 0;
 		}
 
-		timeInfo_t& timeInfo_t::operator+ (const timeInfo_t& op)
+		void timeInfo_t::increment(const timeInfo_t& inc)
 		{
-			m_ntpTimestamp += op.m_ntpTimestamp;
-			return *this;
+			m_ntpTimestamp += inc.m_ntpTimestamp;
 		}
 	}
 }

@@ -27,10 +27,13 @@ namespace hbm {
 		StreamClient::StreamClient()
 			: m_streamSocket()
 			, m_address()
+			, m_httpPath()
 			, m_apiVersion()
 			, m_streamId()
 			, m_controlPort()
 			, m_initialTime()
+			, m_initialTimeScale()
+			, m_initialTimeEpoch()
 			, m_subscribedSignals()
 			, m_receivedDataByteCount(0)
 		{
@@ -39,10 +42,13 @@ namespace hbm {
 		StreamClient::StreamClient(const std::string& fileName)
 			: m_streamSocket(fileName)
 			, m_address()
+			, m_httpPath()
 			, m_apiVersion()
 			, m_streamId()
 			, m_controlPort()
 			, m_initialTime()
+			, m_initialTimeScale()
+			, m_initialTimeEpoch()
 			, m_subscribedSignals()
 			, m_receivedDataByteCount(0)
 		{
@@ -110,7 +116,7 @@ namespace hbm {
 							if(method=="subscribe") {
 								/// this is the first signal related meta information to arrive!
 								if(params.empty()==false) {
-									std::string signalReference = params[0].asString();
+									std::string signalReference = params[0u].asString();
 									m_subscribedSignals[signalNumber].setSignalReference(signalReference);
 								}
 							} else if(method=="unsubscribe") {
@@ -143,7 +149,7 @@ namespace hbm {
 				// stream related meta information
 				if(method=="apiVersion") {
 					if(params.empty()==false) {
-						m_apiVersion = params[0].asString();
+						m_apiVersion = params[0u].asString();
 					}
 					std::cout << m_address << ": daq stream version: " << m_apiVersion << std::endl;
 				} else if(method=="init") {
@@ -168,9 +174,9 @@ namespace hbm {
 					// We do ignore this. We are using TCP keep alive in order to detect communication problems.
 				} else if(method=="fill") {
 					if(params.empty()==false) {
-						unsigned int fill = params[0].asUInt();
+						unsigned int fill = params[0u].asUInt();
 						if(fill>25) {
-							std::cout << m_address << ": ring buffer fill level is " << params[0].asUInt() << "%" << std::endl;
+							std::cout << m_address << ": ring buffer fill level is " << params[0u].asUInt() << "%" << std::endl;
 						}
 					}
 				} else if(method=="available") {

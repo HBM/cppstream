@@ -19,8 +19,9 @@
 DeviceFixture::DeviceFixture()
 	: m_address("hbm-00087b")
 	, m_controlPort("http")
+	, m_streamClient()
+	, m_streamer(boost::thread(boost::bind(&hbm::streaming::StreamClient::start, &m_streamClient, m_address, hbm::streaming::DAQSTREAM_PORT, m_controlPort)))
 {
-	m_streamer = boost::thread(boost::bind(&hbm::streaming::StreamClient::start, &m_streamClient, m_address, hbm::streaming::DAQSTREAM_PORT, m_controlPort));
 }
 
 DeviceFixture::~DeviceFixture()

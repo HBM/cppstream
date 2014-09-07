@@ -40,57 +40,88 @@ namespace hbm {
 		void SubscribedSignal::interpretValues(unsigned char *pData, size_t count)
 		{
 			if(m_dataIsBigEndian) {
-				if(m_dataValueType==DATATYPE_REAL32) {
-					for(size_t i=0; i<count; ++i) {
-						sum += hbm::streaming::extract<float, hbm::streaming::big>()(&pData);
-					}
-				} else if(m_dataValueType==DATATYPE_REAL64) {
-					for(size_t i=0; i<count; ++i) {
-						sum += hbm::streaming::extract<double, hbm::streaming::big>()(&pData);
-					}
-				} else if(m_dataValueType==DATATYPE_U32) {
-					for(size_t i=0; i<count; ++i) {
-						sum += hbm::streaming::extract<uint32_t, hbm::streaming::big>()(&pData);
-					}
-				} else if(m_dataValueType==DATATYPE_S32) {
-					for(size_t i=0; i<count; ++i) {
-						sum += hbm::streaming::extract<int32_t, hbm::streaming::big>()(&pData);
-					}
-				} else if(m_dataValueType==DATATYPE_U64) {
-					for(size_t i=0; i<count; ++i) {
-						sum += hbm::streaming::extract<uint64_t, hbm::streaming::big>()(&pData);
-					}
-				} else if(m_dataValueType==DATATYPE_S64) {
-					for(size_t i=0; i<count; ++i) {
-						sum += hbm::streaming::extract<int64_t, hbm::streaming::big>()(&pData);
-					}
+				switch (m_dataValueType) {
+					case DATATYPE_REAL32:
+						for(size_t i=0; i<count; ++i) {
+							sum += hbm::streaming::extract<float, hbm::streaming::big>()(&pData);
+						}
+						break;
+
+					case DATATYPE_REAL64:
+						for(size_t i=0; i<count; ++i) {
+							sum += hbm::streaming::extract<double, hbm::streaming::big>()(&pData);
+						}
+						break;
+
+					case DATATYPE_U32:
+						for(size_t i=0; i<count; ++i) {
+							sum += hbm::streaming::extract<uint32_t, hbm::streaming::big>()(&pData);
+						}
+						break;
+
+					case DATATYPE_S32:
+						for(size_t i=0; i<count; ++i) {
+							sum += hbm::streaming::extract<int32_t, hbm::streaming::big>()(&pData);
+						}
+						break;
+
+					case DATATYPE_U64:
+						for(size_t i=0; i<count; ++i) {
+							sum += hbm::streaming::extract<uint64_t, hbm::streaming::big>()(&pData);
+						}
+						break;
+
+					case DATATYPE_S64:
+						for(size_t i=0; i<count; ++i) {
+							sum += hbm::streaming::extract<int64_t, hbm::streaming::big>()(&pData);
+						}
+						break;
+
+					default:
+						throw std::runtime_error("datatype not supported!");
+						break;
 				}
 			} else {
-				// handle little endian to host here...
-				if(m_dataValueType==DATATYPE_REAL32) {
-					for(size_t i=0; i<count; ++i) {
-						sum += hbm::streaming::extract<float, hbm::streaming::little>()(&pData);
-					}
-				} else if(m_dataValueType==DATATYPE_REAL64) {
-					for(size_t i=0; i<count; ++i) {
-						sum += hbm::streaming::extract<double, hbm::streaming::little>()(&pData);
-					}
-				} else if(m_dataValueType==DATATYPE_U32) {
-					for(size_t i=0; i<count; ++i) {
-						sum += hbm::streaming::extract<uint32_t, hbm::streaming::little>()(&pData);
-					}
-				} else if(m_dataValueType==DATATYPE_S32) {
-					for(size_t i=0; i<count; ++i) {
-						sum += hbm::streaming::extract<int32_t, hbm::streaming::little>()(&pData);
-					}
-				} else if(m_dataValueType==DATATYPE_U64) {
-					for(size_t i=0; i<count; ++i) {
-						sum += hbm::streaming::extract<uint64_t, hbm::streaming::little>()(&pData);
-					}
-				} else if(m_dataValueType==DATATYPE_S64) {
-					for(size_t i=0; i<count; ++i) {
-						sum += hbm::streaming::extract<int64_t, hbm::streaming::little>()(&pData);
-					}
+				switch (m_dataValueType) {
+					case DATATYPE_REAL32:
+						for(size_t i=0; i<count; ++i) {
+							sum += hbm::streaming::extract<float, hbm::streaming::little>()(&pData);
+						}
+						break;
+
+					case DATATYPE_REAL64:
+						for(size_t i=0; i<count; ++i) {
+							sum += hbm::streaming::extract<double, hbm::streaming::little>()(&pData);
+						}
+						break;
+
+					case DATATYPE_U32:
+						for(size_t i=0; i<count; ++i) {
+							sum += hbm::streaming::extract<uint32_t, hbm::streaming::little>()(&pData);
+						}
+						break;
+
+					case DATATYPE_S32:
+						for(size_t i=0; i<count; ++i) {
+							sum += hbm::streaming::extract<int32_t, hbm::streaming::little>()(&pData);
+						}
+						break;
+
+					case DATATYPE_U64:
+						for(size_t i=0; i<count; ++i) {
+							sum += hbm::streaming::extract<uint64_t, hbm::streaming::little>()(&pData);
+						}
+						break;
+
+					case DATATYPE_S64:
+						for(size_t i=0; i<count; ++i) {
+							sum += hbm::streaming::extract<int64_t, hbm::streaming::little>()(&pData);
+						}
+						break;
+
+					default:
+						throw std::runtime_error("datatype not supported!");
+						break;
 				}
 			}
 		}

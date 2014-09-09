@@ -1,5 +1,6 @@
 #include <sstream>
 #include <stdexcept>
+#include <iostream>
 
 #include "httppost.h"
 
@@ -29,7 +30,6 @@ namespace hbm {
 		message << "POST " << m_httpPath << " HTTP/1.0\r\n";
 		message << "Host: " << m_address << "\r\n";
 		message << "Accept: */*\r\n";
-//		message << "Connection: close\r\n";
 		message << "Content-Type: application/json; charset=utf-8" << "\r\n";
 		message << "Content-Length: " << request.length() << "\r\n";
 		message << "\r\n";
@@ -42,12 +42,12 @@ namespace hbm {
 			return "";
 		}
 
-//		socket.stopSending();
-
 		char recvBuffer[1024];
 		ssize_t retVal = socket.receiveComplete(recvBuffer, sizeof(recvBuffer));
 		// ensure termination!
 		recvBuffer[sizeof(recvBuffer)-1] = '\0';
+
+		std::cout << recvBuffer << std::endl;
 		if(retVal>0) {
 			static const std::string NEEDLE("\r\n\r\n");
 

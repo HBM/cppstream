@@ -28,13 +28,13 @@ namespace hbm {
 			: m_streamSocket()
 			, m_address()
 			, m_httpPath()
-			, m_apiVersion()
 			, m_streamId()
 			, m_controlPort()
 			, m_initialTime()
 			, m_initialTimeScale()
 			, m_initialTimeEpoch()
 			, m_subscribedSignals()
+			, m_streamMetaCb()
 		{
 		}
 
@@ -42,14 +42,24 @@ namespace hbm {
 			: m_streamSocket(fileName)
 			, m_address()
 			, m_httpPath()
-			, m_apiVersion()
 			, m_streamId()
 			, m_controlPort()
 			, m_initialTime()
 			, m_initialTimeScale()
 			, m_initialTimeEpoch()
 			, m_subscribedSignals()
+			, m_streamMetaCb()
 		{
+		}
+
+		void StreamClient::setStreamMetaCb(StreamMetaCb_t cb)
+		{
+			m_streamMetaCb = cb;
+		}
+
+		void StreamClient::setSignalMetaCb(SignalMetaCb_t cb)
+		{
+			m_subscribedSignals.setSignalMetaCb(cb);
 		}
 
 		void StreamClient::subscribe(const signalReferences_t& signalReferences)
@@ -109,11 +119,7 @@ namespace hbm {
 							processStreamMetaInformation(method, params);
 						} else {
 							// signal related meta information
-							if(method=="unsubscribe") {
-								m_subscribedSignals.erase(signalNumber);
-							} else {
-								m_subscribedSignals.processMetaInformation(signalNumber, method, params);
-							}
+							m_subscribedSignals.processMetaInformation(signalNumber, method, params);
 						}
 					}
 				}
@@ -126,7 +132,6 @@ namespace hbm {
 		{
 			m_streamSocket.stop();
 			m_address.clear();
-			m_apiVersion.clear();
 			m_streamId.clear();
 			m_controlPort.clear();
 			m_initialTime.clear();
@@ -137,12 +142,7 @@ namespace hbm {
 		{
 			try {
 				// stream related meta information
-				if(method=="apiVersion") {
-					if(params.empty()==false) {
-						m_apiVersion = params[0u].asString();
-					}
-					std::cout << m_address << ": daq stream version: " << m_apiVersion << std::endl;
-				} else if(method=="init") {
+				if(method=="init") {
 					// this gives important information needed to control the daq stream.
 					m_streamId = params["streamId"].asString();
 					std::cout << m_address << ": this is " << m_streamId << std::endl;
@@ -160,36 +160,11 @@ namespace hbm {
 					m_initialTime.set(params["stamp"]);
 					m_initialTimeEpoch = params["epoch"].asString();
 					m_initialTimeScale = params["scale"].asString();
-				} else if(method=="alive") {
-					// We do ignore this. We are using TCP keep alive in order to detect communication problems.
-				} else if(method=="fill") {
-					if(params.empty()==false) {
-						unsigned int fill = params[0u].asUInt();
-						if(fill>25) {
-							std::cout << m_address << ": ring buffer fill level is " << params[0u].asUInt() << "%" << std::endl;
-						}
-					}
-				} else if(method=="available") {
-					hbm::streaming::signalReferences_t signalReferences;
-					for (Json::ValueConstIterator iter = params.begin(); iter!= params.end(); ++iter) {
-						const Json::Value& element = *iter;
-						signalReferences.push_back(element.asString());
-					}
-
-					try {
-						subscribe(signalReferences);
-						std::cout << __FUNCTION__ << "the following signal(s) were subscribed: ";
-					} catch(const std::runtime_error& e) {
-						std::cerr << __FUNCTION__ << "error '" << e.what() << "' subscribing the following signal(s): ";
-					}
-
-					for(hbm::streaming::signalReferences_t::const_iterator iter=signalReferences.begin(); iter!=signalReferences.end(); ++iter) {
-						std::cout << "'" << *iter << "' ";
-					}
-					std::cout << std::endl;
-				} else {
-					std::cout << m_address << ": Stream related meta information '" << method << "' with parameters: " << Json::StyledWriter().write(params) << std::endl;
 				}
+				if(m_streamMetaCb) {
+					m_streamMetaCb(*this, method, params);
+				}
+
 				return 0;
 			} catch(const std::runtime_error& e) {
 				std::cerr << e.what();

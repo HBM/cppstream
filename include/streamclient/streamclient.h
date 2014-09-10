@@ -19,9 +19,7 @@ namespace hbm {
 
 		class StreamClient;
 
-		typedef std::function<void(hbm::streaming::StreamClient& stream, unsigned int signalId, const unsigned char* pData, size_t size)> DataCb_t;
 		typedef std::function<void(hbm::streaming::StreamClient& stream, const std::string& method, const Json::Value& params)> StreamMetaCb_t;
-		typedef std::function<void(hbm::streaming::StreamClient& stream, int signalNumber, const std::string& method, const Json::Value& params)> SignalMetaCb_t;
 
 		/// Connects to on daq stream server. Receives and interpretes meta data. Subcribes signals. Receives measured data
 		/// Callback functions may be registered in order to get informed about meta information and measured data.
@@ -33,16 +31,17 @@ namespace hbm {
 			/// \throw std::runtime_error if file could not be opened
 			StreamClient(const std::string& fileName);
 
+			/// \warning set callback function before calling start() otherwise you will miss meta information received.
+			void setStreamMetaCb(StreamMetaCb_t cb);
+
+			/// \warning set callback function before calling start() otherwise you will miss meta information received.
+			void setSignalMetaCb(SignalMetaCb_t cb);
+
 			/// \throws std::runtime_error
 			void subscribe(const signalReferences_t& signalReferences);
 
 			/// \throws std::runtime_error
 			void unsubscribe(const signalReferences_t& signalReferences);
-
-			std::string address() const
-			{
-				return m_address;
-			}
 
 			/// connects to a streaming server, receives and processes all meta information and data.
 			/// Returns when stream is stopped by calling stop() or if loss of connection is recognized.
@@ -53,6 +52,11 @@ namespace hbm {
 
 			/// closes the stream socket.
 			void stop();
+
+			std::string address() const
+			{
+				return m_address;
+			}
 
 		private:
 
@@ -68,7 +72,6 @@ namespace hbm {
 			std::string m_address;
 			std::string m_httpPath;
 
-			std::string m_apiVersion;
 			std::string m_streamId;
 			std::string m_controlPort;
 
@@ -79,6 +82,8 @@ namespace hbm {
 
 			/// processes measured data and keeps meta information about all subscribed signals
 			SubscribedSignals m_subscribedSignals;
+
+			StreamMetaCb_t m_streamMetaCb;
 		};
 	}
 }

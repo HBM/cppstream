@@ -18,12 +18,16 @@ namespace hbm {
 		public:
 			SubscribedSignal();
 
-
 			/// process measured data
 			void processData(unsigned char* pData, size_t size);
 
 			/// process signal related meta information.
 			void processSignalMetaInformation(const std::string& method, const Json::Value& params);
+
+			std::string signalReference()
+			{
+				return m_signalReference;
+			}
 
 		private:
 

@@ -5,7 +5,13 @@ namespace hbm {
 	namespace streaming {
 		SubscribedSignals::SubscribedSignals()
 			: m_subscribedSignals()
+			, m_signalMetaCb()
 		{
+		}
+
+		void SubscribedSignals::setSignalMetaCb(SignalMetaCb_t cb)
+		{
+			m_signalMetaCb = cb;
 		}
 
 		void SubscribedSignals::processMeasuredData(unsigned int signalNumber, unsigned char* data, size_t len)
@@ -15,7 +21,15 @@ namespace hbm {
 
 		void SubscribedSignals::processMetaInformation(unsigned int signalNumber, const std::string& method, const Json::Value& params)
 		{
-			m_subscribedSignals[signalNumber].processSignalMetaInformation(method, params);
+			SubscribedSignal& signal = m_subscribedSignals[signalNumber];
+			if (m_signalMetaCb) {
+				m_signalMetaCb(signal, method, params);
+			}
+			signal.processSignalMetaInformation(method, params);
+
+			if(method=="unsubscribe") {
+				m_subscribedSignals.erase(signalNumber);
+			}
 		}
 
 		size_t SubscribedSignals::erase(unsigned int signalNumber)

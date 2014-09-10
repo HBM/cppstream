@@ -7,6 +7,30 @@
 
 #include "streamclient/streamclient.h"
 
+static void streamMetaInformationCb(hbm::streaming::StreamClient& stream, const std::string& method, const Json::Value& params)
+{
+	if (method==hbm::streaming::META_METHOD_AVAILABLE) {
+		// simply subscibe all signals that become available.
+		hbm::streaming::signalReferences_t signalReferences;
+		for (Json::ValueConstIterator iter = params.begin(); iter!= params.end(); ++iter) {
+			const Json::Value& element = *iter;
+			signalReferences.push_back(element.asString());
+		}
+
+		try {
+			stream.subscribe(signalReferences);
+			std::cout << __FUNCTION__ << "the following signal(s) were subscribed: ";
+		} catch(const std::runtime_error& e) {
+			std::cerr << __FUNCTION__ << "error '" << e.what() << "' subscribing the following signal(s): ";
+		}
+
+		for(hbm::streaming::signalReferences_t::const_iterator iter=signalReferences.begin(); iter!=signalReferences.end(); ++iter) {
+			std::cout << "'" << *iter << "' ";
+		}
+		std::cout << std::endl;
+	}
+}
+
 
 int main(int argc, char* argv[])
 {
@@ -34,6 +58,7 @@ int main(int argc, char* argv[])
 	}
 
 	hbm::streaming::StreamClient stream;
+	stream.setStreamMetaCb(streamMetaInformationCb);
 	do {
 		boost::thread streamer = boost::thread(boost::bind(&hbm::streaming::StreamClient::start, &stream, address, hbm::streaming::DAQSTREAM_PORT, controlPort));
 		std::cout << "Started" << std::endl;

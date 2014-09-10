@@ -15,7 +15,7 @@ static void sigHandler(int)
 
 static void streamMetaInformationCb(hbm::streaming::StreamClient& stream, const std::string& method, const Json::Value& params)
 {
-	if (method=="available") {
+	if (method == hbm::streaming::META_METHOD_AVAILABLE) {
 		// simply subscibe all signals that become available.
 		hbm::streaming::signalReferences_t signalReferences;
 		for (Json::ValueConstIterator iter = params.begin(); iter!= params.end(); ++iter) {
@@ -34,7 +34,7 @@ static void streamMetaInformationCb(hbm::streaming::StreamClient& stream, const 
 			std::cout << "'" << *iter << "' ";
 		}
 		std::cout << std::endl;
-	} else if(method=="unavailable") {
+	} else if(method==hbm::streaming::META_METHOD_UNAVAILABLE) {
 
 		std::cout << __FUNCTION__ << "the following signal(s) are not available anyore: ";
 
@@ -43,9 +43,9 @@ static void streamMetaInformationCb(hbm::streaming::StreamClient& stream, const 
 			std::cout << element.asString() << ", ";
 		}
 		std::cout << std::endl;
-	} else if(method=="alive") {
+	} else if(method==hbm::streaming::META_METHOD_ALIVE) {
 		// We do ignore this. We are using TCP keep alive in order to detect communication problems.
-	} else if(method=="fill") {
+	} else if(method==hbm::streaming::META_METHOD_FILL) {
 		if(params.empty()==false) {
 			unsigned int fill = params[0u].asUInt();
 			if(fill>25) {

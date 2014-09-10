@@ -39,41 +39,40 @@ namespace hbm {
 
 		void SubscribedSignal::interpretValues(unsigned char *pData, size_t count)
 		{
-			const unsigned char* pDataEnd = pData + count;
 			if(m_dataIsBigEndian) {
 				switch (m_dataValueType) {
 					case DATATYPE_REAL32:
-						while (pData < pDataEnd) {
+						for(size_t i=0; i<count; ++i) {
 							sum += hbm::streaming::extract<float, hbm::streaming::big>()(&pData);
 						}
 						break;
 
 					case DATATYPE_REAL64:
-						while (pData < pDataEnd) {
+						for(size_t i=0; i<count; ++i) {
 							sum += hbm::streaming::extract<double, hbm::streaming::big>()(&pData);
 						}
 						break;
 
 					case DATATYPE_U32:
-						while (pData < pDataEnd) {
+						for(size_t i=0; i<count; ++i) {
 							sum += hbm::streaming::extract<uint32_t, hbm::streaming::big>()(&pData);
 						}
 						break;
 
 					case DATATYPE_S32:
-						while (pData < pDataEnd) {
+						for(size_t i=0; i<count; ++i) {
 							sum += hbm::streaming::extract<int32_t, hbm::streaming::big>()(&pData);
 						}
 						break;
 
 					case DATATYPE_U64:
-						while (pData < pDataEnd) {
+						for(size_t i=0; i<count; ++i) {
 							sum += hbm::streaming::extract<uint64_t, hbm::streaming::big>()(&pData);
 						}
 						break;
 
 					case DATATYPE_S64:
-						while (pData < pDataEnd) {
+						for(size_t i=0; i<count; ++i) {
 							sum += hbm::streaming::extract<int64_t, hbm::streaming::big>()(&pData);
 						}
 						break;
@@ -85,37 +84,37 @@ namespace hbm {
 			} else {
 				switch (m_dataValueType) {
 					case DATATYPE_REAL32:
-						while (pData < pDataEnd) {
+						for(size_t i=0; i<count; ++i) {
 							sum += hbm::streaming::extract<float, hbm::streaming::little>()(&pData);
 						}
 						break;
 
 					case DATATYPE_REAL64:
-						while (pData < pDataEnd) {
+						for(size_t i=0; i<count; ++i) {
 							sum += hbm::streaming::extract<double, hbm::streaming::little>()(&pData);
 						}
 						break;
 
 					case DATATYPE_U32:
-						while (pData < pDataEnd) {
+						for(size_t i=0; i<count; ++i) {
 							sum += hbm::streaming::extract<uint32_t, hbm::streaming::little>()(&pData);
 						}
 						break;
 
 					case DATATYPE_S32:
-						while (pData < pDataEnd) {
+						for(size_t i=0; i<count; ++i) {
 							sum += hbm::streaming::extract<int32_t, hbm::streaming::little>()(&pData);
 						}
 						break;
 
 					case DATATYPE_U64:
-						while (pData < pDataEnd) {
+						for(size_t i=0; i<count; ++i) {
 							sum += hbm::streaming::extract<uint64_t, hbm::streaming::little>()(&pData);
 						}
 						break;
 
 					case DATATYPE_S64:
-						while (pData < pDataEnd) {
+						for(size_t i=0; i<count; ++i) {
 							sum += hbm::streaming::extract<int64_t, hbm::streaming::little>()(&pData);
 						}
 						break;

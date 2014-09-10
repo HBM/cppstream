@@ -18,17 +18,12 @@ namespace hbm {
 		public:
 			SubscribedSignal();
 
-			void setSignalReference(const std::string& signalReference) {
-				m_signalReference = signalReference;
-			}
-
-			int setDataFormat(const Json::Value& params);
 
 			/// process measured data
-			void dataCb(unsigned char* pData, size_t size);
+			void processData(unsigned char* pData, size_t size);
 
 			/// process signal related meta information.
-			void metaCb(const std::string& method, const Json::Value& params);
+			void processSignalMetaInformation(const std::string& method, const Json::Value& params);
 
 		private:
 
@@ -40,6 +35,7 @@ namespace hbm {
 			/// for Pattern V: If timestamp is not provided with the value(s), we calulate the time
 			void calculateTimestamp();
 
+			int setDataFormat(const Json::Value& params);
 
 			enum pattern_t {
 				/// "V"; No timestamps, values only. Signal rate is recieved first.

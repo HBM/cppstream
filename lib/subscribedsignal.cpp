@@ -148,7 +148,7 @@ namespace hbm {
 
 
 
-		void SubscribedSignal::dataCb(unsigned char* pData, size_t size)
+		void SubscribedSignal::processData(unsigned char* pData, size_t size)
 		{
 			switch(m_dataFormatPattern) {
 				case PATTERN_V:
@@ -185,9 +185,14 @@ namespace hbm {
 			}
 		}
 
-		void SubscribedSignal::metaCb(const std::string& method, const Json::Value& params)
+		void SubscribedSignal::processSignalMetaInformation(const std::string& method, const Json::Value& params)
 		{
-			if(method=="time") {
+			if(method=="subscribe") {
+				/// this is the first signal related meta information to arrive!
+				if(params.empty()==false) {
+					m_signalReference = params[0u].asString();
+				}
+			} else if(method=="time") {
 				m_startTime.set(params);
 			} else if(method=="data") {
 				setDataFormat(params);

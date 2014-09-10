@@ -2,8 +2,6 @@
 #define _HBM__STREAMING__STREAMCLIENT_H
 
 #include <string>
-#include <set>
-#include <unordered_map>
 #include <functional>
 
 #ifdef _WIN32
@@ -12,7 +10,7 @@
 #include <jsoncpp/json/value.h>
 #endif
 
-#include "subscribedsignal.h"
+#include "subscribedsignals.h"
 #include "socketnonblocking.h"
 
 
@@ -57,14 +55,12 @@ namespace hbm {
 			void stop();
 
 		private:
-			/// signal number is the key
-			typedef std::unordered_map < unsigned int, SubscribedSignal > subscribedSignals_t;
 
 			StreamClient(const StreamClient&);
 			StreamClient& operator= (const StreamClient&);
 
 			/// handle stream related meta information that is relevant for this class.
-			int interpreteStreamMeta(const std::string& method, const Json::Value& params);
+			int processStreamMetaInformation(const std::string& method, const Json::Value& params);
 
 			/// receives all data from the stream socket
 			hbm::SocketNonblocking m_streamSocket;
@@ -82,7 +78,7 @@ namespace hbm {
 			std::string m_initialTimeEpoch;
 
 			/// processes measured data and keeps meta information about all subscribed signals
-			subscribedSignals_t m_subscribedSignals;
+			SubscribedSignals m_subscribedSignals;
 		};
 	}
 }

@@ -18,6 +18,7 @@ namespace hbm {
 			void processMeasuredData(unsigned int signalNumber, unsigned char* data, size_t len);
 			void processMetaInformation(unsigned int signalNumber, const std::string &method, const Json::Value& params);
 			size_t erase(unsigned int signalNumber);
+			void clear();
 
 		private:
 

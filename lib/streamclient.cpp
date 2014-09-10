@@ -75,7 +75,6 @@ namespace hbm {
 			m_address = address;
 			m_controlPort = controlPort;
 
-
 			unsigned char dataRecvBuffer[8192];
 
 			TransportHeader transportHeader(m_streamSocket);
@@ -95,7 +94,7 @@ namespace hbm {
 						break;
 					}
 
-					m_subscribedSignals[signalNumber].dataCb(dataRecvBuffer, result);
+					m_subscribedSignals.processMeasuredData(signalNumber, dataRecvBuffer, result);
 				} else if(type==TYPE_META){
 					MetaInformation metaInformation(m_streamSocket, size);
 					if(metaInformation.type()!=METAINFORMATION_JSON) {
@@ -107,19 +106,13 @@ namespace hbm {
 
 						if(signalNumber==0) {
 							// stream related meta information
-							interpreteStreamMeta(method, params);
+							processStreamMetaInformation(method, params);
 						} else {
 							// signal related meta information
-							if(method=="subscribe") {
-								/// this is the first signal related meta information to arrive!
-								if(params.empty()==false) {
-									std::string signalReference = params[0u].asString();
-									m_subscribedSignals[signalNumber].setSignalReference(signalReference);
-								}
-							} else if(method=="unsubscribe") {
+							if(method=="unsubscribe") {
 								m_subscribedSignals.erase(signalNumber);
 							} else {
-								m_subscribedSignals[signalNumber].metaCb(method, params);
+								m_subscribedSignals.processMetaInformation(signalNumber, method, params);
 							}
 						}
 					}
@@ -140,7 +133,7 @@ namespace hbm {
 			m_subscribedSignals.clear();
 		}
 
-		int StreamClient::interpreteStreamMeta(const std::string& method, const Json::Value& params)
+		int StreamClient::processStreamMetaInformation(const std::string& method, const Json::Value& params)
 		{
 			try {
 				// stream related meta information

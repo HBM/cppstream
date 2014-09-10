@@ -10,12 +10,12 @@ namespace hbm {
 
 		void SubscribedSignals::processMeasuredData(unsigned int signalNumber, unsigned char* data, size_t len)
 		{
-			m_subscribedSignals[signalNumber].dataCb(data, len);
+			m_subscribedSignals[signalNumber].processData(data, len);
 		}
 
 		void SubscribedSignals::processMetaInformation(unsigned int signalNumber, const std::string& method, const Json::Value& params)
 		{
-			m_subscribedSignals[signalNumber].metaCb(method, params);
+			m_subscribedSignals[signalNumber].processSignalMetaInformation(method, params);
 		}
 
 		size_t SubscribedSignals::erase(unsigned int signalNumber)
@@ -23,5 +23,9 @@ namespace hbm {
 			return m_subscribedSignals.erase(signalNumber);
 		}
 
+		void SubscribedSignals::clear()
+		{
+			m_subscribedSignals.clear();
+		}
 	}
 }

@@ -4,7 +4,7 @@
 #include <string>
 
 namespace hbm {
-	/// Creates and send a HTTP post. Returns the response without HTTP post response header.
+	/// Creates and sends a HTTP post. Returns the response without HTTP post response header.
 	/// TCP Connection is opened with each execute() and is being closed afterwards.
 
 	/// We use HTTP version 1.0 in order to force pipelining not to be used.

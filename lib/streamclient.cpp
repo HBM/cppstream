@@ -35,7 +35,6 @@ namespace hbm {
 			, m_initialTimeScale()
 			, m_initialTimeEpoch()
 			, m_subscribedSignals()
-			, m_receivedDataByteCount(0)
 		{
 		}
 
@@ -50,7 +49,6 @@ namespace hbm {
 			, m_initialTimeScale()
 			, m_initialTimeEpoch()
 			, m_subscribedSignals()
-			, m_receivedDataByteCount(0)
 		{
 		}
 
@@ -69,7 +67,6 @@ namespace hbm {
 
 		int StreamClient::start(const std::string& address, const std::string &streamPort, const std::string &controlPort)
 		{
-			m_receivedDataByteCount = 0;
 			int result = m_streamSocket.connect(address.c_str(), streamPort);
 			if(result<0) {
 				return -1;
@@ -110,7 +107,7 @@ namespace hbm {
 
 						if(signalNumber==0) {
 							// stream related meta information
-							metaCb(method, params);
+							interpreteStreamMeta(method, params);
 						} else {
 							// signal related meta information
 							if(method=="subscribe") {
@@ -143,7 +140,7 @@ namespace hbm {
 			m_subscribedSignals.clear();
 		}
 
-		int StreamClient::metaCb(const std::string& method, const Json::Value& params)
+		int StreamClient::interpreteStreamMeta(const std::string& method, const Json::Value& params)
 		{
 			try {
 				// stream related meta information

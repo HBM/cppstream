@@ -22,7 +22,7 @@ static void sigHandler(int)
 	}
 }
 
-int main(int argc, char* argv[])
+int main(int argc, char** )
 {
 	// Some signals should lead to a normal shutdown of the daq stream client. Afterwards the program exists.
 	signal( SIGTERM, &sigHandler);

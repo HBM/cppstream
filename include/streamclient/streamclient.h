@@ -63,9 +63,10 @@ namespace hbm {
 			StreamClient(const StreamClient&);
 			StreamClient& operator= (const StreamClient&);
 
-			/// handle stream related meta information
-			int metaCb(const std::string& method, const Json::Value& params);
+			/// handle stream related meta information that is relevant for this class.
+			int interpreteStreamMeta(const std::string& method, const Json::Value& params);
 
+			/// receives all data from the stream socket
 			hbm::SocketNonblocking m_streamSocket;
 
 			std::string m_address;
@@ -80,9 +81,8 @@ namespace hbm {
 			std::string m_initialTimeScale;
 			std::string m_initialTimeEpoch;
 
-			/// information about all subscribed signals
+			/// processes measured data and keeps meta information about all subscribed signals
 			subscribedSignals_t m_subscribedSignals;
-			size_t m_receivedDataByteCount;
 		};
 	}
 }

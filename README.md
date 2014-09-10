@@ -28,9 +28,9 @@ A solution for MSVC2010 is provided.
 ## Library
 Center of all is a library containing everything needed to implement an HBM Daq Stream Client. Sources are to be found below `lib`. Headers with the interface headers are to be found under `include`.
 
-The most important class of is `StreamClient`. It encapsulates the communication with a Daq Stream server. It collects and keeps stream related meta information received from the Daq Stream Server. It provides methods for subscribing and unsubscribing signals from the Daq Stream Server. 
+The most important class is `StreamClient`. It encapsulates the communication with a Daq Stream server. It collects and keeps stream related meta information received from the Daq Stream Server. It provides methods for subscribing and unsubscribing signals from the Daq Stream Server. 
 
-Furthermore it holds a container of objects representing subscribed signals. The `SubScribedSignal` class processes signal related meta information and measured values.
+`SubScribedSignals` holds a container of objects representing all subscribed signals from a Daq Stream Server. The `SubScribedSignal` class processes signal related meta information and measured values.
 
 ## Examples
 There are simple example programs using the library.

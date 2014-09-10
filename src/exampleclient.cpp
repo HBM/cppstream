@@ -3,9 +3,9 @@
 #include <signal.h>
 
 #include "streamclient/streamclient.h"
+#include "streamclient/subscribedsignals.h"
 #include "streamclient/types.h"
 
-/// this object represents
 static hbm::streaming::StreamClient stream;
 
 static void sigHandler(int)
@@ -55,7 +55,7 @@ static void streamMetaInformationCb(hbm::streaming::StreamClient& stream, const 
 	}
 }
 
-static void signalMetaInformationCb(hbm::streaming::SubscribedSignal& subscribedSignal, const std::string& method, const Json::Value& params)
+static void signalMetaInformationCb(hbm::streaming::SubscribedSignal& subscribedSignal, const std::string& method, const Json::Value& )
 {
 	std::cout << subscribedSignal.signalReference() << ": " << method << std::endl;
 }

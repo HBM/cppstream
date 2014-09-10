@@ -7,7 +7,7 @@ namespace hbm {
 	/// Creates and sends a HTTP post. Returns the response without HTTP post response header.
 	/// TCP Connection is opened with each execute() and is being closed afterwards.
 
-	/// We use HTTP version 1.0 in order to force pipelining not to be used.
+	/// We use HTTP version 1.0 in order keep the implementation as simple as possible. We do not want to support things like chunked response or pipelining.
 	class HttpPost
 	{
 	public:

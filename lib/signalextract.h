@@ -43,7 +43,6 @@ namespace hbm {
 
 		template<typename RET, endian e>
 		struct extract {
-			/// @param[in, out] p is being moved on to the next value
 			inline RET operator()(unsigned char **p) const
 			{
 				typename copy_traits<RET>::copy_type temp;

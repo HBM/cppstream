@@ -15,12 +15,10 @@
 namespace hbm {
 	namespace streaming {
 
-		// we use this as target for all values. Otherwise the compiler might optimize away a lot of functionality!
-		static double sum = 0;
 
 		SubscribedSignal::SubscribedSignal()
 			: m_signalReference()
-			, m_startTime()
+			, m_syncSignalTime()
 
 			, m_signalRateSamples(0)
 			, m_signalRateSamplesDelta()
@@ -33,47 +31,48 @@ namespace hbm {
 			, m_dataTimeType()
 			, m_dataTimeSize(0)
 
-			, m_valueCount(0)
+			, m_dataCb()
 		{
 		}
 
-		void SubscribedSignal::interpretValues(unsigned char *pData, size_t count)
+		std::vector < double > SubscribedSignal::interpretValues(unsigned char *pData, size_t count)
 		{
+			std::vector < double > values(count);
 			if(m_dataIsBigEndian) {
 				switch (m_dataValueType) {
 					case DATATYPE_REAL32:
 						for(size_t i=0; i<count; ++i) {
-							sum += hbm::streaming::extract<float, hbm::streaming::big>()(&pData);
+							values[i] = hbm::streaming::extract<float, hbm::streaming::big>()(&pData);
 						}
 						break;
 
 					case DATATYPE_REAL64:
 						for(size_t i=0; i<count; ++i) {
-							sum += hbm::streaming::extract<double, hbm::streaming::big>()(&pData);
+							values[i] = hbm::streaming::extract<double, hbm::streaming::big>()(&pData);
 						}
 						break;
 
 					case DATATYPE_U32:
 						for(size_t i=0; i<count; ++i) {
-							sum += hbm::streaming::extract<uint32_t, hbm::streaming::big>()(&pData);
+							values[i] = hbm::streaming::extract<uint32_t, hbm::streaming::big>()(&pData);
 						}
 						break;
 
 					case DATATYPE_S32:
 						for(size_t i=0; i<count; ++i) {
-							sum += hbm::streaming::extract<int32_t, hbm::streaming::big>()(&pData);
+							values[i] = hbm::streaming::extract<int32_t, hbm::streaming::big>()(&pData);
 						}
 						break;
 
 					case DATATYPE_U64:
 						for(size_t i=0; i<count; ++i) {
-							sum += hbm::streaming::extract<uint64_t, hbm::streaming::big>()(&pData);
+							values[i] = hbm::streaming::extract<uint64_t, hbm::streaming::big>()(&pData);
 						}
 						break;
 
 					case DATATYPE_S64:
 						for(size_t i=0; i<count; ++i) {
-							sum += hbm::streaming::extract<int64_t, hbm::streaming::big>()(&pData);
+							values[i] = hbm::streaming::extract<int64_t, hbm::streaming::big>()(&pData);
 						}
 						break;
 
@@ -85,37 +84,37 @@ namespace hbm {
 				switch (m_dataValueType) {
 					case DATATYPE_REAL32:
 						for(size_t i=0; i<count; ++i) {
-							sum += hbm::streaming::extract<float, hbm::streaming::little>()(&pData);
+							values[i] = hbm::streaming::extract<float, hbm::streaming::little>()(&pData);
 						}
 						break;
 
 					case DATATYPE_REAL64:
 						for(size_t i=0; i<count; ++i) {
-							sum += hbm::streaming::extract<double, hbm::streaming::little>()(&pData);
+							values[i] = hbm::streaming::extract<double, hbm::streaming::little>()(&pData);
 						}
 						break;
 
 					case DATATYPE_U32:
 						for(size_t i=0; i<count; ++i) {
-							sum += hbm::streaming::extract<uint32_t, hbm::streaming::little>()(&pData);
+							values[i] = hbm::streaming::extract<uint32_t, hbm::streaming::little>()(&pData);
 						}
 						break;
 
 					case DATATYPE_S32:
 						for(size_t i=0; i<count; ++i) {
-							sum += hbm::streaming::extract<int32_t, hbm::streaming::little>()(&pData);
+							values[i] = hbm::streaming::extract<int32_t, hbm::streaming::little>()(&pData);
 						}
 						break;
 
 					case DATATYPE_U64:
 						for(size_t i=0; i<count; ++i) {
-							sum += hbm::streaming::extract<uint64_t, hbm::streaming::little>()(&pData);
+							values[i] = hbm::streaming::extract<uint64_t, hbm::streaming::little>()(&pData);
 						}
 						break;
 
 					case DATATYPE_S64:
 						for(size_t i=0; i<count; ++i) {
-							sum += hbm::streaming::extract<int64_t, hbm::streaming::little>()(&pData);
+							values[i] = hbm::streaming::extract<int64_t, hbm::streaming::little>()(&pData);
 						}
 						break;
 
@@ -124,39 +123,43 @@ namespace hbm {
 						break;
 				}
 			}
+			return values;
 		}
 
-		void SubscribedSignal::interpreteTimestamp(unsigned char* pData)
+		uint64_t SubscribedSignal::interpreteNtpTimestamp(unsigned char* pData)
 		{
 			if(m_dataTimeType == TIMETYPE_NTP) {
-				uint64_t ntpTimestamp;
 				if(m_dataIsBigEndian) {
-					ntpTimestamp = be64toh(*reinterpret_cast < uint64_t* > (pData));
+					return be64toh(*reinterpret_cast < uint64_t* > (pData));
 				} else {
-					ntpTimestamp = le64toh(*reinterpret_cast < uint64_t* > (pData));
+					return le64toh(*reinterpret_cast < uint64_t* > (pData));
 				}
+			} else {
+				return 0;
 			}
 		}
 
-		void SubscribedSignal::calculateTimestamp()
+		void SubscribedSignal::incrementSyncSignalTime(unsigned int valueCount)
 		{
-			timeInfo_t delta(m_signalRateDelta.ntpTimeStamp()*m_valueCount);
-			m_startTime.increment(delta);
-			timeInfo_t time = m_startTime;
+			timeInfo_t delta(m_signalRateDelta.ntpTimeStamp()*valueCount);
+			m_syncSignalTime.increment(delta);
 		}
-
-
 
 
 		void SubscribedSignal::processData(unsigned char* pData, size_t size)
 		{
+			uint64_t timeStamp;
+			std::vector < double > values;
 			switch(m_dataFormatPattern) {
 				case PATTERN_V:
 					{
 						size_t valueCount = size / m_dataValueSize;
-						calculateTimestamp();
-						interpretValues(pData, valueCount);
-						m_valueCount += valueCount;
+						timeStamp = m_syncSignalTime.ntpTimeStamp();
+						values = interpretValues(pData, valueCount);
+						incrementSyncSignalTime(valueCount);
+						if (m_dataCb) {
+							m_dataCb(*this, m_syncSignalTime.ntpTimeStamp(), values);
+						}
 					}
 					break;
 				case PATTERN_TV:
@@ -164,12 +167,14 @@ namespace hbm {
 						// 1 time stamp, 1 value
 						size_t tupleSize = m_dataTimeSize+m_dataValueSize;
 						while(size>=tupleSize) {
-							interpreteTimestamp(pData);
+							timeStamp = interpreteNtpTimestamp(pData);
 							pData += m_dataTimeSize;
-							interpretValues(pData, 1);
+							values = interpretValues(pData, 1);
 							pData += m_dataValueSize;
 							size -= tupleSize;
-							++m_valueCount;
+							if (m_dataCb) {
+								m_dataCb(*this, timeStamp, values);
+							}
 						}
 					}
 					break;
@@ -177,9 +182,12 @@ namespace hbm {
 					// 1 time stamp n values
 					if(size>=m_dataTimeSize+m_dataValueSize) {
 						size_t valueCount = (size-m_dataTimeSize) / m_dataValueSize;
-						interpreteTimestamp(pData);
-						interpretValues(pData+m_dataTimeSize, valueCount);
-						m_valueCount += valueCount;
+						timeStamp = interpreteNtpTimestamp(pData);
+						values = interpretValues(pData+m_dataTimeSize, valueCount);
+						if (m_dataCb) {
+							m_dataCb(*this, timeStamp, values);
+						}
+
 					}
 					break;
 			}
@@ -193,7 +201,7 @@ namespace hbm {
 					m_signalReference = params[0u].asString();
 				}
 			} else if(method=="time") {
-				m_startTime.set(params);
+				m_syncSignalTime.set(params);
 			} else if(method=="data") {
 				setDataFormat(params);
 			} else if(method=="signalRate") {

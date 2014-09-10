@@ -1,6 +1,8 @@
 #ifndef _HBM__STREAMING__SUBSCRIBEDSIGNAL
 #define _HBM__STREAMING__SUBSCRIBEDSIGNAL
 
+#include <boost/function.hpp>
+
 #ifdef _WIN32
 #include "json/value.h"
 #else
@@ -11,6 +13,10 @@
 
 namespace hbm {
 	namespace streaming {
+		class SubscribedSignal;
+
+		typedef std::function<void(SubscribedSignal& subscribedSignal, uint64_t timeStamp, std::vector < double > )> DataCb_t;
+
 		/// interpretes and stores meta information of a subscribed signal.
 		/// Mesured data of a subscribed signal is processed here
 		/// \warning for windows, this class works on little endian machines only. this is because of endian issues.
@@ -32,12 +38,12 @@ namespace hbm {
 		private:
 
 			/// @param count number of values not the number of bytes!
-			void interpretValues(unsigned char* pData, size_t count);
+			std::vector<double> interpretValues(unsigned char* pData, size_t count);
 
-			void interpreteTimestamp(unsigned char* pData);
+			uint64_t interpreteNtpTimestamp(unsigned char* pData);
 
 			/// for Pattern V: If timestamp is not provided with the value(s), we calulate the time
-			void calculateTimestamp();
+			void incrementSyncSignalTime(unsigned int valueCount);
 
 			int setDataFormat(const Json::Value& params);
 
@@ -68,8 +74,8 @@ namespace hbm {
 
 			std::string m_signalReference;
 
-			/// For synchronuous signals (Pattern V): time of the first measured value of this channel.
-			timeInfo_t m_startTime;
+			/// For synchronuous signals (Pattern V): will be set to the time of the first measured value and will be incremented with each value received.
+			timeInfo_t m_syncSignalTime;
 
 			unsigned int m_signalRateSamples;
 			/// For synchronuous signals (Pattern V): The time between m_signalRateSamples samples. Use this to omit rounding errors.
@@ -85,7 +91,7 @@ namespace hbm {
 			timeType_t m_dataTimeType;
 			size_t m_dataTimeSize;
 
-			size_t m_valueCount;
+			DataCb_t m_dataCb;
 		};
 	}
 }

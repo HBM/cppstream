@@ -78,7 +78,7 @@ namespace hbm {
 		int StreamClient::start(const std::string& address, const std::string &streamPort, const std::string &controlPort)
 		{
 			int result = m_streamSocket.connect(address.c_str(), streamPort);
-			if(result<0) {
+			if (result < 0) {
 				return -1;
 			}
 
@@ -90,14 +90,14 @@ namespace hbm {
 			TransportHeader transportHeader(m_streamSocket);
 			do {
 				result = transportHeader.receive();
-				if(result<0) {
+				if (result < 0) {
 					break;
 				}
 				int type = transportHeader.type();
 				size_t size = transportHeader.size();
 				unsigned int signalNumber = transportHeader.signalNumber();
 
-				if(type==TYPE_DATA) {
+				if (type == TYPE_DATA) {
 					// read measured data. This happens really often! Be sure to be as efficient as possible here.
 					result = m_streamSocket.receiveComplete(dataRecvBuffer, size);
 					if(static_cast < size_t >(result)!=size) {
@@ -105,7 +105,7 @@ namespace hbm {
 					}
 
 					m_subscribedSignals.processMeasuredData(signalNumber, dataRecvBuffer, result);
-				} else if(type==TYPE_META){
+				} else if (type == TYPE_META){
 					MetaInformation metaInformation(m_streamSocket, size);
 					if(metaInformation.type()!=METAINFORMATION_JSON) {
 						std::cout << "unhandled meta information of type " << metaInformation.type() << std::endl;
@@ -114,7 +114,7 @@ namespace hbm {
 						std::string method = content[METHOD].asString();
 						const Json::Value& params = content[PARAMS];
 
-						if(signalNumber==0) {
+						if (signalNumber == 0) {
 							// stream related meta information
 							processStreamMetaInformation(method, params);
 						} else {
@@ -142,7 +142,7 @@ namespace hbm {
 		{
 			try {
 				// stream related meta information
-				if(method=="init") {
+				if (method == "init") {
 					// this gives important information needed to control the daq stream.
 					m_streamId = params["streamId"].asString();
 					std::cout << m_address << ": this is " << m_streamId << std::endl;
@@ -152,11 +152,11 @@ namespace hbm {
 						const Json::Value& element = *iter;
 						std::cout << m_address << ": command interfaces: " << element << std::endl;
 						static const char POST[] = "post";
-						if(strncasecmp(element["httpMethod"].asString().c_str(), POST, sizeof(POST))==0) {
+						if (strncasecmp(element["httpMethod"].asString().c_str(), POST, sizeof(POST)) == 0) {
 							m_httpPath = element["httpPath"].asString();
 						}
 					}
-				} else if(method=="time") {
+				} else if (method == "time") {
 					m_initialTime.set(params["stamp"]);
 					m_initialTimeEpoch = params["epoch"].asString();
 					m_initialTimeScale = params["scale"].asString();

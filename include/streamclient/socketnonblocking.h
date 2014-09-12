@@ -30,7 +30,7 @@ namespace hbm
 		/// \return 0: success; -1: error
 		int connect(const std::string& address, const std::string& port);
 
-		int sendBlock(const void* pBlock, size_t len, bool more);
+		ssize_t sendBlock(const void* pBlock, size_t len, bool more);
 
 		/// might return with less bytes the requested
 		ssize_t receive(void* pBlock, size_t len);

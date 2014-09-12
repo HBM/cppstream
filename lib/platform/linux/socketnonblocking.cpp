@@ -157,12 +157,12 @@ ssize_t hbm::SocketNonblocking::receiveComplete(void* pBlock, size_t size)
 }
 
 
-int hbm::SocketNonblocking::sendBlock(const void* pBlock, size_t size, bool more)
+ssize_t hbm::SocketNonblocking::sendBlock(const void* pBlock, size_t size, bool more)
 {
 	const uint8_t* pDat = reinterpret_cast<const uint8_t*>(pBlock);
 	size_t BytesLeft = size;
-	int numBytes;
-	int retVal = 0;
+	ssize_t numBytes;
+	ssize_t retVal = size;
 
 	struct pollfd pfd;
 	pfd.fd = m_fd;
@@ -201,7 +201,7 @@ int hbm::SocketNonblocking::sendBlock(const void* pBlock, size_t size, bool more
 			}
 		}
 	}
-	return size;
+	return retVal;
 }
 
 

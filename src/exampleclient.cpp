@@ -6,11 +6,12 @@
 #include "streamclient/signals.h"
 #include "streamclient/types.h"
 
-static hbm::streaming::StreamClient stream;
+
+static hbm::streaming::StreamClient streamClient;
 
 static void sigHandler(int)
 {
-	stream.stop();
+	streamClient.stop();
 }
 
 static void streamMetaInformationCb(hbm::streaming::StreamClient& stream, const std::string& method, const Json::Value& params)
@@ -87,12 +88,12 @@ int main(int argc, char* argv[])
 		controlPort = argv[2];
 	}
 
-	stream.setStreamMetaCb(streamMetaInformationCb);
-	stream.setSignalMetaCb(signalMetaInformationCb);
-	stream.setDataCb(dataCb);
+	streamClient.setStreamMetaCb(streamMetaInformationCb);
+	streamClient.setSignalMetaCb(signalMetaInformationCb);
+	streamClient.setDataCb(dataCb);
 
 	// connect to the daq stream service and give control to the receiving function.
 	// returns on signal (terminate, interrupt) buffer overrun on the server side or loss of connection.
-	stream.start(argv[1], hbm::streaming::DAQSTREAM_PORT, controlPort);
+	streamClient.start(argv[1], hbm::streaming::DAQSTREAM_PORT, controlPort);
 	return EXIT_SUCCESS;
 }

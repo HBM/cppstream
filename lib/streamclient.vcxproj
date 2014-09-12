@@ -148,14 +148,14 @@
     <ClCompile Include="httppost.cpp" />
     <ClCompile Include="metainformation.cpp" />
     <ClCompile Include="platform/windows/socketnonblocking.cpp" />
-    <ClCompile Include="signals.cpp" />
+    <ClCompile Include="signalcontainer.cpp" />
     <ClCompile Include="streamclient.cpp" />
     <ClCompile Include="subscribedsignal.cpp" />
     <ClCompile Include="transportheader.cpp" />
     <ClCompile Include="types.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\streamclient\signals.h" />
+    <ClInclude Include="..\include\streamclient\signalcontainer.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="HttpPost.h" />
     <ClInclude Include="MetaInformation.h" />

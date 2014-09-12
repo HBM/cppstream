@@ -48,7 +48,7 @@
     <ClCompile Include="streamclient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="signals.cpp">
+    <ClCompile Include="signalcontainer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -68,7 +68,7 @@
     <ClInclude Include="HttpPost.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\streamclient\signals.h">
+    <ClInclude Include="..\include\streamclient\signalcontainer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -60,6 +60,16 @@ static void signalMetaInformationCb(hbm::streaming::SubscribedSignal& subscribed
 	std::cout << subscribedSignal.signalReference() << ": " << method << std::endl;
 }
 
+
+static void dataCb(hbm::streaming::SubscribedSignal& subscribedSignal, uint64_t timestamp, hbm::streaming::values_t values)
+{
+	std::cout << subscribedSignal.signalReference() << ": " << std::hex << timestamp << std::dec << " ";
+	for (hbm::streaming::values_t::const_iterator iter = values.begin(); iter != values.end(); ++iter) {
+		std::cout << *iter << " ";
+	}
+	std::cout << std::endl;
+}
+
 int main(int argc, char* argv[])
 {
 	// Some signals should lead to a normal shutdown of the daq stream client. Afterwards the program exists.
@@ -79,6 +89,7 @@ int main(int argc, char* argv[])
 
 	stream.setStreamMetaCb(streamMetaInformationCb);
 	stream.setSignalMetaCb(signalMetaInformationCb);
+	stream.setDataCb(dataCb);
 
 	// connect to the daq stream service and give control to the receiving function.
 	// returns on signal (terminate, interrupt) buffer overrun on the server side or loss of connection.

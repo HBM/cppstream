@@ -2,6 +2,7 @@
 #define _HBM__STREAMING__SUBSCRIBEDSIGNALS
 
 #include <unordered_map>
+#include <vector>
 
 #include <boost/function.hpp>
 
@@ -19,8 +20,11 @@ namespace hbm {
 		public:
 			SubscribedSignals();
 
-			/// \warning set callback function before calling start() otherwise you will miss meta information received.
+			/// \warning set callback function before calling start(), otherwise you will miss meta information received.
 			void setSignalMetaCb(SignalMetaCb_t cb);
+
+			/// \warning set callback function before subscribing signals, otherwise you will miss measured values received.
+			void setDataCb(DataCb_t cb);
 
 			/// new subscribed signals are added with arival of initial meta information
 			void processMeasuredData(unsigned int signalNumber, unsigned char* data, size_t len);
@@ -37,6 +41,7 @@ namespace hbm {
 			subscribedSignals_t m_subscribedSignals;
 
 			SignalMetaCb_t m_signalMetaCb;
+			DataCb_t m_dataCb;
 		};
 	}
 }

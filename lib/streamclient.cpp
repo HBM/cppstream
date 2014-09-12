@@ -62,6 +62,11 @@ namespace hbm {
 			m_subscribedSignals.setSignalMetaCb(cb);
 		}
 
+		void StreamClient::setDataCb(DataCb_t cb)
+		{
+			m_subscribedSignals.setDataCb(cb);
+		}
+
 		void StreamClient::subscribe(const signalReferences_t& signalReferences)
 		{
 			Controller controller(m_streamId, m_address.c_str(), m_controlPort, m_httpPath);

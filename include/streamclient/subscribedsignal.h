@@ -1,6 +1,7 @@
 #ifndef _HBM__STREAMING__SUBSCRIBEDSIGNAL
 #define _HBM__STREAMING__SUBSCRIBEDSIGNAL
 
+#include <stdint.h>
 #include <boost/function.hpp>
 
 #ifdef _WIN32
@@ -13,9 +14,11 @@
 
 namespace hbm {
 	namespace streaming {
+
 		class SubscribedSignal;
 
-		typedef std::function<void(SubscribedSignal& subscribedSignal, uint64_t timeStamp, std::vector < double > )> DataCb_t;
+		typedef std::vector < double > values_t;
+		typedef std::function<void(SubscribedSignal& subscribedSignal, uint64_t timeStamp, values_t )> DataCb_t;
 
 		/// interpretes and stores meta information of a subscribed signal.
 		/// Mesured data of a subscribed signal is processed here
@@ -25,7 +28,7 @@ namespace hbm {
 			SubscribedSignal();
 
 			/// process measured data
-			void processData(unsigned char* pData, size_t size);
+			void processData(unsigned char* pData, size_t size, DataCb_t cb);
 
 			/// process signal related meta information.
 			void processSignalMetaInformation(const std::string& method, const Json::Value& params);
@@ -90,8 +93,6 @@ namespace hbm {
 			size_t m_dataValueSize;
 			timeType_t m_dataTimeType;
 			size_t m_dataTimeSize;
-
-			DataCb_t m_dataCb;
 		};
 	}
 }

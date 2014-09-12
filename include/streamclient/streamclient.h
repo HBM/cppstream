@@ -37,6 +37,9 @@ namespace hbm {
 			/// \warning set callback function before calling start() otherwise you will miss meta information received.
 			void setSignalMetaCb(SignalMetaCb_t cb);
 
+			/// \warning set callback function before subscribing signals, otherwise you will miss measured values received.
+			void setDataCb(DataCb_t cb);
+
 			/// \throws std::runtime_error
 			void subscribe(const signalReferences_t& signalReferences);
 

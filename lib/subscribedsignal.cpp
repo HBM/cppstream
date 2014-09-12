@@ -30,14 +30,12 @@ namespace hbm {
 			, m_dataValueSize(0)
 			, m_dataTimeType()
 			, m_dataTimeSize(0)
-
-			, m_dataCb()
 		{
 		}
 
-		std::vector < double > SubscribedSignal::interpretValues(unsigned char *pData, size_t count)
+		values_t SubscribedSignal::interpretValues(unsigned char *pData, size_t count)
 		{
-			std::vector < double > values(count);
+			values_t values(count);
 			if(m_dataIsBigEndian) {
 				switch (m_dataValueType) {
 					case DATATYPE_REAL32:
@@ -146,50 +144,49 @@ namespace hbm {
 		}
 
 
-		void SubscribedSignal::processData(unsigned char* pData, size_t size)
+		void SubscribedSignal::processData(unsigned char* pData, size_t size, DataCb_t cb)
 		{
 			uint64_t timeStamp;
 			std::vector < double > values;
 			switch(m_dataFormatPattern) {
-				case PATTERN_V:
-					{
-						size_t valueCount = size / m_dataValueSize;
-						timeStamp = m_syncSignalTime.ntpTimeStamp();
-						values = interpretValues(pData, valueCount);
-						incrementSyncSignalTime(valueCount);
-						if (m_dataCb) {
-							m_dataCb(*this, m_syncSignalTime.ntpTimeStamp(), values);
-						}
+			case PATTERN_V:
+				{
+					size_t valueCount = size / m_dataValueSize;
+					timeStamp = m_syncSignalTime.ntpTimeStamp();
+					values = interpretValues(pData, valueCount);
+					incrementSyncSignalTime(valueCount);
+					if (cb) {
+						cb(*this, m_syncSignalTime.ntpTimeStamp(), values);
 					}
-					break;
-				case PATTERN_TV:
-					{
-						// 1 time stamp, 1 value
-						size_t tupleSize = m_dataTimeSize+m_dataValueSize;
-						while(size>=tupleSize) {
-							timeStamp = interpreteNtpTimestamp(pData);
-							pData += m_dataTimeSize;
-							values = interpretValues(pData, 1);
-							pData += m_dataValueSize;
-							size -= tupleSize;
-							if (m_dataCb) {
-								m_dataCb(*this, timeStamp, values);
-							}
-						}
-					}
-					break;
-				case PATTERN_TB:
-					// 1 time stamp n values
-					if(size>=m_dataTimeSize+m_dataValueSize) {
-						size_t valueCount = (size-m_dataTimeSize) / m_dataValueSize;
+				}
+				break;
+			case PATTERN_TV:
+				{
+					// 1 time stamp, 1 value
+					size_t tupleSize = m_dataTimeSize+m_dataValueSize;
+					while(size>=tupleSize) {
 						timeStamp = interpreteNtpTimestamp(pData);
-						values = interpretValues(pData+m_dataTimeSize, valueCount);
-						if (m_dataCb) {
-							m_dataCb(*this, timeStamp, values);
+						pData += m_dataTimeSize;
+						values = interpretValues(pData, 1);
+						pData += m_dataValueSize;
+						size -= tupleSize;
+						if (cb) {
+							cb(*this, timeStamp, values);
 						}
-
 					}
-					break;
+				}
+				break;
+			case PATTERN_TB:
+				// 1 time stamp n values
+				if(size>=m_dataTimeSize+m_dataValueSize) {
+					size_t valueCount = (size-m_dataTimeSize) / m_dataValueSize;
+					timeStamp = interpreteNtpTimestamp(pData);
+					values = interpretValues(pData+m_dataTimeSize, valueCount);
+					if (cb) {
+						cb(*this, timeStamp, values);
+					}
+				}
+				break;
 			}
 		}
 

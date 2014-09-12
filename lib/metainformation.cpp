@@ -15,9 +15,7 @@ namespace hbm {
 			: m_type(0)
 			, m_jsonContent()
 			, m_binaryContent()
-
 		{
-
 			int32_t typeBig;
 
 			if (size<=sizeof(typeBig)) {
@@ -37,7 +35,7 @@ namespace hbm {
 				Json::Reader().parse(&data[0], &data[dataSize], m_jsonContent);
 			} else {
 				m_binaryContent.resize(size-sizeof(m_type));
-				socket.receive(&m_binaryContent[0], m_binaryContent.size());
+				socket.receiveComplete(&m_binaryContent[0], m_binaryContent.size());
 			}
 		}
 	}

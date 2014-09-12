@@ -17,7 +17,14 @@ namespace hbm {
 			, m_binaryContent()
 
 		{
+
 			int32_t typeBig;
+
+			if (size<=sizeof(typeBig)) {
+				std::cerr << __FUNCTION__ << ": invalid size" <<std::endl;
+				return;
+			}
+
 			socket.receiveComplete(&typeBig, sizeof(typeBig));
 
 			m_type = ntohl(typeBig);

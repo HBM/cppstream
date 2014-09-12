@@ -9,6 +9,8 @@
 
 /// receives data from DAQ Stream Server. Subscribes/Unsubscribes signals
 static hbm::streaming::StreamClient streamClient;
+
+/// handles signal related meta information and measured data.
 static hbm::streaming::SignalContainer signalContainer;
 
 static void sigHandler(int)

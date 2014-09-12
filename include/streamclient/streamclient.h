@@ -84,7 +84,7 @@ namespace hbm {
 			std::string m_initialTimeEpoch;
 
 			/// processes measured data and keeps meta information about all subscribed signals
-			Signals m_subscribedSignals;
+			Signals m_signals;
 
 			StreamMetaCb_t m_streamMetaCb;
 		};

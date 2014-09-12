@@ -38,11 +38,6 @@ namespace hbm {
 			}
 		}
 
-		size_t Signals::erase(unsigned int signalNumber)
-		{
-			return m_subscribedSignals.erase(signalNumber);
-		}
-
 		void Signals::clear()
 		{
 			m_subscribedSignals.clear();

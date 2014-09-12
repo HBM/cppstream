@@ -3,7 +3,7 @@
 #include <signal.h>
 
 #include "streamclient/streamclient.h"
-#include "streamclient/subscribedsignals.h"
+#include "streamclient/signals.h"
 #include "streamclient/types.h"
 
 static hbm::streaming::StreamClient stream;

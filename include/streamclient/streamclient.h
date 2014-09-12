@@ -10,7 +10,7 @@
 #include <jsoncpp/json/value.h>
 #endif
 
-#include "subscribedsignals.h"
+#include "signals.h"
 #include "socketnonblocking.h"
 
 
@@ -84,7 +84,7 @@ namespace hbm {
 			std::string m_initialTimeEpoch;
 
 			/// processes measured data and keeps meta information about all subscribed signals
-			SubscribedSignals m_subscribedSignals;
+			Signals m_subscribedSignals;
 
 			StreamMetaCb_t m_streamMetaCb;
 		};

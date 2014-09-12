@@ -21,8 +21,8 @@ SET( INTERFADE_HEADERS
     ${INTERFACE_INCLUDE_DIR}/bufferedreader.h
     ${INTERFACE_INCLUDE_DIR}/socketnonblocking.h
     ${INTERFACE_INCLUDE_DIR}/streamclient.h
+    ${INTERFACE_INCLUDE_DIR}/signals.h
     ${INTERFACE_INCLUDE_DIR}/subscribedsignal.h
-    ${INTERFACE_INCLUDE_DIR}/subscribedsignals.h
     ${INTERFACE_INCLUDE_DIR}/types.h
 )
 
@@ -35,8 +35,8 @@ set(STREAMCLIENT_SOURCES
   metainformation.cpp
   controller.cpp
   httppost.cpp
+  signals.cpp
   subscribedsignal.cpp
-  subscribedsignals.cpp
   platform/linux/socketnonblocking.cpp
   bufferedreader.cpp
 )

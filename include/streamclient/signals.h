@@ -1,5 +1,5 @@
-#ifndef _HBM__STREAMING__SUBSCRIBEDSIGNALS
-#define _HBM__STREAMING__SUBSCRIBEDSIGNALS
+#ifndef _HBM__STREAMING__SIGNALS
+#define _HBM__STREAMING__SIGNALS
 
 #include <unordered_map>
 #include <vector>
@@ -16,9 +16,9 @@ namespace hbm {
 		typedef std::function<void(SubscribedSignal& subscribedSignal, const std::string& method, const Json::Value& params)> SignalMetaCb_t;
 
 		/// contains all subscribed signals.
-		class SubscribedSignals {
+		class Signals {
 		public:
-			SubscribedSignals();
+			Signals();
 
 			/// \warning set callback function before calling start(), otherwise you will miss meta information received.
 			void setSignalMetaCb(SignalMetaCb_t cb);

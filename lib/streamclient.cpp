@@ -33,7 +33,7 @@ namespace hbm {
 			, m_initialTime()
 			, m_initialTimeScale()
 			, m_initialTimeEpoch()
-			, m_signals()
+			, m_pSignalContainer(NULL)
 			, m_streamMetaCb()
 		{
 		}
@@ -47,7 +47,7 @@ namespace hbm {
 			, m_initialTime()
 			, m_initialTimeScale()
 			, m_initialTimeEpoch()
-			, m_signals()
+			, m_pSignalContainer(NULL)
 			, m_streamMetaCb()
 		{
 		}
@@ -55,16 +55,6 @@ namespace hbm {
 		void StreamClient::setStreamMetaCb(StreamMetaCb_t cb)
 		{
 			m_streamMetaCb = cb;
-		}
-
-		void StreamClient::setSignalMetaCb(SignalMetaCb_t cb)
-		{
-			m_signals.setSignalMetaCb(cb);
-		}
-
-		void StreamClient::setDataCb(DataCb_t cb)
-		{
-			m_signals.setDataCb(cb);
 		}
 
 		void StreamClient::subscribe(const signalReferences_t& signalReferences)
@@ -109,7 +99,9 @@ namespace hbm {
 						break;
 					}
 
-					m_signals.processMeasuredData(signalNumber, dataRecvBuffer, result);
+					if (m_pSignalContainer) {
+						m_pSignalContainer->processMeasuredData(signalNumber, dataRecvBuffer, result);
+					}
 				} else if (type == TYPE_META){
 					MetaInformation metaInformation(m_streamSocket, size);
 					if(metaInformation.type()!=METAINFORMATION_JSON) {
@@ -124,7 +116,9 @@ namespace hbm {
 							processStreamMetaInformation(method, params);
 						} else {
 							// signal related meta information
-							m_signals.processMetaInformation(signalNumber, method, params);
+							if (m_pSignalContainer) {
+								m_pSignalContainer->processMetaInformation(signalNumber, method, params);
+							}
 						}
 					}
 				}
@@ -140,7 +134,6 @@ namespace hbm {
 			m_streamId.clear();
 			m_controlPort.clear();
 			m_initialTime.clear();
-			m_signals.clear();
 		}
 
 		int StreamClient::processStreamMetaInformation(const std::string& method, const Json::Value& params)

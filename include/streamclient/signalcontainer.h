@@ -19,10 +19,11 @@ namespace hbm {
 
 		typedef std::function<void(SubscribedSignal& subscribedSignal, const std::string& method, const Json::Value& params)> SignalMetaCb_t;
 
-		/// contains all subscribed signals.
-		class Signals {
+		/// Contains all subscribed signals.
+		/// Callback functions may be registered in order to get informed about signal related meta information and measured data.
+		class SignalContainer {
 		public:
-			Signals();
+			SignalContainer();
 
 			/// \warning set callback function before calling start(), otherwise you will miss meta information received.
 			void setSignalMetaCb(SignalMetaCb_t cb);
@@ -44,7 +45,7 @@ namespace hbm {
 			typedef std::unordered_map < unsigned int, SubscribedSignal > signals_t;
 
 			/// processes measured data and keeps meta information about all subscribed signals
-			signals_t m_signals;
+			signals_t m_subscribedsignals;
 
 			SignalMetaCb_t m_signalMetaCb;
 			DataCb_t m_dataCb;

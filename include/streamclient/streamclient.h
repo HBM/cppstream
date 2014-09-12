@@ -10,7 +10,7 @@
 #include <jsoncpp/json/value.h>
 #endif
 
-#include "signals.h"
+#include "signalcontainer.h"
 #include "socketnonblocking.h"
 
 
@@ -21,8 +21,8 @@ namespace hbm {
 
 		typedef std::function<void(hbm::streaming::StreamClient& stream, const std::string& method, const Json::Value& params)> StreamMetaCb_t;
 
-		/// Connects to on daq stream server. Receives and interpretes meta data. Subcribes signals. Receives measured data
-		/// Callback functions may be registered in order to get informed about meta information and measured data.
+		/// Connects to on daq stream server. Receives and interpretes meta data and measured data. Subcribes and unsubscribes signals.
+		/// Callback functions may be registered in order to get informed about stream related meta information.
 		class StreamClient {
 		public:
 			StreamClient();
@@ -34,11 +34,9 @@ namespace hbm {
 			/// \warning set callback function before calling start() otherwise you will miss meta information received.
 			void setStreamMetaCb(StreamMetaCb_t cb);
 
-			/// \warning set callback function before calling start() otherwise you will miss meta information received.
-			void setSignalMetaCb(SignalMetaCb_t cb);
-
-			/// \warning set callback function before subscribing signals, otherwise you will miss measured values received.
-			void setDataCb(DataCb_t cb);
+			void setSignalContainer(SignalContainer *pSignalContainer) {
+				m_pSignalContainer = pSignalContainer;
+			}
 
 			/// \throws std::runtime_error
 			void subscribe(const signalReferences_t& signalReferences);
@@ -84,7 +82,7 @@ namespace hbm {
 			std::string m_initialTimeEpoch;
 
 			/// processes measured data and keeps meta information about all subscribed signals
-			Signals m_signals;
+			SignalContainer* m_pSignalContainer;
 
 			StreamMetaCb_t m_streamMetaCb;
 		};

@@ -3,11 +3,13 @@
 #include <signal.h>
 
 #include "streamclient/streamclient.h"
-#include "streamclient/signals.h"
+#include "streamclient/signalcontainer.h"
 #include "streamclient/types.h"
 
 
+/// receives data from DAQ Stream Server. Subscribes/Unsubscribes signals
 static hbm::streaming::StreamClient streamClient;
+static hbm::streaming::SignalContainer signalContainer;
 
 static void sigHandler(int)
 {
@@ -88,9 +90,11 @@ int main(int argc, char* argv[])
 		controlPort = argv[2];
 	}
 
+	signalContainer.setDataCb(dataCb);
+	signalContainer.setSignalMetaCb(signalMetaInformationCb);
+
 	streamClient.setStreamMetaCb(streamMetaInformationCb);
-	streamClient.setSignalMetaCb(signalMetaInformationCb);
-	streamClient.setDataCb(dataCb);
+	streamClient.setSignalContainer(&signalContainer);
 
 	// connect to the daq stream service and give control to the receiving function.
 	// returns on signal (terminate, interrupt) buffer overrun on the server side or loss of connection.

@@ -13,7 +13,9 @@
 
 
 typedef boost::ptr_vector < hbm::streaming::StreamClient > streams_t;
+typedef std::vector < hbm::streaming::SignalContainer > signalcontainers_t;
 static streams_t streams;
+static signalcontainers_t signalcontainers;
 
 static void sigHandler(int)
 {

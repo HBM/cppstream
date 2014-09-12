@@ -48,6 +48,9 @@
     <ClCompile Include="streamclient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="signals.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="controller.h">
@@ -59,13 +62,13 @@
     <ClInclude Include="metainformation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="signal.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="socketnonblocking.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HttpPost.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\streamclient\signals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

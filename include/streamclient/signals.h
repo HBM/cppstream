@@ -6,7 +6,7 @@
 
 #include <boost/function.hpp>
 
-#include <jsoncpp/json/value.h>
+#include <json/value.h>
 
 #include "subscribedsignal.h"
 

@@ -81,7 +81,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../include/StreamClient;../../jsoncpp/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include/StreamClient;../../jsoncpp/include;;$(BOOST_ROOT)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -96,7 +96,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../include/StreamClient;../../jsoncpp/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include/StreamClient;../../jsoncpp/include;;$(BOOST_ROOT)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -113,7 +113,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../include/StreamClient;../../jsoncpp/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include/StreamClient;../../jsoncpp/include;;$(BOOST_ROOT)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -132,7 +132,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../include/StreamClient;../../jsoncpp/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../include/StreamClient;../../jsoncpp/include;;$(BOOST_ROOT)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -148,16 +148,17 @@
     <ClCompile Include="httppost.cpp" />
     <ClCompile Include="metainformation.cpp" />
     <ClCompile Include="platform/windows/socketnonblocking.cpp" />
+    <ClCompile Include="signals.cpp" />
     <ClCompile Include="streamclient.cpp" />
     <ClCompile Include="subscribedsignal.cpp" />
     <ClCompile Include="transportheader.cpp" />
     <ClCompile Include="types.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\streamclient\signals.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="HttpPost.h" />
     <ClInclude Include="MetaInformation.h" />
-    <ClInclude Include="Signal.h" />
     <ClInclude Include="SocketNonblocking.h" />
     <ClInclude Include="Types.h" />
   </ItemGroup>

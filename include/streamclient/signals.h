@@ -6,7 +6,11 @@
 
 #include <boost/function.hpp>
 
-#include <json/value.h>
+#ifdef _WIN32
+#include "json/value.h"
+#else
+#include <jsoncpp/json/value.h>
+#endif
 
 #include "subscribedsignal.h"
 

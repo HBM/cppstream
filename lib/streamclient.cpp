@@ -94,19 +94,20 @@ namespace hbm {
 
 				if (type == TYPE_DATA) {
 					// read and process measured data. This happens really often! Be sure to be as efficient as possible here.
+
 					size_t bytesLeftInBuffer = 0;
-					size_t bytesToRead;
-					while(bytesToProcess) {
+					size_t bytesToReadToBuffer;
+					while(bytesToProcess>0) {
 						if(bytesToProcess>sizeof(dataRecvBuffer)) {
-							bytesToRead = sizeof(dataRecvBuffer)-bytesLeftInBuffer;
+							bytesToReadToBuffer = sizeof(dataRecvBuffer)-bytesLeftInBuffer;
 						} else {
-							bytesToRead = bytesToProcess-bytesLeftInBuffer;
+							bytesToReadToBuffer = bytesToProcess-bytesLeftInBuffer;
 						}
-						ssize_t bytesRead = m_streamSocket.receiveComplete(dataRecvBuffer+bytesLeftInBuffer, bytesToRead);
-						if(bytesRead<=0) {
+						ssize_t bytesReadToBuffer = m_streamSocket.receiveComplete(dataRecvBuffer+bytesLeftInBuffer, bytesToReadToBuffer);
+						if(bytesReadToBuffer<=0) {
 							break;
 						}
-						bytesLeftInBuffer += bytesRead;
+						bytesLeftInBuffer += bytesReadToBuffer;
 
 						if (m_pSignalContainer) {
 							size_t bytesProcessedFromBuffer = m_pSignalContainer->processMeasuredData(signalNumber, dataRecvBuffer, bytesLeftInBuffer);
@@ -118,8 +119,6 @@ namespace hbm {
 							bytesLeftInBuffer = 0;
 						}
 					}
-
-
 				} else if (type == TYPE_META){
 					MetaInformation metaInformation(m_streamSocket, bytesToProcess);
 					if(metaInformation.type()!=METAINFORMATION_JSON) {

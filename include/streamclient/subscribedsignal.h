@@ -17,8 +17,7 @@ namespace hbm {
 
 		class SubscribedSignal;
 
-		typedef std::vector < double > values_t;
-		typedef std::function<void(SubscribedSignal& subscribedSignal, uint64_t timeStamp, values_t )> DataCb_t;
+		typedef std::function<void(SubscribedSignal& subscribedSignal, uint64_t timeStamp, double* values, size_t count)> DataCb_t;
 
 		/// interpretes and stores meta information of a subscribed signal.
 		/// Mesured data of a subscribed signal is processed here
@@ -42,7 +41,7 @@ namespace hbm {
 		private:
 
 			/// @param count number of values not the number of bytes!
-			std::vector<double> interpretValues(unsigned char* pData, size_t count);
+			void interpretValues(unsigned char* pData, size_t count);
 
 			uint64_t interpreteNtpTimestamp(unsigned char* pData);
 
@@ -94,6 +93,8 @@ namespace hbm {
 			size_t m_dataValueSize;
 			timeType_t m_dataTimeType;
 			size_t m_dataTimeSize;
+
+			double m_valueBuffer[128];
 		};
 	}
 }

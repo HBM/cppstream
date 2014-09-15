@@ -112,7 +112,7 @@ namespace hbm {
 							size_t bytesProcessedFromBuffer = m_pSignalContainer->processMeasuredData(signalNumber, dataRecvBuffer, bytesLeftInBuffer);
 							bytesToProcess -= bytesProcessedFromBuffer;
 							bytesLeftInBuffer -= bytesProcessedFromBuffer;
-							//memmove(dataRecvBuffer, dataRecvBuffer+bytesProcessedFromBuffer, bytesLeftInBuffer);
+							memmove(dataRecvBuffer, dataRecvBuffer+bytesProcessedFromBuffer, bytesLeftInBuffer);
 						} else {
 							bytesToProcess -= bytesLeftInBuffer;
 							bytesLeftInBuffer = 0;

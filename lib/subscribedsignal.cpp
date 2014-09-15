@@ -150,6 +150,9 @@ namespace hbm {
 			case PATTERN_V:
 				{
 					size_t valueCount = size / m_dataValueSize;
+					if(valueCount>m_valueBufferMaxValues) {
+						valueCount=m_valueBufferMaxValues;
+					}
 					timeStamp = m_syncSignalTime.ntpTimeStamp();
 					interpretValues(pData, valueCount);
 					incrementSyncSignalTime(valueCount);
@@ -181,6 +184,9 @@ namespace hbm {
 				size_t tupleSize = m_dataTimeSize+m_dataValueSize;
 				if(size>=tupleSize) {
 					size_t valueCount = (size-m_dataTimeSize) / m_dataValueSize;
+					if(valueCount>m_valueBufferMaxValues) {
+						valueCount=m_valueBufferMaxValues;
+					}
 					timeStamp = interpreteNtpTimestamp(pData);
 					interpretValues(pData+m_dataTimeSize, valueCount);
 					if (cb) {

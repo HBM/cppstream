@@ -94,7 +94,9 @@ namespace hbm {
 			timeType_t m_dataTimeType;
 			size_t m_dataTimeSize;
 
-			double m_valueBuffer[128];
+			static const size_t m_valueBufferMaxValues = 128;
+
+			double m_valueBuffer[m_valueBufferMaxValues];
 		};
 	}
 }

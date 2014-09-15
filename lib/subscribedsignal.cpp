@@ -194,7 +194,7 @@ namespace hbm {
 					if (cb) {
 						cb(*this, ntpTimeStamp, m_valueBuffer, valueCount);
 					}
-					bytesProcessed += tupleSize;
+					bytesProcessed = m_dataTimeSize + (m_dataValueSize*valueCount);
 				}
 				break;
 			}

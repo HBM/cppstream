@@ -95,28 +95,28 @@ namespace hbm {
 				if (type == TYPE_DATA) {
 					// read and process measured data. This happens really often! Be sure to be as efficient as possible here.
 
-					size_t bytesLeftInBuffer = 0;
+					size_t bytesInBuffer = 0;
 					size_t bytesToReadToBuffer;
 					while(bytesToProcess>0) {
 						if(bytesToProcess>sizeof(dataRecvBuffer)) {
-							bytesToReadToBuffer = sizeof(dataRecvBuffer)-bytesLeftInBuffer;
+							bytesToReadToBuffer = sizeof(dataRecvBuffer)-bytesInBuffer;
 						} else {
-							bytesToReadToBuffer = bytesToProcess-bytesLeftInBuffer;
+							bytesToReadToBuffer = bytesToProcess-bytesInBuffer;
 						}
-						ssize_t bytesReadToBuffer = m_streamSocket.receive(dataRecvBuffer+bytesLeftInBuffer, bytesToReadToBuffer);
+						ssize_t bytesReadToBuffer = m_streamSocket.receive(dataRecvBuffer+bytesInBuffer, bytesToReadToBuffer);
 						if(bytesReadToBuffer<=0) {
 							break;
 						}
-						bytesLeftInBuffer += bytesReadToBuffer;
+						bytesInBuffer += bytesReadToBuffer;
 
 						if (m_pSignalContainer) {
-							size_t bytesProcessedFromBuffer = m_pSignalContainer->processMeasuredData(signalNumber, dataRecvBuffer, bytesLeftInBuffer);
+							size_t bytesProcessedFromBuffer = m_pSignalContainer->processMeasuredData(signalNumber, dataRecvBuffer, bytesInBuffer);
 							bytesToProcess -= bytesProcessedFromBuffer;
-							bytesLeftInBuffer -= bytesProcessedFromBuffer;
-							memmove(dataRecvBuffer, dataRecvBuffer+bytesProcessedFromBuffer, bytesLeftInBuffer);
+							bytesInBuffer -= bytesProcessedFromBuffer;
+							memmove(dataRecvBuffer, dataRecvBuffer+bytesProcessedFromBuffer, bytesInBuffer);
 						} else {
-							bytesToProcess -= bytesLeftInBuffer;
-							bytesLeftInBuffer = 0;
+							bytesToProcess -= bytesInBuffer;
+							bytesInBuffer = 0;
 						}
 					}
 				} else if (type == TYPE_META){

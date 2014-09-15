@@ -1,3 +1,5 @@
+#include <iostream>
+
 #ifdef _WIN32
 #include <WinSock2.h>
 #include "json/reader.h"

@@ -8,6 +8,7 @@
 
 #ifdef _WIN32
 #include "json/value.h"
+#define ssize_t int
 #else
 #include <jsoncpp/json/value.h>
 #endif

@@ -71,12 +71,12 @@ static void signalMetaInformationCb(hbm::streaming::SubscribedSignal& subscribed
 
 static void dataCb(hbm::streaming::SubscribedSignal& subscribedSignal, uint64_t timestamp, double* pValues, size_t count)
 {
-//	std::cout << subscribedSignal.signalReference() << ": " << std::hex << timestamp << std::dec << " ";
-//	for (size_t i=0; i<count; ++i) {
-//		std::cout << *pValues << " ";
-//		++pValues;
-//	}
-//	std::cout << std::endl;
+	std::cout << subscribedSignal.signalReference() << ": " << std::hex << timestamp << std::dec << " ";
+	for (size_t i=0; i<count; ++i) {
+		std::cout << *pValues << " ";
+		++pValues;
+	}
+	std::cout << std::endl;
 }
 
 int main(int argc, char* argv[])

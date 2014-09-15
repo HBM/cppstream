@@ -23,12 +23,12 @@ static void streamMetaInformationCb(hbm::streaming::StreamClient& stream, const 
 	if (method == hbm::streaming::META_METHOD_AVAILABLE) {
 		// simply subscibe all signals that become available.
 		hbm::streaming::signalReferences_t signalReferences;
-//		for (Json::ValueConstIterator iter = params.begin(); iter!= params.end(); ++iter) {
-//			const Json::Value& element = *iter;
-//			signalReferences.push_back(element.asString());
-//		}
+		for (Json::ValueConstIterator iter = params.begin(); iter!= params.end(); ++iter) {
+			const Json::Value& element = *iter;
+			signalReferences.push_back(element.asString());
+		}
 
-		signalReferences.push_back("AnalogIn_Connector1.Signal1");
+//		signalReferences.push_back("AnalogIn_Connector1.Signal1");
 
 
 		try {

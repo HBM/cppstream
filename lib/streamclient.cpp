@@ -80,8 +80,7 @@ namespace hbm {
 			m_address = address;
 			m_controlPort = controlPort;
 
-			//unsigned char dataRecvBuffer[8192];
-			unsigned char dataRecvBuffer[6];
+			unsigned char dataRecvBuffer[8192];
 
 			TransportHeader transportHeader(m_streamSocket);
 			do {
@@ -96,7 +95,6 @@ namespace hbm {
 				if (type == TYPE_DATA) {
 					// read and process measured data. This happens really often! Be sure to be as efficient as possible here.
 					size_t bytesLeftInBuffer = 0;
-					size_t bytesProcessed = 0;
 					size_t bytesToRead;
 					while(bytesToProcess) {
 						if(bytesToProcess>sizeof(dataRecvBuffer)) {
@@ -112,12 +110,10 @@ namespace hbm {
 
 						if (m_pSignalContainer) {
 							size_t bytesProcessedFromBuffer = m_pSignalContainer->processMeasuredData(signalNumber, dataRecvBuffer, bytesLeftInBuffer);
-							bytesProcessed += bytesProcessedFromBuffer;
 							bytesToProcess -= bytesProcessedFromBuffer;
 							bytesLeftInBuffer -= bytesProcessedFromBuffer;
-							memmove(dataRecvBuffer, dataRecvBuffer+bytesProcessedFromBuffer, bytesLeftInBuffer);
+							//memmove(dataRecvBuffer, dataRecvBuffer+bytesProcessedFromBuffer, bytesLeftInBuffer);
 						} else {
-							bytesProcessed += bytesLeftInBuffer;
 							bytesToProcess -= bytesLeftInBuffer;
 							bytesLeftInBuffer = 0;
 						}

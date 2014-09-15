@@ -142,7 +142,7 @@ namespace hbm {
 		}
 
 
-		size_t SubscribedSignal::processData(unsigned char* pData, size_t size, DataCb_t cb)
+		size_t SubscribedSignal::processMeasuredData(unsigned char* pData, size_t size, DataCb_t cb)
 		{
 			size_t bytesProcessed = 0;
 			uint64_t ntpTimeStamp;

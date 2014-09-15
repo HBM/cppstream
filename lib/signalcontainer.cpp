@@ -24,7 +24,7 @@ namespace hbm {
 		{
 			signals_t::iterator iter = m_subscribedsignals.find(signalNumber);
 			if (iter != m_subscribedsignals.end()) {
-				return iter->second.processData(data, len, m_dataCb);
+				return iter->second.processMeasuredData(data, len, m_dataCb);
 			}
 			return -1;
 		}

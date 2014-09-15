@@ -103,7 +103,7 @@ namespace hbm {
 						} else {
 							bytesToReadToBuffer = bytesToProcess-bytesLeftInBuffer;
 						}
-						ssize_t bytesReadToBuffer = m_streamSocket.receiveComplete(dataRecvBuffer+bytesLeftInBuffer, bytesToReadToBuffer);
+						ssize_t bytesReadToBuffer = m_streamSocket.receive(dataRecvBuffer+bytesLeftInBuffer, bytesToReadToBuffer);
 						if(bytesReadToBuffer<=0) {
 							break;
 						}

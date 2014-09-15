@@ -89,21 +89,35 @@ namespace hbm {
 					break;
 				}
 				int type = transportHeader.type();
-				size_t size = transportHeader.size();
+				size_t bytesToProcess = transportHeader.size();
 				unsigned int signalNumber = transportHeader.signalNumber();
 
 				if (type == TYPE_DATA) {
-					// read measured data. This happens really often! Be sure to be as efficient as possible here.
-					result = m_streamSocket.receiveComplete(dataRecvBuffer, size);
-					if(static_cast < size_t >(result)!=size) {
-						break;
+					size_t bytesLeftInBuffer = 0;
+					size_t bytesProcessed = 0;
+					size_t bytesToRead;
+					while(bytesProcessed < bytesToProcess) {
+						if(bytesToProcess>sizeof(dataRecvBuffer)) {
+							bytesToRead = sizeof(dataRecvBuffer);
+						} else {
+							bytesToRead = bytesToProcess;
+						}
+						// read measured data. This happens really often! Be sure to be as efficient as possible here.
+						bytesLeftInBuffer = m_streamSocket.receiveComplete(dataRecvBuffer+bytesLeftInBuffer, bytesToRead-bytesLeftInBuffer);
+						if(static_cast < size_t >(result)!=bytesToProcess) {
+							break;
+						}
+
+						if (m_pSignalContainer) {
+							size_t bytesProcessedFromBuffer = m_pSignalContainer->processMeasuredData(signalNumber, dataRecvBuffer, result);
+							bytesLeftInBuffer -= bytesProcessedFromBuffer;
+							bytesProcessed += bytesProcessedFromBuffer;
+						}
 					}
 
-					if (m_pSignalContainer) {
-						m_pSignalContainer->processMeasuredData(signalNumber, dataRecvBuffer, result);
-					}
+
 				} else if (type == TYPE_META){
-					MetaInformation metaInformation(m_streamSocket, size);
+					MetaInformation metaInformation(m_streamSocket, bytesToProcess);
 					if(metaInformation.type()!=METAINFORMATION_JSON) {
 						std::cout << "unhandled meta information of type " << metaInformation.type() << std::endl;
 					} else {

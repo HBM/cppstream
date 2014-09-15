@@ -28,7 +28,8 @@ namespace hbm {
 			SubscribedSignal();
 
 			/// process measured data
-			void processData(unsigned char* pData, size_t size, DataCb_t cb);
+			/// \return number of bytes processed
+			size_t processData(unsigned char* pData, size_t size, DataCb_t cb);
 
 			/// process signal related meta information.
 			void processSignalMetaInformation(const std::string& method, const Json::Value& params);

@@ -20,12 +20,11 @@ namespace hbm {
 			m_dataCb = cb;
 		}
 
-		int SignalContainer::processMeasuredData(unsigned int signalNumber, unsigned char* data, size_t len)
+		ssize_t SignalContainer::processMeasuredData(unsigned int signalNumber, unsigned char* data, size_t len)
 		{
 			signals_t::iterator iter = m_subscribedsignals.find(signalNumber);
 			if (iter != m_subscribedsignals.end()) {
-				iter->second.processData(data, len, m_dataCb);
-				return 0;
+				return iter->second.processData(data, len, m_dataCb);
 			}
 			return -1;
 		}

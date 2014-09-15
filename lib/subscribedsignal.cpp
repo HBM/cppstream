@@ -144,8 +144,9 @@ namespace hbm {
 		}
 
 
-		void SubscribedSignal::processData(unsigned char* pData, size_t size, DataCb_t cb)
+		size_t SubscribedSignal::processData(unsigned char* pData, size_t size, DataCb_t cb)
 		{
+			size_t bytesProcessed = 0;
 			uint64_t timeStamp;
 			std::vector < double > values;
 			switch(m_dataFormatPattern) {
@@ -158,6 +159,7 @@ namespace hbm {
 					if (cb) {
 						cb(*this, m_syncSignalTime.ntpTimeStamp(), values);
 					}
+					bytesProcessed = valueCount * m_dataValueSize;
 				}
 				break;
 			case PATTERN_TV:
@@ -173,21 +175,25 @@ namespace hbm {
 						if (cb) {
 							cb(*this, timeStamp, values);
 						}
+						bytesProcessed += tupleSize;
 					}
 				}
 				break;
 			case PATTERN_TB:
 				// 1 time stamp n values
-				if(size>=m_dataTimeSize+m_dataValueSize) {
+				size_t tupleSize = m_dataTimeSize+m_dataValueSize;
+				if(size>=tupleSize) {
 					size_t valueCount = (size-m_dataTimeSize) / m_dataValueSize;
 					timeStamp = interpreteNtpTimestamp(pData);
 					values = interpretValues(pData+m_dataTimeSize, valueCount);
 					if (cb) {
 						cb(*this, timeStamp, values);
 					}
+					bytesProcessed += tupleSize;
 				}
 				break;
 			}
+			return bytesProcessed;
 		}
 
 		void SubscribedSignal::processSignalMetaInformation(const std::string& method, const Json::Value& params)

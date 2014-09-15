@@ -34,8 +34,8 @@ namespace hbm {
 			/// new subscribed signals are added with arrival of initial meta information
 			void processMetaInformation(unsigned int signalNumber, const std::string &method, const Json::Value& params);
 
-			/// \return -1 if signal is unknown.
-			int processMeasuredData(unsigned int signalNumber, unsigned char* data, size_t len);
+			/// \return number of bytes processed or -1 if signal is unknown.
+			ssize_t processMeasuredData(unsigned int signalNumber, unsigned char* data, size_t len);
 
 			void clear();
 

@@ -80,7 +80,8 @@ namespace hbm {
 			m_address = address;
 			m_controlPort = controlPort;
 
-			unsigned char dataRecvBuffer[8192];
+			//unsigned char dataRecvBuffer[8192];
+			unsigned char dataRecvBuffer[6];
 
 			TransportHeader transportHeader(m_streamSocket);
 			do {
@@ -93,25 +94,32 @@ namespace hbm {
 				unsigned int signalNumber = transportHeader.signalNumber();
 
 				if (type == TYPE_DATA) {
+					// read and process measured data. This happens really often! Be sure to be as efficient as possible here.
 					size_t bytesLeftInBuffer = 0;
 					size_t bytesProcessed = 0;
 					size_t bytesToRead;
-					while(bytesProcessed < bytesToProcess) {
+					while(bytesToProcess) {
 						if(bytesToProcess>sizeof(dataRecvBuffer)) {
-							bytesToRead = sizeof(dataRecvBuffer);
+							bytesToRead = sizeof(dataRecvBuffer)-bytesLeftInBuffer;
 						} else {
-							bytesToRead = bytesToProcess;
+							bytesToRead = bytesToProcess-bytesLeftInBuffer;
 						}
-						// read measured data. This happens really often! Be sure to be as efficient as possible here.
-						bytesLeftInBuffer = m_streamSocket.receiveComplete(dataRecvBuffer+bytesLeftInBuffer, bytesToRead-bytesLeftInBuffer);
-						if(static_cast < size_t >(result)!=bytesToProcess) {
+						ssize_t bytesRead = m_streamSocket.receiveComplete(dataRecvBuffer+bytesLeftInBuffer, bytesToRead);
+						if(bytesRead<=0) {
 							break;
 						}
+						bytesLeftInBuffer += bytesRead;
 
 						if (m_pSignalContainer) {
-							size_t bytesProcessedFromBuffer = m_pSignalContainer->processMeasuredData(signalNumber, dataRecvBuffer, result);
-							bytesLeftInBuffer -= bytesProcessedFromBuffer;
+							size_t bytesProcessedFromBuffer = m_pSignalContainer->processMeasuredData(signalNumber, dataRecvBuffer, bytesLeftInBuffer);
 							bytesProcessed += bytesProcessedFromBuffer;
+							bytesToProcess -= bytesProcessedFromBuffer;
+							bytesLeftInBuffer -= bytesProcessedFromBuffer;
+							memmove(dataRecvBuffer, dataRecvBuffer+bytesProcessedFromBuffer, bytesLeftInBuffer);
+						} else {
+							bytesProcessed += bytesLeftInBuffer;
+							bytesToProcess -= bytesLeftInBuffer;
+							bytesLeftInBuffer = 0;
 						}
 					}
 

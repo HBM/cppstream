@@ -20,7 +20,6 @@ const time_t TIMEOUT_CONNECT_S = 5;
 
 hbm::SocketNonblocking::SocketNonblocking()
 	: m_fd(-1)
-	, m_event(WSACreateEvent())
 	, m_bufferedReader()
 {
 	WSADATA wsaData;
@@ -29,7 +28,6 @@ hbm::SocketNonblocking::SocketNonblocking()
 
 hbm::SocketNonblocking::SocketNonblocking(const std::string& fileName)
 	: m_fd(-1)
-	, m_event(WSACreateEvent())
 	, m_bufferedReader(fileName)
 {
 	WSADATA wsaData;
@@ -39,7 +37,6 @@ hbm::SocketNonblocking::SocketNonblocking(const std::string& fileName)
 hbm::SocketNonblocking::~SocketNonblocking()
 {
 	stop();
-	WSACloseEvent(m_event);
 }
 
 int hbm::SocketNonblocking::init()
@@ -54,8 +51,6 @@ int hbm::SocketNonblocking::init()
 		// switch to non blocking
 		u_long value = 1;
 		::ioctlsocket(m_fd, FIONBIO, &value);
-
-		WSAEventSelect(m_fd, m_event, FD_READ);
 
 		// turn off nagle algorithm
 		setsockopt(m_fd, IPPROTO_TCP, TCP_NODELAY, reinterpret_cast<char*>(&opt), sizeof(opt));

@@ -38,12 +38,6 @@ namespace hbm
 		/// might return with less bytes the requested if connection is being closed before completion
 		ssize_t receiveComplete(void* pBlock, size_t len);
 
-		/// poll this fd to see whether there is something to be received or out of order;
-		int getFd() const
-		{
-			return m_fd;
-		}
-
 		void stop();
 
 	private:
@@ -56,9 +50,7 @@ namespace hbm
 		int init();
 
 		int m_fd;
-#ifdef _WIN32
-		WSAEVENT m_event;
-#endif
+
 		BufferedReader m_bufferedReader;
 	};
 }

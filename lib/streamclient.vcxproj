@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -147,7 +147,7 @@
     <ClCompile Include="controller.cpp" />
     <ClCompile Include="httppost.cpp" />
     <ClCompile Include="metainformation.cpp" />
-    <ClCompile Include="platform/windows/socketnonblocking.cpp" />
+    <ClCompile Include="windows/socketnonblocking.cpp" />
     <ClCompile Include="signalcontainer.cpp" />
     <ClCompile Include="streamclient.cpp" />
     <ClCompile Include="subscribedsignal.cpp" />
@@ -155,7 +155,6 @@
     <ClCompile Include="types.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\streamclient\signalcontainer.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="HttpPost.h" />
     <ClInclude Include="MetaInformation.h" />

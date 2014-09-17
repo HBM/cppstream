@@ -37,7 +37,7 @@ set(STREAMCLIENT_SOURCES
   httppost.cpp
   signalcontainer.cpp
   subscribedsignal.cpp
-  platform/linux/socketnonblocking.cpp
+  linux/socketnonblocking.cpp
   bufferedreader.cpp
 )
 

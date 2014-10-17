@@ -42,7 +42,7 @@ This program connects to a HBM Daq Streaming socket, receives everything that ar
 call without parameter or with parameter '`-h`' to get help.
 
 ### Reconnect
-Works as example client but stops and restarts the streaming client periodically.
+Works as example client but stops and restarts the streaming client periodically. This program relies on the boost thread library.
 
 ### Multiple
-Works as example client but creates several instances of the streaming client in order to connect to several streaming servers.
+Works as example client but creates several instances of the streaming client in order to connect to several streaming servers. This program relies on the boost thread library.

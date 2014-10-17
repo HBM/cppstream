@@ -3,8 +3,7 @@
 
 #include <unordered_map>
 #include <vector>
-
-#include <boost/function.hpp>
+#include <functional>
 
 #ifdef _WIN32
 #include "json/value.h"

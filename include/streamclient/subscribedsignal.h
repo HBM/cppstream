@@ -2,7 +2,7 @@
 #define _HBM__STREAMING__SUBSCRIBEDSIGNAL
 
 #include <stdint.h>
-#include <boost/function.hpp>
+#include <functional>
 
 #ifdef _WIN32
 #include "json/value.h"

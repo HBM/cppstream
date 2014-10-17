@@ -63,13 +63,13 @@ namespace hbm {
 
 					case DATATYPE_U64:
 						for(size_t i=0; i<count; ++i) {
-							m_valueBuffer[i] = hbm::streaming::extract<uint64_t, hbm::streaming::big>()(&pData);
+							m_valueBuffer[i] = static_cast < double > (hbm::streaming::extract<uint64_t, hbm::streaming::big>()(&pData));
 						}
 						break;
 
 					case DATATYPE_S64:
 						for(size_t i=0; i<count; ++i) {
-							m_valueBuffer[i] = hbm::streaming::extract<int64_t, hbm::streaming::big>()(&pData);
+							m_valueBuffer[i] = static_cast < double > (hbm::streaming::extract<int64_t, hbm::streaming::big>()(&pData));
 						}
 						break;
 
@@ -105,13 +105,13 @@ namespace hbm {
 
 					case DATATYPE_U64:
 						for(size_t i=0; i<count; ++i) {
-							m_valueBuffer[i] = hbm::streaming::extract<uint64_t, hbm::streaming::little>()(&pData);
+							m_valueBuffer[i] = static_cast < double > (hbm::streaming::extract<uint64_t, hbm::streaming::little>()(&pData));
 						}
 						break;
 
 					case DATATYPE_S64:
 						for(size_t i=0; i<count; ++i) {
-							m_valueBuffer[i] = hbm::streaming::extract<int64_t, hbm::streaming::little>()(&pData);
+							m_valueBuffer[i] = static_cast < double > (hbm::streaming::extract<int64_t, hbm::streaming::little>()(&pData));
 						}
 						break;
 

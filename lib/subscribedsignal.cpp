@@ -3,11 +3,7 @@
 #include <iostream>
 #include <stdexcept>
 
-#ifdef _WIN32
-#include "json/writer.h"
-#else
-#include <jsoncpp/json/writer.h>
-#endif
+#include <json/writer.h>
 
 #include "signalextract.h"
 #include "subscribedsignal.h"

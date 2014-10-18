@@ -2,11 +2,10 @@
 
 #ifdef _WIN32
 #include <WinSock2.h>
-#include "json/reader.h"
 #else
 #include <arpa/inet.h>
-#include <jsoncpp/json/reader.h>
 #endif
+#include <json/reader.h>
 
 #include "metainformation.h"
 

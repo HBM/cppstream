@@ -3,11 +3,7 @@
 
 #include <stdint.h>
 #include <vector>
-#ifdef _WIN32
-#include "json/value.h"
-#else
-#include <jsoncpp/json/value.h>
-#endif
+#include <json/value.h>
 
 namespace hbm {
 	static const char PARAMS[] = "params";

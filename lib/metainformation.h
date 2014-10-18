@@ -5,11 +5,7 @@
 
 #include <stdint.h>
 
-#ifdef _WIN32
-#include "json/value.h"
-#else
-#include "jsoncpp/json/value.h"
-#endif
+#include <json/value.h>
 
 #include "socketnonblocking.h"
 namespace hbm {

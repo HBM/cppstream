@@ -6,13 +6,11 @@
 #include <cstring>
 
 #ifdef _WIN32
-#include "json/reader.h"
-#include "json/writer.h"
 #define strncasecmp _strnicmp
-#else
-#include <jsoncpp/json/reader.h>
-#include <jsoncpp/json/writer.h>
 #endif
+#include <json/reader.h>
+#include <json/writer.h>
+
 
 #include "transportheader.h"
 #include "metainformation.h"

@@ -1,14 +1,8 @@
 #include <sstream>
 
-#ifdef _WIN32
-#include "json/value.h"
-#include "json/reader.h"
-#include "json/writer.h"
-#else
-#include <jsoncpp/json/value.h>
-#include <jsoncpp/json/reader.h>
-#include <jsoncpp/json/writer.h>
-#endif
+#include <json/value.h>
+#include <json/reader.h>
+#include <json/writer.h>
 
 #include "controller.h"
 #include "httppost.h"

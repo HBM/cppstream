@@ -4,11 +4,7 @@
 #include <stdint.h>
 #include <functional>
 
-#ifdef _WIN32
-#include "json/value.h"
-#else
-#include <jsoncpp/json/value.h>
-#endif
+#include <json/value.h>
 
 #include "types.h"
 

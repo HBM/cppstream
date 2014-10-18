@@ -5,14 +5,14 @@
 #include <vector>
 #include <functional>
 
-#ifdef _WIN32
-#include "json/value.h"
-#define ssize_t int
-#else
-#include <jsoncpp/json/value.h>
-#endif
+#include <json/value.h>
 
 #include "subscribedsignal.h"
+
+
+#ifdef _WIN32
+#define ssize_t int
+#endif
 
 namespace hbm {
 	namespace streaming {

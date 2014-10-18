@@ -30,7 +30,7 @@ Center of all is a library containing everything needed to implement an HBM Daq 
 
 The most important class is `StreamClient`. It encapsulates the communication with a Daq Stream server. It collects and keeps stream related meta information received from the Daq Stream Server. It provides methods for subscribing and unsubscribing signals from the Daq Stream Server. 
 
-`Signals` holds a container of objects representing all subscribed signals from a Daq Stream Server. The `SubScribedSignal` class processes signal related meta information and measured values.
+`SignalContainer` holds a container of objects representing all subscribed signals from a Daq Stream Server. The `SubScribedSignal` class processes signal related meta information and measured values.
 
 ## Examples
 There are simple example programs using the library.

@@ -13,13 +13,13 @@ namespace hbm {
 			timeInfo_t(boost::multiprecision::uint128_t timeStamp);
 			boost::multiprecision::uint128_t timeStamp() const;
 			void set(const Json::Value& StampNode);
-			void setTimestamp(boost::multiprecision::uint128_t ntpTimeStamp);
+			void setTimestamp(boost::multiprecision::uint128_t timeStamp);
 			void clear();
 			void increment(const timeInfo_t& op);
 
 			uint32_t era() const;
 			uint32_t seconds() const;
-			uint32_t fractions() const;
+			uint32_t fraction() const;
 			uint32_t subFraction() const;
 
 		private:

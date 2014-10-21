@@ -63,7 +63,7 @@ BOOST_AUTO_TEST_CASE(test_time)
 	timeInfo.set(timeObject);
 	BOOST_CHECK(eraReq == timeInfo.era());
 	BOOST_CHECK(secondsReq == timeInfo.seconds());
-	BOOST_CHECK(fractionReq == timeInfo.fractions());
+	BOOST_CHECK(fractionReq == timeInfo.fraction());
 	BOOST_CHECK(subFractionReq == timeInfo.subFraction());
 
 	hbm::streaming::timeInfo_t timeDiff;
@@ -73,7 +73,7 @@ BOOST_AUTO_TEST_CASE(test_time)
 	for(unsigned int i=0;i<10;++i) {
 		BOOST_CHECK(eraReq == timeInfo.era());
 		BOOST_CHECK(secondsReq == timeInfo.seconds());
-		BOOST_CHECK(fractionReq == timeInfo.fractions());
+		BOOST_CHECK(fractionReq == timeInfo.fraction());
 		BOOST_CHECK((subFractionReq+(i*8)) == timeInfo.subFraction());
 		timeInfo.increment(timeDiff);
 	}

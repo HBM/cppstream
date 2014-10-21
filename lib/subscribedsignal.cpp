@@ -118,17 +118,20 @@ namespace hbm {
 			}
 		}
 
-		uint64_t SubscribedSignal::interpreteNtpTimestamp(unsigned char* pData)
+		timeInfo_t SubscribedSignal::interpreteNtp64Timestamp(unsigned char* pData)
 		{
 			if(m_dataTimeType == TIMETYPE_NTP) {
+				boost::multiprecision::uint128_t value;
 				if(m_dataIsBigEndian) {
-					return be64toh(*reinterpret_cast < uint64_t* > (pData));
+					value = be64toh(*reinterpret_cast < uint64_t* > (pData));
 				} else {
-					return le64toh(*reinterpret_cast < uint64_t* > (pData));
+					value = le64toh(*reinterpret_cast < uint64_t* > (pData));
 				}
-			} else {
-				return 0;
+				value <<= 32;
+				return timeInfo_t(value);
 			}
+
+			return timeInfo_t();
 		}
 
 		void SubscribedSignal::incrementSyncSignalTime(unsigned int valueCount)
@@ -141,7 +144,6 @@ namespace hbm {
 		size_t SubscribedSignal::processMeasuredData(unsigned char* pData, size_t size, DataCb_t cb)
 		{
 			size_t bytesProcessed = 0;
-			boost::multiprecision::uint128_t timeStamp;
 			switch(m_dataFormatPattern) {
 			case PATTERN_V:
 				{
@@ -151,11 +153,10 @@ namespace hbm {
 					} else if (valueCount == 0) {
 						break;
 					}
-					timeStamp = m_syncSignalTime.timeStamp();
 					interpretValues(pData, valueCount);
 					incrementSyncSignalTime(valueCount);
 					if (cb) {
-						cb(*this, m_syncSignalTime.timeStamp(), m_valueBuffer, valueCount);
+						cb(*this, m_syncSignalTime, m_valueBuffer, valueCount);
 					}
 					bytesProcessed = valueCount * m_dataValueSize;
 				}
@@ -163,15 +164,17 @@ namespace hbm {
 			case PATTERN_TV:
 				{
 					// 1 time stamp, 1 value
+					timeInfo_t timeInfo;
+
 					size_t tupleSize = m_dataTimeSize+m_dataValueSize;
 					while (size>=tupleSize) {
-						timeStamp = interpreteNtpTimestamp(pData);
+						timeInfo = interpreteNtp64Timestamp(pData);
 						pData += m_dataTimeSize;
 						interpretValues(pData, 1);
 						pData += m_dataValueSize;
 						size -= tupleSize;
 						if (cb) {
-							cb(*this, timeStamp, m_valueBuffer, 1);
+							cb(*this, timeInfo, m_valueBuffer, 1);
 						}
 						bytesProcessed += tupleSize;
 					}
@@ -185,10 +188,10 @@ namespace hbm {
 					if(valueCount>m_valueBufferMaxValues) {
 						valueCount=m_valueBufferMaxValues;
 					}
-					timeStamp = interpreteNtpTimestamp(pData);
+					timeInfo_t timeInfo = interpreteNtp64Timestamp(pData);
 					interpretValues(pData+m_dataTimeSize, valueCount);
 					if (cb) {
-						cb(*this, timeStamp, m_valueBuffer, valueCount);
+						cb(*this, timeInfo, m_valueBuffer, valueCount);
 					}
 					bytesProcessed = m_dataTimeSize + (m_dataValueSize*valueCount);
 				}

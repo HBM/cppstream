@@ -32,7 +32,7 @@ namespace hbm {
 			return static_cast < uint32_t > ((m_timestamp >> (32*2)) & 0xffffffff);
 		}
 
-		uint32_t timeInfo_t::fractions() const
+		uint32_t timeInfo_t::fraction() const
 		{
 			return static_cast < uint32_t > ((m_timestamp >> 32) & 0xffffffff);
 		}

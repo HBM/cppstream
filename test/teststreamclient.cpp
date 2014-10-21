@@ -71,7 +71,6 @@ BOOST_AUTO_TEST_CASE(test_time)
 	timeDiff.setTimestamp(8);
 
 	for(unsigned int i=0;i<10;++i) {
-
 		BOOST_CHECK(eraReq == timeInfo.era());
 		BOOST_CHECK(secondsReq == timeInfo.seconds());
 		BOOST_CHECK(fractionReq == timeInfo.fractions());

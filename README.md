@@ -11,7 +11,7 @@ We try to use as much existing and prooved software as possbile in order to keep
 
 The open source project jsoncpp is being used as JSON composer and parser. For Linux, simply install the jsoncpp development package of your distribution. For Windows, download the source from the [jsoncpp github project page](https://github.com/open-source-parsers/jsoncpp "") and put them beside the directory of this project.
 
-Some example programs do use the Boost libraries. Refer to [boost](http://www.boost.org/ "") for details.
+We do use the Boost multiprecision headers for representing the timestamp with its full width of 128 bit. Some examples programs use the boost thread library. Refer to [boost](http://www.boost.org/ "") for details.
 For Linux, simply install the Boost development packages of your distribution. For Windows, the projects are tailored to link against the prebuilt boost binaries from [boost](http://www.boost.org/ "").
 Download and install the binaries and set the '`BOOST_ROOT`' environment variable to the installation directory.
 

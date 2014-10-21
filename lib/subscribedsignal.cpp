@@ -133,7 +133,7 @@ namespace hbm {
 
 		void SubscribedSignal::incrementSyncSignalTime(unsigned int valueCount)
 		{
-			timeInfo_t delta(m_signalRateDelta.ntpTimeStamp()*valueCount);
+			timeInfo_t delta(m_signalRateDelta.timeStamp()*valueCount);
 			m_syncSignalTime.increment(delta);
 		}
 
@@ -141,7 +141,7 @@ namespace hbm {
 		size_t SubscribedSignal::processMeasuredData(unsigned char* pData, size_t size, DataCb_t cb)
 		{
 			size_t bytesProcessed = 0;
-			uint64_t ntpTimeStamp;
+			boost::multiprecision::uint128_t timeStamp;
 			switch(m_dataFormatPattern) {
 			case PATTERN_V:
 				{
@@ -151,11 +151,11 @@ namespace hbm {
 					} else if (valueCount == 0) {
 						break;
 					}
-					ntpTimeStamp = m_syncSignalTime.ntpTimeStamp();
+					timeStamp = m_syncSignalTime.timeStamp();
 					interpretValues(pData, valueCount);
 					incrementSyncSignalTime(valueCount);
 					if (cb) {
-						cb(*this, m_syncSignalTime.ntpTimeStamp(), m_valueBuffer, valueCount);
+						cb(*this, m_syncSignalTime.timeStamp(), m_valueBuffer, valueCount);
 					}
 					bytesProcessed = valueCount * m_dataValueSize;
 				}
@@ -165,13 +165,13 @@ namespace hbm {
 					// 1 time stamp, 1 value
 					size_t tupleSize = m_dataTimeSize+m_dataValueSize;
 					while (size>=tupleSize) {
-						ntpTimeStamp = interpreteNtpTimestamp(pData);
+						timeStamp = interpreteNtpTimestamp(pData);
 						pData += m_dataTimeSize;
 						interpretValues(pData, 1);
 						pData += m_dataValueSize;
 						size -= tupleSize;
 						if (cb) {
-							cb(*this, ntpTimeStamp, m_valueBuffer, 1);
+							cb(*this, timeStamp, m_valueBuffer, 1);
 						}
 						bytesProcessed += tupleSize;
 					}
@@ -185,10 +185,10 @@ namespace hbm {
 					if(valueCount>m_valueBufferMaxValues) {
 						valueCount=m_valueBufferMaxValues;
 					}
-					ntpTimeStamp = interpreteNtpTimestamp(pData);
+					timeStamp = interpreteNtpTimestamp(pData);
 					interpretValues(pData+m_dataTimeSize, valueCount);
 					if (cb) {
-						cb(*this, ntpTimeStamp, m_valueBuffer, valueCount);
+						cb(*this, timeStamp, m_valueBuffer, valueCount);
 					}
 					bytesProcessed = m_dataTimeSize + (m_dataValueSize*valueCount);
 				}
@@ -213,7 +213,7 @@ namespace hbm {
 					std::cout << Json::StyledWriter().write(params) << std::endl;
 					m_signalRateSamples = params["samples"].asUInt();
 					m_signalRateSamplesDelta.set(params["delta"]);
-					m_signalRateDelta.setNtpTimestamp(m_signalRateSamplesDelta.ntpTimeStamp()/m_signalRateSamples);
+					m_signalRateDelta.setTimestamp(m_signalRateSamplesDelta.timeStamp()/m_signalRateSamples);
 				} catch(const std::runtime_error& e) {
 					std::cerr << e.what();
 				}

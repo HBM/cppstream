@@ -152,7 +152,8 @@
     <ClCompile Include="streamclient.cpp" />
     <ClCompile Include="subscribedsignal.cpp" />
     <ClCompile Include="transportheader.cpp" />
-    <ClCompile Include="types.cpp" />
+    <ClCompile Include="types.cpp" />    
+    <ClCompile Include="timeinfo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Controller.h" />
@@ -160,6 +161,7 @@
     <ClInclude Include="MetaInformation.h" />
     <ClInclude Include="SocketNonblocking.h" />
     <ClInclude Include="Types.h" />
+    <ClInclude Include="Timeinfo.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

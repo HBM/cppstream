@@ -1,19 +1,21 @@
 #ifndef _HBM__STREAMING__SUBSCRIBEDSIGNAL
 #define _HBM__STREAMING__SUBSCRIBEDSIGNAL
 
-#include <stdint.h>
 #include <functional>
+
+#include <boost/multiprecision/cpp_int.hpp>
 
 #include <json/value.h>
 
 #include "types.h"
+#include "timeinfo.h"
 
 namespace hbm {
 	namespace streaming {
 
 		class SubscribedSignal;
 
-		typedef std::function<void(SubscribedSignal& subscribedSignal, uint64_t ntpTimeStamp, double* values, size_t count)> DataCb_t;
+		typedef std::function<void(SubscribedSignal& subscribedSignal, boost::multiprecision::uint128_t ntpTimeStamp, double* values, size_t count)> DataCb_t;
 
 		/// interpretes and stores meta information of a subscribed signal.
 		/// Mesured data of a subscribed signal is processed here

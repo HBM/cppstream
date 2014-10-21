@@ -23,6 +23,7 @@ SET( INTERFADE_HEADERS
     ${INTERFACE_INCLUDE_DIR}/streamclient.h
     ${INTERFACE_INCLUDE_DIR}/signalcontainer.h
     ${INTERFACE_INCLUDE_DIR}/subscribedsignal.h
+    ${INTERFACE_INCLUDE_DIR}/timeinfo.h
     ${INTERFACE_INCLUDE_DIR}/types.h
 )
 
@@ -30,6 +31,7 @@ SET( INTERFADE_HEADERS
 set(STREAMCLIENT_SOURCES
   ${INTERFADE_HEADERS}
   types.cpp
+  timeinfo.cpp
   streamclient.cpp
   transportheader.cpp
   metainformation.cpp

@@ -24,22 +24,29 @@ namespace hbm {
 
 		uint32_t timeInfo_t::era() const
 		{
-			return static_cast < uint32_t > (m_timestamp >> (32*3));
+			boost::multiprecision::uint128_t shifted = m_timestamp >> (32*3);
+			return shifted.convert_to < uint32_t >();
 		}
 
 		uint32_t timeInfo_t::seconds() const
 		{
-			return static_cast < uint32_t > ((m_timestamp >> (32*2)) & 0xffffffff);
+			boost::multiprecision::uint128_t shiftedAndMasked = m_timestamp >> (32*2);
+			shiftedAndMasked &= 0xffffffff;
+			return shiftedAndMasked.convert_to < uint32_t >();
 		}
 
 		uint32_t timeInfo_t::fraction() const
 		{
-			return static_cast < uint32_t > ((m_timestamp >> 32) & 0xffffffff);
+			boost::multiprecision::uint128_t shiftedAndMasked = m_timestamp >> 32;
+			shiftedAndMasked &= 0xffffffff;
+			return shiftedAndMasked.convert_to < uint32_t >();
 		}
 
 		uint32_t timeInfo_t::subFraction() const
 		{
-			return static_cast < uint32_t > (m_timestamp & 0xffffffff);
+			boost::multiprecision::uint128_t masked = m_timestamp;
+			masked &= 0xffffffff;
+			return masked.convert_to < uint32_t >();
 		}
 
 

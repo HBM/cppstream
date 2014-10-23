@@ -118,16 +118,25 @@ namespace hbm {
 			}
 		}
 
-		timeInfo_t SubscribedSignal::interpreteNtp64Timestamp(unsigned char* pData)
+		timeInfo_t SubscribedSignal::interpreteTimestamp(unsigned char* pData)
 		{
 			if(m_dataTimeType == TIMETYPE_NTP) {
 				boost::multiprecision::uint128_t value;
 				if(m_dataIsBigEndian) {
-					value = be64toh(*reinterpret_cast < uint64_t* > (pData));
+					if(m_dataTimeSize == 4) {
+						value = extract<uint64_t, big>()(&pData);
+						value <<= 32;
+					} else if(m_dataTimeSize == 8) {
+						value = extract<boost::multiprecision::uint128_t, big>()(&pData);
+					}
 				} else {
-					value = le64toh(*reinterpret_cast < uint64_t* > (pData));
+					if(m_dataTimeSize == 4) {
+						value = extract<uint64_t, little>()(&pData);
+						value <<= 32;
+					} else if(m_dataTimeSize == 8) {
+						value = extract<boost::multiprecision::uint128_t, little>()(&pData);
+					}
 				}
-				value <<= 32;
 				return timeInfo_t(value);
 			}
 
@@ -168,7 +177,7 @@ namespace hbm {
 
 					size_t tupleSize = m_dataTimeSize+m_dataValueSize;
 					while (size>=tupleSize) {
-						timeInfo = interpreteNtp64Timestamp(pData);
+						timeInfo = interpreteTimestamp(pData);
 						pData += m_dataTimeSize;
 						interpretValues(pData, 1);
 						pData += m_dataValueSize;
@@ -188,7 +197,7 @@ namespace hbm {
 					if(valueCount>m_valueBufferMaxValues) {
 						valueCount=m_valueBufferMaxValues;
 					}
-					timeInfo_t timeInfo = interpreteNtp64Timestamp(pData);
+					timeInfo_t timeInfo = interpreteTimestamp(pData);
 					interpretValues(pData+m_dataTimeSize, valueCount);
 					if (cb) {
 						cb(*this, timeInfo, m_valueBuffer, valueCount);

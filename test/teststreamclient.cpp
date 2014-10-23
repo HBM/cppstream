@@ -18,6 +18,8 @@
 #include "streamclient/streamclient.h"
 #include "streamclient/timeinfo.h"
 #include "teststreamclient.h"
+#include "../lib/signalextract.h"
+#include "../lib/endianess.h"
 
 DeviceFixture::DeviceFixture()
 	: m_address("hbm-00087b")
@@ -47,7 +49,6 @@ BOOST_AUTO_TEST_CASE (test_subscribe)
 
 BOOST_AUTO_TEST_CASE(test_time)
 {
-
 	Json::Value timeObject;
 	uint32_t eraReq = 1;
 	uint32_t secondsReq = 2;
@@ -76,6 +77,48 @@ BOOST_AUTO_TEST_CASE(test_time)
 		BOOST_CHECK(fractionReq == timeInfo.fraction());
 		BOOST_CHECK((subFractionReq+(i*8)) == timeInfo.subFraction());
 		timeInfo.increment(timeDiff);
+	}
+}
+
+BOOST_AUTO_TEST_CASE(test_signalextract)
+{
+	{
+		u_int32_t source = 0x01020304;
+
+		unsigned char buffer[sizeof(source)];
+		memcpy(buffer, &source, sizeof(buffer));
+		unsigned char* pBuffer = buffer;
+		u_int32_t result = hbm::streaming::extract<uint32_t, hbm::streaming::big>()(&pBuffer);
+		BOOST_CHECK(result==0x04030201);
+	}
+
+
+	{
+		u_int64_t source = 0x0102030405060708;
+		unsigned char buffer[8];
+		memcpy(buffer, &source, sizeof(buffer));
+		unsigned char* pBuffer = buffer;
+		u_int64_t result = hbm::streaming::extract<uint64_t, hbm::streaming::big>()(&pBuffer);
+		BOOST_CHECK(result==0x0807060504030201);
+	}
+
+	{
+		uint64_t sourceUpperHalf = 0x0102030405060708;
+		uint64_t sourceLowerHalf = 0x090A0B0C0D0E0F10;
+		boost::multiprecision::uint128_t source = sourceUpperHalf;
+		source <<= 64;
+		source |= sourceLowerHalf;
+		unsigned char buffer[sizeof(source)];
+		memcpy(buffer, &source, sizeof(source));
+		unsigned char* pBuffer = buffer;
+		boost::multiprecision::uint128_t result = hbm::streaming::extract<boost::multiprecision::uint128_t, hbm::streaming::big>()(&pBuffer);
+
+		uint64_t resultLowerHalf = static_cast < uint64_t > (result & 0xffffffffffffffff);
+		uint64_t resultUpperHalf = static_cast < uint64_t > (result >> 64);
+
+
+		BOOST_CHECK(resultLowerHalf==be64toh(sourceUpperHalf));
+		BOOST_CHECK(resultUpperHalf==be64toh(sourceLowerHalf));
 	}
 }
 

@@ -2,7 +2,6 @@
 #include <string>
 #include <signal.h>
 
-#include <boost/multiprecision/cpp_int.hpp>
 
 #include "streamclient/streamclient.h"
 #include "streamclient/signalcontainer.h"

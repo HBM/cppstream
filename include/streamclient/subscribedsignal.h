@@ -3,8 +3,6 @@
 
 #include <functional>
 
-#include <boost/multiprecision/cpp_int.hpp>
-
 #include <json/value.h>
 
 #include "types.h"
@@ -41,7 +39,7 @@ namespace hbm {
 			/// @param count number of values not the number of bytes!
 			void interpretValues(unsigned char* pData, size_t count);
 
-			timeInfo_t interpreteNtp64Timestamp(unsigned char* pData);
+			timeInfo_t interpreteTimestamp(unsigned char* pData);
 
 			/// for Pattern V: If timestamp is not provided with the value(s), we calulate the time
 			void incrementSyncSignalTime(unsigned int valueCount);

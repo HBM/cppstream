@@ -12,6 +12,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/thread/thread.hpp>
 #include <boost/bind.hpp>
+#include <boost/multiprecision/cpp_int.hpp>
 
 #include <json/value.h>
 

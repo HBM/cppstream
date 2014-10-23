@@ -6,7 +6,7 @@
 
 #include <json/value.h>
 
-#include <boost\multiprecision\cpp_int.hpp>
+#include <boost/multiprecision/cpp_int.hpp>
 
 #include "timeinfo.h"
 

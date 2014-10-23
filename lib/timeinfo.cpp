@@ -1,7 +1,12 @@
 #include <vector>
 #include <stdexcept>
 #include <iostream>
+
+#include <stdint.h>
+
 #include <json/value.h>
+
+#include <boost\multiprecision\cpp_int.hpp>
 
 #include "timeinfo.h"
 

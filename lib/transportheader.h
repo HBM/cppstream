@@ -1,8 +1,6 @@
 #ifndef _HBM__STREAMING__TRANSPORTHEADER_H
 #define _HBM__STREAMING__TRANSPORTHEADER_H
 
-#include <stdint.h>
-
 #include "socketnonblocking.h"
 
 namespace hbm {

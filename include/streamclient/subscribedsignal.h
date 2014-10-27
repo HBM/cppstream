@@ -1,19 +1,19 @@
 #ifndef _HBM__STREAMING__SUBSCRIBEDSIGNAL
 #define _HBM__STREAMING__SUBSCRIBEDSIGNAL
 
+#include <stdint.h>
 #include <functional>
 
 #include <json/value.h>
 
 #include "types.h"
-#include "timeinfo.h"
 
 namespace hbm {
 	namespace streaming {
 
 		class SubscribedSignal;
 
-		typedef std::function<void(SubscribedSignal& subscribedSignal, const timeInfo_t& timeInfo, double* values, size_t count)> DataCb_t;
+		typedef std::function<void(SubscribedSignal& subscribedSignal, uint64_t ntpTimeStamp, double* values, size_t count)> DataCb_t;
 
 		/// interpretes and stores meta information of a subscribed signal.
 		/// Mesured data of a subscribed signal is processed here
@@ -39,7 +39,7 @@ namespace hbm {
 			/// @param count number of values not the number of bytes!
 			void interpretValues(unsigned char* pData, size_t count);
 
-			timeInfo_t interpreteTimestamp(unsigned char* pData);
+			uint64_t interpreteNtpTimestamp(unsigned char* pData);
 
 			/// for Pattern V: If timestamp is not provided with the value(s), we calulate the time
 			void incrementSyncSignalTime(unsigned int valueCount);

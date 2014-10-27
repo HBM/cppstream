@@ -1,5 +1,4 @@
 #include <iostream>
-#include <stdint.h>
 
 #ifdef _WIN32
 #include <WinSock2.h>

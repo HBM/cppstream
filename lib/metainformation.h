@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include <stdint.h>
+
 #include <json/value.h>
 
 #include "socketnonblocking.h"

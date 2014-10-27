@@ -6,7 +6,7 @@
 
 #include <json/value.h>
 
-#include "types.h"
+#include "timeinfo.h"
 
 namespace hbm {
 	namespace streaming {

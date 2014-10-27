@@ -8,6 +8,7 @@
 
 #include "signalcontainer.h"
 #include "socketnonblocking.h"
+#include "types.h"
 
 
 namespace hbm {

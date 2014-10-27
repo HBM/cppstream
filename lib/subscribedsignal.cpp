@@ -141,7 +141,7 @@ namespace hbm {
 		size_t SubscribedSignal::processMeasuredData(unsigned char* pData, size_t size, DataCb_t cb)
 		{
 			size_t bytesProcessed = 0;
-			uint64_t ntpTimeStamp;
+
 			switch(m_dataFormatPattern) {
 			case PATTERN_V:
 				{
@@ -151,7 +151,6 @@ namespace hbm {
 					} else if (valueCount == 0) {
 						break;
 					}
-					ntpTimeStamp = m_syncSignalTime.ntpTimeStamp();
 					interpretValues(pData, valueCount);
 					incrementSyncSignalTime(valueCount);
 					if (cb) {
@@ -165,7 +164,7 @@ namespace hbm {
 					// 1 time stamp, 1 value
 					size_t tupleSize = m_dataTimeSize+m_dataValueSize;
 					while (size>=tupleSize) {
-						ntpTimeStamp = interpreteNtpTimestamp(pData);
+						uint64_t ntpTimeStamp = interpreteNtpTimestamp(pData);
 						pData += m_dataTimeSize;
 						interpretValues(pData, 1);
 						pData += m_dataValueSize;
@@ -185,7 +184,7 @@ namespace hbm {
 					if(valueCount>m_valueBufferMaxValues) {
 						valueCount=m_valueBufferMaxValues;
 					}
-					ntpTimeStamp = interpreteNtpTimestamp(pData);
+					uint64_t ntpTimeStamp = interpreteNtpTimestamp(pData);
 					interpretValues(pData+m_dataTimeSize, valueCount);
 					if (cb) {
 						cb(*this, ntpTimeStamp, m_valueBuffer, valueCount);

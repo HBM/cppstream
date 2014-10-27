@@ -8,12 +8,16 @@
 namespace hbm {
 	namespace streaming {
 		timeInfo::timeInfo()
-			: m_ntpTimestamp(0)
+			: m_era(0)
+			, m_ntpTimestamp(0)
+			, m_subFraction(0)
 		{
 		}
 
 		timeInfo::timeInfo(uint64_t ntpTimeStamp)
-			: m_ntpTimestamp(ntpTimeStamp)
+			: m_era(0)
+			, m_ntpTimestamp(ntpTimeStamp)
+			, m_subFraction(0)
 		{
 		}
 
@@ -22,13 +26,23 @@ namespace hbm {
 			return m_ntpTimestamp;
 		}
 
+		uint32_t timeInfo::era() const
+		{
+			return m_era;
+		}
+
 		uint32_t timeInfo::seconds() const
 		{
 			return m_ntpTimestamp >> 32;
 		}
-		uint32_t timeInfo::fractions() const
+		uint32_t timeInfo::fraction() const
 		{
 			return m_ntpTimestamp & 0xffffffff;
+		}
+
+		uint32_t timeInfo::subFraction() const
+		{
+			return m_subFraction;
 		}
 
 
@@ -36,9 +50,11 @@ namespace hbm {
 		{
 			try {
 				if(timeObject["type"]=="ntp") {
+					m_era = timeObject["era"].asUInt();
 					m_ntpTimestamp = timeObject["seconds"].asUInt();
 					m_ntpTimestamp <<= 32;
 					m_ntpTimestamp |= timeObject["fraction"].asUInt();
+					m_subFraction = timeObject["subFraction"].asUInt();
 				}
 			} catch(const std::runtime_error& e) {
 				std::cerr << e.what();

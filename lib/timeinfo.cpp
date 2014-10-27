@@ -3,36 +3,36 @@
 #include <iostream>
 #include <json/value.h>
 
-#include "types.h"
+#include "timeinfo.h"
 
 namespace hbm {
 	namespace streaming {
-		timeInfo_t::timeInfo_t()
+		timeInfo::timeInfo()
 			: m_ntpTimestamp(0)
 		{
 		}
 
-		timeInfo_t::timeInfo_t(uint64_t ntpTimeStamp)
+		timeInfo::timeInfo(uint64_t ntpTimeStamp)
 			: m_ntpTimestamp(ntpTimeStamp)
 		{
 		}
 
-		uint64_t timeInfo_t::ntpTimeStamp() const
+		uint64_t timeInfo::ntpTimeStamp() const
 		{
 			return m_ntpTimestamp;
 		}
 
-		uint32_t timeInfo_t::seconds() const
+		uint32_t timeInfo::seconds() const
 		{
 			return m_ntpTimestamp >> 32;
 		}
-		uint32_t timeInfo_t::fractions() const
+		uint32_t timeInfo::fractions() const
 		{
 			return m_ntpTimestamp & 0xffffffff;
 		}
 
 
-		void timeInfo_t::set(const Json::Value& timeObject)
+		void timeInfo::set(const Json::Value& timeObject)
 		{
 			try {
 				if(timeObject["type"]=="ntp") {
@@ -45,17 +45,17 @@ namespace hbm {
 			}
 		}
 
-		void timeInfo_t::setNtpTimestamp(uint64_t ntpTimeStamp)
+		void timeInfo::setNtpTimestamp(uint64_t ntpTimeStamp)
 		{
 			m_ntpTimestamp = ntpTimeStamp;
 		}
 
-		void timeInfo_t::clear()
+		void timeInfo::clear()
 		{
 			m_ntpTimestamp = 0;
 		}
 
-		void timeInfo_t::increment(const timeInfo_t& inc)
+		void timeInfo::increment(const timeInfo& inc)
 		{
 			m_ntpTimestamp += inc.m_ntpTimestamp;
 		}

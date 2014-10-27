@@ -74,14 +74,14 @@ namespace hbm {
 			std::string m_signalReference;
 
 			/// For synchronuous signals (Pattern V): will be set to the time of the first measured value and will be incremented with each value received.
-			timeInfo_t m_syncSignalTime;
+			timeInfo m_syncSignalTime;
 
 			unsigned int m_signalRateSamples;
 			/// For synchronuous signals (Pattern V): The time between m_signalRateSamples samples. Use this to omit rounding errors.
-			timeInfo_t m_signalRateSamplesDelta;
+			timeInfo m_signalRateSamplesDelta;
 
 			/// using this may cause rounding errors.
-			timeInfo_t m_signalRateDelta;
+			timeInfo m_signalRateDelta;
 
 			pattern_t m_dataFormatPattern;
 			bool m_dataIsBigEndian;

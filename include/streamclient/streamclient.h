@@ -73,7 +73,7 @@ namespace hbm {
 			std::string m_controlPort;
 
 			/// initial time received when opening the stream
-			timeInfo_t m_initialTime;
+			timeInfo m_initialTime;
 			std::string m_initialTimeScale;
 			std::string m_initialTimeEpoch;
 

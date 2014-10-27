@@ -133,7 +133,7 @@ namespace hbm {
 
 		void SubscribedSignal::incrementSyncSignalTime(unsigned int valueCount)
 		{
-			timeInfo_t delta(m_signalRateDelta.ntpTimeStamp()*valueCount);
+			timeInfo delta(m_signalRateDelta.ntpTimeStamp()*valueCount);
 			m_syncSignalTime.increment(delta);
 		}
 

@@ -72,6 +72,7 @@ namespace hbm {
 		{
 			int result = m_streamSocket.connect(address.c_str(), streamPort);
 			if (result < 0) {
+				std::cerr << "could not connect to " << address << ":" << streamPort << std::endl;
 				return -1;
 			}
 
@@ -139,7 +140,7 @@ namespace hbm {
 				}
 			} while(true);
 
-			return 0;
+			return result;
 		}
 
 		void StreamClient::stop()

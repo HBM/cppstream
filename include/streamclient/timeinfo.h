@@ -20,7 +20,7 @@ namespace hbm {
 			void set(const Json::Value& StampNode);
 			void setNtpTimestamp(uint64_t ntpTimeStamp);
 			void clear();
-			void increment(const timeInfo& op);
+			void increment(const timeInfo& op, unsigned int valueCount);
 
 		private:
 			uint32_t m_era;
@@ -29,6 +29,9 @@ namespace hbm {
 			uint64_t m_ntpTimestamp;
 
 			uint32_t m_subFraction;
+
+			unsigned int m_correctionCycle;
+			unsigned int m_syncValueCount;
 		};
 	}
 }

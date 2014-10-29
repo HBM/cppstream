@@ -1,9 +1,8 @@
 #ifndef _HBM__STREAMING__TYPES
 #define _HBM__STREAMING__TYPES
 
-#include <stdint.h>
 #include <vector>
-#include <json/value.h>
+#include <string>
 
 namespace hbm {
 	static const char PARAMS[] = "params";
@@ -14,7 +13,7 @@ namespace hbm {
 	namespace streaming {
 		typedef std::vector < std::string > signalReferences_t;
 
-		static const std::string DAQSTREAM_PORT = "7411";
+		static const char DAQSTREAM_PORT[] = "7411";
 
 		static const char META_METHOD_AVAILABLE[] = "available";
 		static const char META_METHOD_UNAVAILABLE[] = "unavailable";

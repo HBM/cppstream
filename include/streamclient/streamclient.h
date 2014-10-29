@@ -8,6 +8,7 @@
 
 #include "signalcontainer.h"
 #include "socketnonblocking.h"
+#include "timeinfo.h"
 #include "types.h"
 
 
@@ -16,7 +17,7 @@ namespace hbm {
 
 		class StreamClient;
 
-		typedef std::function<void(hbm::streaming::StreamClient& stream, const std::string& method, const Json::Value& params)> StreamMetaCb_t;
+		typedef std::function<void(StreamClient& stream, const std::string& method, const Json::Value& params)> StreamMetaCb_t;
 
 		/// Connects to on daq stream server. Receives and interpretes meta data and measured data. Subcribes and unsubscribes signals.
 		/// Callback functions may be registered in order to get informed about stream related meta information.

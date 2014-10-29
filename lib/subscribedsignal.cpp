@@ -201,6 +201,8 @@ namespace hbm {
 				/// this is the first signal related meta information to arrive!
 				if(params.empty()==false) {
 					m_signalReference = params[0u].asString();
+				} else {
+					throw std::runtime_error("Incomplete meta information 'subscribe'");
 				}
 			} else if(method=="time") {
 				m_syncSignalTime.setTime(params);
@@ -233,7 +235,7 @@ namespace hbm {
 			} else if(params["endian"].asString()=="little") {
 				m_dataIsBigEndian = false;
 			} else {
-				throw std::runtime_error(m_signalReference + ": ilegal endianness");
+				throw std::runtime_error(m_signalReference + ": illegal endianness");
 			}
 			std::string dataValueType = params["valueType"].asString();
 			if(dataValueType=="real32") {

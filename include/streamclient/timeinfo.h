@@ -6,6 +6,7 @@
 
 namespace hbm {
 	namespace streaming {
+		/// the complete time stamp consists of 32 era information, an 64 bit NTP timestamp (32 bits seconds, 32 bits fraction) and 32 bits sub fraction.
 		class timeInfo {
 		public:
 			timeInfo();

@@ -6,7 +6,6 @@
 
 #include <json/value.h>
 
-#include "timeinfo.h"
 #include "deltatimeinfo.h"
 
 namespace hbm {

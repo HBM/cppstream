@@ -77,10 +77,6 @@ namespace hbm {
 			/// For synchronuous signals (Pattern V): will be set to the time of the first measured value and will be incremented with each value received.
 			deltaTimeInfo m_syncSignalTime;
 
-			//unsigned int m_signalRateSamples;
-			/// For synchronuous signals (Pattern V): The time between m_signalRateSamples samples. Use this to omit rounding errors.
-			//deltaTimeInfo m_signalRateSamplesDelta;
-
 
 			pattern_t m_dataFormatPattern;
 			bool m_dataIsBigEndian;
@@ -92,12 +88,6 @@ namespace hbm {
 			static const size_t m_valueBufferMaxValues = 128;
 
 			double m_valueBuffer[m_valueBufferMaxValues];
-
-
-//			/// using this may cause rounding errors.
-//			uint64_t m_signalRateDelta;
-//			uint64_t m_subFraction;
-//			uint64_t m_subFractionCollected;
 		};
 	}
 }

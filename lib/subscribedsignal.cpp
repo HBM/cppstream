@@ -14,19 +14,12 @@ namespace hbm {
 			: m_signalReference()
 			, m_syncSignalTime()
 
-//			, m_signalRateSamples(0)
-//			, m_signalRateSamplesDelta()
-
 			, m_dataFormatPattern()
 			, m_dataIsBigEndian(false)
 			, m_dataValueType()
 			, m_dataValueSize(0)
 			, m_dataTimeType()
 			, m_dataTimeSize(0)
-
-//			, m_signalRateDelta(0)
-//			, m_subFraction(0)
-//			, m_subFractionCollected(0)
 		{
 		}
 
@@ -132,18 +125,6 @@ namespace hbm {
 			}
 		}
 
-//		void SubscribedSignal::incrementSyncSignalTime(unsigned int valueCount)
-//		{
-//			uint64_t delta = m_signalRateDelta*valueCount;
-
-//			// add sub fractions overflowed to fraction
-//			m_subFractionCollected += m_subFraction * valueCount;
-//			delta += (m_subFractionCollected >> 32) & 0xffffffff;
-
-//			m_syncSignalTime.add(delta);
-//		}
-
-
 		size_t SubscribedSignal::processMeasuredData(unsigned char* pData, size_t size, DataCb_t cb)
 		{
 			size_t bytesProcessed = 0;
@@ -159,7 +140,6 @@ namespace hbm {
 					}
 					interpretValues(pData, valueCount);
 					uint64_t timeStamp = m_syncSignalTime.increment(valueCount);
-					//incrementSyncSignalTime(valueCount);
 					if (cb) {
 						cb(*this, timeStamp, m_valueBuffer, valueCount);
 					}

@@ -22,7 +22,7 @@ namespace hbm {
 			void add(uint64_t inc);
 			void clear();
 
-		protected:
+		private:
 			uint32_t m_era;
 			uint64_t m_ntpTimestamp;
 			uint32_t m_subFraction;

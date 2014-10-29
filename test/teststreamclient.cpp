@@ -71,6 +71,20 @@ BOOST_AUTO_TEST_CASE (test_timeInfo)
 	}
 	timestamp = timeInfo.ntpTimeStamp();
 	BOOST_CHECK(timestamp==0x0800000000);
+
+	timeInfo.clear();
+	timestamp = timeInfo.ntpTimeStamp();
+	BOOST_CHECK(timestamp==0);
+
+	{
+		Json::Value params;
+
+		params["type"] = "ntp";
+		params["era"] = 3;
+
+		timeInfo.set(params);
+	}
+	BOOST_CHECK(timeInfo.era()==3);
 }
 
 
@@ -118,7 +132,7 @@ BOOST_AUTO_TEST_CASE (test_deltaTimeInfo)
 
 		params["samples"] = 1;
 		params["delta"]["type"] = "ntp";
-		params["delta"]["fraction"] = 0x10000000;
+		params["delta"]["subFraction"] = 0x10000000;
 
 		signalTime.setSignalRate(params);
 	}
@@ -127,7 +141,24 @@ BOOST_AUTO_TEST_CASE (test_deltaTimeInfo)
 	BOOST_CHECK(timestamp==0);
 	signalTime.increment(16);
 	timestamp = signalTime.ntpTimeStamp();
-	BOOST_CHECK(timestamp==(0x0100000000));
+	BOOST_CHECK(timestamp==(0x01));
+
+	{
+		Json::Value params;
+
+		params["samples"] = 2;
+		params["delta"]["type"] = "ntp";
+		params["delta"]["subFraction"] = 0x20000000;
+
+		signalTime.setSignalRate(params);
+	}
+	signalTime.clear();
+	timestamp = signalTime.ntpTimeStamp();
+	BOOST_CHECK(timestamp==0);
+	signalTime.increment(16);
+	timestamp = signalTime.ntpTimeStamp();
+	BOOST_CHECK(timestamp==(0x01));
+
 
 	{
 		Json::Value params;

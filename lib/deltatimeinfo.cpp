@@ -14,7 +14,7 @@ namespace hbm {
 			uint64_t delta = m_deltaNtpTimestamp*count;
 
 			// add sub fractions overflowed to fraction
-			m_deltaSubFractionCollected += m_subFraction * count;
+			m_deltaSubFractionCollected += m_deltaSubFraction * count;
 			delta += (m_deltaSubFractionCollected >> 32) & 0xffffffff;
 
 			add(delta);
@@ -62,10 +62,10 @@ namespace hbm {
 
 			// we are loosing precision here. In order to compensate this, we calculate a correction to use.
 			m_deltaNtpTimestamp = ntpTimestamp/samples;
-			m_subFraction = subFraction/samples;
+			m_deltaSubFraction = subFraction/samples;
 
 			// determine remainder and calculate sub fraction from it.
-			uint64_t rest = m_ntpTimestamp%samples;
+			uint64_t rest = m_deltaNtpTimestamp%samples;
 			rest <<= 32;
 			rest /= samples;
 			m_deltaSubFraction += static_cast < uint32_t > (rest & 0xffffffff);

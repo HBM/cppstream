@@ -133,16 +133,22 @@ namespace hbm {
 			case PATTERN_V:
 				{
 					size_t valueCount = size / m_dataValueSize;
-					if (valueCount > m_valueBufferMaxValues) {
-						valueCount = m_valueBufferMaxValues;
-					} else if (valueCount == 0) {
-						break;
+					size_t valueChunk;
+
+					while(valueCount>0) {
+						if (valueCount > m_valueBufferMaxValues) {
+							valueChunk = m_valueBufferMaxValues;
+						} else {
+							valueChunk = valueCount;
+						}
+						interpretValues(pData, valueChunk);
+						uint64_t timeStamp = m_syncSignalTime.increment(valueChunk);
+						if (cb) {
+							cb(*this, timeStamp, m_valueBuffer, valueChunk);
+						}
+						valueCount -= valueChunk;
 					}
-					interpretValues(pData, valueCount);
-					uint64_t timeStamp = m_syncSignalTime.increment(valueCount);
-					if (cb) {
-						cb(*this, timeStamp, m_valueBuffer, valueCount);
-					}
+
 					bytesProcessed = valueCount * m_dataValueSize;
 				}
 				break;

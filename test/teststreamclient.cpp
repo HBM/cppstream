@@ -14,6 +14,7 @@
 #include <boost/bind.hpp>
 
 #include "streamclient/streamclient.h"
+#include "streamclient/timeinfo.h"
 #include "streamclient/deltatimeinfo.h"
 #include "teststreamclient.h"
 
@@ -43,11 +44,39 @@ BOOST_AUTO_TEST_CASE (test_subscribe)
 	BOOST_CHECK_THROW(m_streamClient.unsubscribe(signalReferences), std::runtime_error);
 }
 
-BOOST_AUTO_TEST_CASE (test_timestamp)
-{
 
+BOOST_AUTO_TEST_CASE (test_timeInfo)
+{
 //	}
-//		”method”: ”signalRate”,
+//		”params”: {
+//			"type": "ntp",
+//			"era": <number>,
+//			"seconds": <number>,
+//			"fraction": <number>,
+//			"subFraction": <number>
+//		}
+//	}
+
+
+	hbm::streaming::timeInfo timeInfo;
+	uint64_t timestamp;
+
+	{
+		Json::Value params;
+
+		params["type"] = "ntp";
+		params["seconds"] = 8;
+
+		timeInfo.set(params);
+	}
+	timestamp = timeInfo.ntpTimeStamp();
+	BOOST_CHECK(timestamp==0x0800000000);
+}
+
+
+BOOST_AUTO_TEST_CASE (test_deltaTimeInfo)
+{
+//	}
 //		”params”: {
 //			”samples”: <number>,
 //			”delta”: {
@@ -72,6 +101,8 @@ BOOST_AUTO_TEST_CASE (test_timestamp)
 
 		signalTime.setSignalRate(params);
 	}
+
+
 	timestamp = signalTime.ntpTimeStamp();
 	BOOST_CHECK(timestamp==0);
 	signalTime.increment(1);

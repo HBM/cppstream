@@ -41,11 +41,35 @@ namespace hbm {
 		{
 			try {
 				if(timeObject["type"]=="ntp") {
-					m_era = timeObject["era"].asUInt();
-					m_ntpTimestamp = timeObject["seconds"].asUInt();
+					uint32_t seconds = 0;
+					uint32_t fraction = 0;
+					Json::Value value;
+					value = timeObject["era"];
+					if(value.isNull()) {
+						m_era = 0;
+					} else {
+						m_era = value.asUInt();
+					}
+
+					value = timeObject["seconds"];
+					if(value.isNull()==false) {
+						seconds = value.asUInt();
+					}
+
+					value = timeObject["fraction"];
+					if(value.isNull()==false) {
+						fraction = value.asUInt();
+					}
+					m_ntpTimestamp = seconds;
 					m_ntpTimestamp <<= 32;
-					m_ntpTimestamp |= timeObject["fraction"].asUInt();
-					m_subFraction = timeObject["subFraction"].asUInt();
+					m_ntpTimestamp |= fraction;
+
+					value = timeObject["fraction"];
+					if(value.isNull()) {
+						m_subFraction = 0;
+					} else {
+						m_subFraction = value.asUInt();
+					}
 				}
 			} catch(const std::runtime_error& e) {
 				std::cerr << e.what();

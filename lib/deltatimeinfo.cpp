@@ -23,7 +23,8 @@ namespace hbm {
 		void deltaTimeInfo::setSignalRate(const Json::Value& params)
 		{
 			uint32_t samples = 1;
-			uint64_t ntpTimestamp = 0;
+			uint32_t seconds = 0;
+			uint32_t fraction = 0;
 			uint32_t subFraction = 0;
 
 			Json::Value value;
@@ -40,13 +41,12 @@ namespace hbm {
 			if(timeObject["type"]=="ntp") {
 				value = timeObject["seconds"];
 				if(value.isNull()==false) {
-					ntpTimestamp = value.asUInt();
-					ntpTimestamp <<= 32;
+					seconds = value.asUInt();
 				}
 
 				value = timeObject["fraction"];
 				if(value.isNull()==false) {
-					ntpTimestamp |= value.asUInt();
+					fraction = value.asUInt();
 				}
 
 				value = timeObject["subFraction"];
@@ -54,6 +54,10 @@ namespace hbm {
 					subFraction = value.asUInt();
 				}
 			}
+			uint64_t ntpTimestamp = seconds;
+			ntpTimestamp <<= 32;
+			ntpTimestamp |= fraction;
+
 
 
 			// we are loosing precision here. In order to compensate this, we calculate a correction to use.

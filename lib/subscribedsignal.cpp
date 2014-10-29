@@ -18,7 +18,7 @@ namespace hbm {
 
 			, m_signalRateSamples(0)
 			, m_signalRateSamplesDelta()
-			, m_signalRateDelta()
+			, m_signalRateDelta(0)
 
 			, m_dataFormatPattern()
 			, m_dataIsBigEndian(false)
@@ -26,6 +26,8 @@ namespace hbm {
 			, m_dataValueSize(0)
 			, m_dataTimeType()
 			, m_dataTimeSize(0)
+			, m_syncSignalCorrectionCycle(0)
+			, m_syncSignalValueCount(0)
 		{
 		}
 
@@ -133,8 +135,16 @@ namespace hbm {
 
 		void SubscribedSignal::incrementSyncSignalTime(unsigned int valueCount)
 		{
-			timeInfo delta(m_signalRateDelta.ntpTimeStamp());
-			m_syncSignalTime.increment(delta, valueCount);
+			uint64_t delta = m_signalRateDelta*valueCount;
+
+			m_syncSignalValueCount += valueCount;
+			if(m_syncSignalCorrectionCycle) {
+				if(m_syncSignalValueCount%m_syncSignalCorrectionCycle==0) {
+					++delta;
+				}
+			}
+
+			m_syncSignalTime.add(delta);
 		}
 
 
@@ -212,7 +222,9 @@ namespace hbm {
 					std::cout << Json::StyledWriter().write(params) << std::endl;
 					m_signalRateSamples = params["samples"].asUInt();
 					m_signalRateSamplesDelta.set(params["delta"]);
-					m_signalRateDelta.setNtpTimestamp(m_signalRateSamplesDelta.ntpTimeStamp()/m_signalRateSamples);
+
+					// we are loosing precision here. In order to compsate this, we calculate a correction to use.
+					m_signalRateDelta = m_signalRateSamplesDelta.ntpTimeStamp()/m_signalRateSamples;
 				} catch(const std::runtime_error& e) {
 					std::cerr << e.what();
 				}

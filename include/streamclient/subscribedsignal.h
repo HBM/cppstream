@@ -81,7 +81,7 @@ namespace hbm {
 			timeInfo m_signalRateSamplesDelta;
 
 			/// using this may cause rounding errors.
-			timeInfo m_signalRateDelta;
+			uint64_t m_signalRateDelta;
 
 			pattern_t m_dataFormatPattern;
 			bool m_dataIsBigEndian;
@@ -93,6 +93,9 @@ namespace hbm {
 			static const size_t m_valueBufferMaxValues = 128;
 
 			double m_valueBuffer[m_valueBufferMaxValues];
+
+			unsigned int m_syncSignalCorrectionCycle;
+			unsigned int m_syncSignalValueCount;
 		};
 	}
 }

@@ -2,7 +2,6 @@
 #define _HBM__STREAMING__TIMEINFO
 
 #include <stdint.h>
-#include <vector>
 #include <json/value.h>
 
 namespace hbm {
@@ -10,7 +9,9 @@ namespace hbm {
 		class timeInfo {
 		public:
 			timeInfo();
-			timeInfo(uint64_t ntpTimeStamp);
+
+			/// the upper 32 byte are seconds
+			/// the lower 32 bytes are fraction of seconds (0.5, 0.25, 0.125...)
 			uint64_t ntpTimeStamp() const;
 			uint32_t era() const;
 			uint32_t seconds() const;
@@ -18,20 +19,13 @@ namespace hbm {
 			uint32_t subFraction() const;
 
 			void set(const Json::Value& StampNode);
-			void setNtpTimestamp(uint64_t ntpTimeStamp);
+			void add(uint64_t inc);
 			void clear();
-			void increment(const timeInfo& op, unsigned int valueCount);
 
 		private:
 			uint32_t m_era;
-			/// the upper 32 byte are seconds
-			/// the lower 32 bytes are fraction of seconds (0.5, 0.25, 0.125...)
 			uint64_t m_ntpTimestamp;
-
 			uint32_t m_subFraction;
-
-			unsigned int m_correctionCycle;
-			unsigned int m_syncValueCount;
 		};
 	}
 }

@@ -11,17 +11,6 @@ namespace hbm {
 			: m_era(0)
 			, m_ntpTimestamp(0)
 			, m_subFraction(0)
-			, m_correctionCycle(0)
-			, m_syncValueCount(0)
-		{
-		}
-
-		timeInfo::timeInfo(uint64_t ntpTimeStamp)
-			: m_era(0)
-			, m_ntpTimestamp(ntpTimeStamp)
-			, m_subFraction(0)
-			, m_correctionCycle(0)
-			, m_syncValueCount(0)
 		{
 		}
 
@@ -49,7 +38,6 @@ namespace hbm {
 			return m_subFraction;
 		}
 
-
 		void timeInfo::set(const Json::Value& timeObject)
 		{
 			try {
@@ -65,25 +53,14 @@ namespace hbm {
 			}
 		}
 
-		void timeInfo::setNtpTimestamp(uint64_t ntpTimeStamp)
-		{
-			m_ntpTimestamp = ntpTimeStamp;
-		}
-
 		void timeInfo::clear()
 		{
 			m_ntpTimestamp = 0;
 		}
 
-		void timeInfo::increment(const timeInfo& inc, unsigned int valueCount)
+		void timeInfo::add(uint64_t inc)
 		{
-			m_ntpTimestamp += inc.m_ntpTimestamp*valueCount;
-			m_syncValueCount += valueCount;
-			if(m_correctionCycle) {
-				if(m_syncValueCount%m_correctionCycle==0) {
-					++m_ntpTimestamp;
-				}
-			}
+			m_ntpTimestamp += inc;
 		}
 	}
 }

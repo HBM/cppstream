@@ -28,9 +28,6 @@ namespace hbm {
 			, m_dataTimeSize(0)
 			, m_subFraction(0)
 			, m_subFractionCollected(0)
-
-//			, m_syncSignalCorrectionCycle(0)
-//			, m_syncSignalCorrectionCount(0)
 		{
 		}
 

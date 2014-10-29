@@ -53,6 +53,7 @@ namespace hbm {
 			}
 		}
 
+
 		void timeInfo::clear()
 		{
 			m_ntpTimestamp = 0;

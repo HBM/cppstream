@@ -24,6 +24,7 @@ SET( INTERFADE_HEADERS
     ${INTERFACE_INCLUDE_DIR}/signalcontainer.h
     ${INTERFACE_INCLUDE_DIR}/subscribedsignal.h
     ${INTERFACE_INCLUDE_DIR}/timeinfo.h
+    ${INTERFACE_INCLUDE_DIR}/deltatimeinfo.h
     ${INTERFACE_INCLUDE_DIR}/types.h
 )
 

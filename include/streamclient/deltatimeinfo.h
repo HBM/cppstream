@@ -8,6 +8,7 @@
 
 namespace hbm {
 	namespace streaming {
+		/// used for calculating NTP time stamps for measured values of synchronuous signals.
 		class deltaTimeInfo {
 		public:
 			deltaTimeInfo();
@@ -20,6 +21,11 @@ namespace hbm {
 
 			uint64_t ntpTimeStamp() const;
 		private:
+			/// may not be copied
+			deltaTimeInfo(const deltaTimeInfo&);
+			/// may not be assigned
+			deltaTimeInfo& operator=(const deltaTimeInfo&);
+
 			uint64_t m_deltaNtpTimestamp;
 			uint64_t m_deltaSubFraction;
 			uint64_t m_deltaSubFractionCollected;

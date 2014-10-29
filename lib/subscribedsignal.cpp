@@ -26,8 +26,11 @@ namespace hbm {
 			, m_dataValueSize(0)
 			, m_dataTimeType()
 			, m_dataTimeSize(0)
-			, m_syncSignalCorrectionCycle(0)
-			, m_syncSignalValueCount(0)
+			, m_subFraction(0)
+			, m_subFractionCollected(0)
+
+//			, m_syncSignalCorrectionCycle(0)
+//			, m_syncSignalCorrectionCount(0)
 		{
 		}
 
@@ -137,12 +140,9 @@ namespace hbm {
 		{
 			uint64_t delta = m_signalRateDelta*valueCount;
 
-			m_syncSignalValueCount += valueCount;
-			if(m_syncSignalCorrectionCycle) {
-				if(m_syncSignalValueCount%m_syncSignalCorrectionCycle==0) {
-					++delta;
-				}
-			}
+			// add sub fractions overflowed to fraction
+			m_subFractionCollected += m_subFraction * valueCount;
+			delta += (m_subFractionCollected >> 32) & 0xffffffff;
 
 			m_syncSignalTime.add(delta);
 		}
@@ -223,8 +223,9 @@ namespace hbm {
 					m_signalRateSamples = params["samples"].asUInt();
 					m_signalRateSamplesDelta.set(params["delta"]);
 
-					// we are loosing precision here. In order to compsate this, we calculate a correction to use.
+					// todo: we are loosing precision here. In order to compensate this, we calculate a correction to use.
 					m_signalRateDelta = m_signalRateSamplesDelta.ntpTimeStamp()/m_signalRateSamples;
+					m_subFraction = m_signalRateSamplesDelta.subFraction();
 				} catch(const std::runtime_error& e) {
 					std::cerr << e.what();
 				}

@@ -94,8 +94,10 @@ namespace hbm {
 
 			double m_valueBuffer[m_valueBufferMaxValues];
 
-			unsigned int m_syncSignalCorrectionCycle;
-			unsigned int m_syncSignalValueCount;
+			uint32_t m_subFraction;
+			uint64_t m_subFractionCollected;
+//			unsigned int m_syncSignalCorrectionCycle;
+//			unsigned int m_syncSignalCorrectionCount;
 		};
 	}
 }

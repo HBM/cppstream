@@ -82,9 +82,10 @@ namespace hbm {
 			m_ntpTimestamp = 0;
 		}
 
-		void timeInfo::add(uint64_t inc)
+		uint64_t timeInfo::add(uint64_t inc)
 		{
 			m_ntpTimestamp += inc;
+			return m_ntpTimestamp;
 		}
 	}
 }

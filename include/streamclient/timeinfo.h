@@ -19,7 +19,7 @@ namespace hbm {
 			uint32_t subFraction() const;
 
 			void set(const Json::Value& StampNode);
-			void add(uint64_t inc);
+			uint64_t add(uint64_t inc);
 			void clear();
 
 		private:

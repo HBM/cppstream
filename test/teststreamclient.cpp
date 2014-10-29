@@ -103,7 +103,7 @@ BOOST_AUTO_TEST_CASE (test_deltaTimeInfo)
 //		}
 //	}
 
-	hbm::streaming::deltaTimeInfo signalTime;
+	hbm::streaming::deltaTimeInfo deltaTime;
 	uint64_t timestamp;
 
 	{
@@ -113,20 +113,21 @@ BOOST_AUTO_TEST_CASE (test_deltaTimeInfo)
 		params["delta"]["type"] = "ntp";
 		params["delta"]["seconds"] = 1;
 
-		signalTime.setSignalRate(params);
+		deltaTime.setDelta(params);
 	}
 
 
-	timestamp = signalTime.ntpTimeStamp();
+	timestamp = deltaTime.ntpTimeStamp();
 	BOOST_CHECK(timestamp==0);
-	signalTime.increment(1);
-	timestamp = signalTime.ntpTimeStamp();
+	deltaTime.increment(1);
+	timestamp = deltaTime.ntpTimeStamp();
 	BOOST_CHECK(timestamp==(0x0100000000));
-	signalTime.increment(2);
-	timestamp = signalTime.ntpTimeStamp();
+	deltaTime.increment(2);
+	timestamp = deltaTime.ntpTimeStamp();
 	BOOST_CHECK(timestamp==(0x0300000000));
 
 
+	deltaTime.clear();
 	{
 		Json::Value params;
 
@@ -134,15 +135,14 @@ BOOST_AUTO_TEST_CASE (test_deltaTimeInfo)
 		params["delta"]["type"] = "ntp";
 		params["delta"]["subFraction"] = 0x10000000;
 
-		signalTime.setSignalRate(params);
+		deltaTime.setDelta(params);
 	}
-	signalTime.clear();
-	timestamp = signalTime.ntpTimeStamp();
+	timestamp = deltaTime.ntpTimeStamp();
 	BOOST_CHECK(timestamp==0);
-	signalTime.increment(16);
-	timestamp = signalTime.ntpTimeStamp();
+	timestamp = deltaTime.increment(16);
 	BOOST_CHECK(timestamp==(0x01));
 
+	deltaTime.clear();
 	{
 		Json::Value params;
 
@@ -150,16 +150,16 @@ BOOST_AUTO_TEST_CASE (test_deltaTimeInfo)
 		params["delta"]["type"] = "ntp";
 		params["delta"]["subFraction"] = 0x20000000;
 
-		signalTime.setSignalRate(params);
+		deltaTime.setDelta(params);
 	}
-	signalTime.clear();
-	timestamp = signalTime.ntpTimeStamp();
+	timestamp = deltaTime.ntpTimeStamp();
 	BOOST_CHECK(timestamp==0);
-	signalTime.increment(16);
-	timestamp = signalTime.ntpTimeStamp();
+	deltaTime.increment(16);
+	timestamp = deltaTime.ntpTimeStamp();
 	BOOST_CHECK(timestamp==(0x01));
 
 
+	deltaTime.clear();
 	{
 		Json::Value params;
 
@@ -167,13 +167,12 @@ BOOST_AUTO_TEST_CASE (test_deltaTimeInfo)
 		params["delta"]["type"] = "ntp";
 		params["delta"]["seconds"] = 1;
 
-		signalTime.setSignalRate(params);
+		deltaTime.setDelta(params);
 	}
-	signalTime.clear();
-	timestamp = signalTime.ntpTimeStamp();
+	timestamp = deltaTime.ntpTimeStamp();
 	BOOST_CHECK(timestamp==0);
-	signalTime.increment(4);
-	timestamp = signalTime.ntpTimeStamp();
+	deltaTime.increment(4);
+	timestamp = deltaTime.ntpTimeStamp();
 	BOOST_CHECK(timestamp==(0x0200000000));
 }
 

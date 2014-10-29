@@ -158,10 +158,10 @@ namespace hbm {
 						break;
 					}
 					interpretValues(pData, valueCount);
-					m_syncSignalTime.increment(valueCount);
+					uint64_t timeStamp = m_syncSignalTime.increment(valueCount);
 					//incrementSyncSignalTime(valueCount);
 					if (cb) {
-						cb(*this, m_syncSignalTime.ntpTimeStamp(), m_valueBuffer, valueCount);
+						cb(*this, timeStamp, m_valueBuffer, valueCount);
 					}
 					bytesProcessed = valueCount * m_dataValueSize;
 				}
@@ -211,27 +211,13 @@ namespace hbm {
 					m_signalReference = params[0u].asString();
 				}
 			} else if(method=="time") {
-				m_syncSignalTime.set(params);
+				m_syncSignalTime.setTime(params);
 			} else if(method=="data") {
 				setDataFormat(params);
 			} else if(method=="signalRate") {
 				try {
 					std::cout << Json::StyledWriter().write(params) << std::endl;
-					m_syncSignalTime.setSignalRate(params);
-//					std::cout << Json::StyledWriter().write(params) << std::endl;
-//					m_signalRateSamples = params["samples"].asUInt();
-//					m_signalRateSamplesDelta.set(params["delta"]);
-//					m_subFraction = m_signalRateSamplesDelta.subFraction();
-
-//					// we are loosing precision here. In order to compensate this, we calculate a correction to use.
-//					m_signalRateDelta = m_signalRateSamplesDelta.ntpTimeStamp()/m_signalRateSamples;
-
-//					// determine remainder and calculate sub fraction from it.
-//					uint64_t rest = m_signalRateSamplesDelta.ntpTimeStamp()%m_signalRateSamples;
-//					rest <<= 32;
-//					rest /= m_signalRateSamples;
-//					m_subFraction += static_cast < uint32_t > (rest & 0xffffffff);
-
+					m_syncSignalTime.setDelta(params);
 				} catch(const std::runtime_error& e) {
 					std::cerr << e.what();
 				}

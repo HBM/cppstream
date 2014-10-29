@@ -6,10 +6,12 @@ namespace hbm {
 			: m_deltaNtpTimestamp(0)
 			, m_deltaSubFraction(0)
 			, m_deltaSubFractionCollected(0)
+
+			, m_time()
 		{
 		}
 
-		void deltaTimeInfo::increment(unsigned int count)
+		uint64_t deltaTimeInfo::increment(unsigned int count)
 		{
 			uint64_t delta = m_deltaNtpTimestamp*count;
 
@@ -17,10 +19,16 @@ namespace hbm {
 			m_deltaSubFractionCollected += m_deltaSubFraction * count;
 			delta += (m_deltaSubFractionCollected >> 32) & 0xffffffff;
 
-			add(delta);
+			return m_time.add(delta);
 		}
 
-		void deltaTimeInfo::setSignalRate(const Json::Value& params)
+		void deltaTimeInfo::setTime(const Json::Value& params)
+		{
+			m_time.set(params);
+		}
+
+
+		void deltaTimeInfo::setDelta(const Json::Value& params)
 		{
 			uint32_t samples = 1;
 			uint32_t seconds = 0;
@@ -69,6 +77,20 @@ namespace hbm {
 			rest <<= 32;
 			rest /= samples;
 			m_deltaSubFraction += static_cast < uint32_t > (rest & 0xffffffff);
+		}
+
+		void deltaTimeInfo::clear()
+		{
+			m_deltaNtpTimestamp = 0;
+			m_deltaSubFraction = 0;
+			m_deltaSubFractionCollected = 0;
+
+			m_time.clear();
+		}
+
+		uint64_t deltaTimeInfo::ntpTimeStamp() const
+		{
+			return m_time.ntpTimeStamp();
 		}
 	}
 }

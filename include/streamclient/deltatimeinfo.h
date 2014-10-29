@@ -8,17 +8,23 @@
 
 namespace hbm {
 	namespace streaming {
-		class deltaTimeInfo: public timeInfo {
+		class deltaTimeInfo {
 		public:
 			deltaTimeInfo();
+			void setTime(const Json::Value& params);
 
 			/// \throws std::runtime_error if provided JSON is not valid
-			void setSignalRate(const Json::Value& params);
-			void increment(unsigned int count);
+			void setDelta(const Json::Value& params);
+			uint64_t increment(unsigned int count);
+			void clear();
+
+			uint64_t ntpTimeStamp() const;
 		private:
 			uint64_t m_deltaNtpTimestamp;
 			uint64_t m_deltaSubFraction;
 			uint64_t m_deltaSubFractionCollected;
+
+			timeInfo m_time;
 		};
 	}
 }

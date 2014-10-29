@@ -40,6 +40,8 @@ namespace hbm {
 			void clear();
 
 		private:
+			SignalContainer(const SignalContainer& op);
+			SignalContainer& operator=(const SignalContainer& op);
 
 			/// signal number is the key
 			typedef std::unordered_map < unsigned int, SubscribedSignal > signals_t;

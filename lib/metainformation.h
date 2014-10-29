@@ -46,6 +46,9 @@ namespace hbm {
 			}
 
 		private:
+			MetaInformation(const MetaInformation&);
+			MetaInformation& operator= (const MetaInformation&);
+
 			int m_type;
 			Json::Value m_jsonContent;
 			binaryContent_t m_binaryContent;

@@ -18,6 +18,9 @@ namespace hbm {
 		std::string execute(const std::string& request);
 
 	private:
+		HttpPost(const HttpPost&);
+		HttpPost& operator= (const HttpPost&);
+
 		std::string m_address;
 		std::string m_port;
 		std::string m_httpPath;

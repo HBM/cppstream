@@ -25,6 +25,9 @@ namespace hbm {
 			/// \throws std::runtime_error
 			void unsubscribe(const signalReferences_t& signalReferences);
 		private:
+			Controller(const Controller&);
+			Controller& operator= (const Controller&);
+
 			std::string m_streamId;
 			HttpPost m_httpPost;
 

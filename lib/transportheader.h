@@ -40,6 +40,8 @@ namespace hbm {
 				return m_signalNumber;
 			}
 		private:
+			TransportHeader(const TransportHeader&);
+			TransportHeader& operator= (const TransportHeader&);
 			SocketNonblocking& m_socket;
 			size_t m_dataByteCount;
 			unsigned int m_signalNumber;

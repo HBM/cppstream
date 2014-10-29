@@ -36,6 +36,9 @@ namespace hbm {
 			}
 
 		private:
+			SubscribedSignal(const SubscribedSignal& op);
+			SubscribedSignal& operator=(const SubscribedSignal& op);
+
 
 			/// @param count number of values not the number of bytes!
 			void interpretValues(unsigned char* pData, size_t count);

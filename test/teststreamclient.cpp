@@ -14,6 +14,7 @@
 #include <boost/bind.hpp>
 
 #include "streamclient/streamclient.h"
+#include "streamclient/deltatimeinfo.h"
 #include "teststreamclient.h"
 
 DeviceFixture::DeviceFixture()
@@ -41,5 +42,78 @@ BOOST_AUTO_TEST_CASE (test_subscribe)
 	BOOST_CHECK_THROW(m_streamClient.subscribe(signalReferences), std::runtime_error);
 	BOOST_CHECK_THROW(m_streamClient.unsubscribe(signalReferences), std::runtime_error);
 }
+
+BOOST_AUTO_TEST_CASE (test_timestamp)
+{
+
+//	}
+//		”method”: ”signalRate”,
+//		”params”: {
+//			”samples”: <number>,
+//			”delta”: {
+//				"type": "ntp",
+//				"era": <number>,
+//				"seconds": <number>,
+//				"fraction": <number>,
+//				"subFraction": <number>
+//			}
+//		}
+//	}
+
+	hbm::streaming::deltaTimeInfo signalTime;
+	uint64_t timestamp;
+
+	{
+		Json::Value params;
+
+		params["samples"] = 1;
+		params["delta"]["type"] = "ntp";
+		params["delta"]["seconds"] = 1;
+
+		signalTime.setSignalRate(params);
+	}
+	timestamp = signalTime.ntpTimeStamp();
+	BOOST_CHECK(timestamp==0);
+	signalTime.increment(1);
+	timestamp = signalTime.ntpTimeStamp();
+	BOOST_CHECK(timestamp==(0x0100000000));
+	signalTime.increment(2);
+	timestamp = signalTime.ntpTimeStamp();
+	BOOST_CHECK(timestamp==(0x0300000000));
+
+
+	{
+		Json::Value params;
+
+		params["samples"] = 1;
+		params["delta"]["type"] = "ntp";
+		params["delta"]["fraction"] = 0x10000000;
+
+		signalTime.setSignalRate(params);
+	}
+	signalTime.clear();
+	timestamp = signalTime.ntpTimeStamp();
+	BOOST_CHECK(timestamp==0);
+	signalTime.increment(16);
+	timestamp = signalTime.ntpTimeStamp();
+	BOOST_CHECK(timestamp==(0x0100000000));
+
+	{
+		Json::Value params;
+
+		params["samples"] = 2;
+		params["delta"]["type"] = "ntp";
+		params["delta"]["seconds"] = 1;
+
+		signalTime.setSignalRate(params);
+	}
+	signalTime.clear();
+	timestamp = signalTime.ntpTimeStamp();
+	BOOST_CHECK(timestamp==0);
+	signalTime.increment(4);
+	timestamp = signalTime.ntpTimeStamp();
+	BOOST_CHECK(timestamp==(0x0200000000));
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()

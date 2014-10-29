@@ -10,15 +10,12 @@
 
 namespace hbm {
 	namespace streaming {
-
-
 		SubscribedSignal::SubscribedSignal()
 			: m_signalReference()
 			, m_syncSignalTime()
 
-			, m_signalRateSamples(0)
-			, m_signalRateSamplesDelta()
-			, m_signalRateDelta(0)
+//			, m_signalRateSamples(0)
+//			, m_signalRateSamplesDelta()
 
 			, m_dataFormatPattern()
 			, m_dataIsBigEndian(false)
@@ -26,8 +23,10 @@ namespace hbm {
 			, m_dataValueSize(0)
 			, m_dataTimeType()
 			, m_dataTimeSize(0)
-			, m_subFraction(0)
-			, m_subFractionCollected(0)
+
+//			, m_signalRateDelta(0)
+//			, m_subFraction(0)
+//			, m_subFractionCollected(0)
 		{
 		}
 
@@ -133,16 +132,16 @@ namespace hbm {
 			}
 		}
 
-		void SubscribedSignal::incrementSyncSignalTime(unsigned int valueCount)
-		{
-			uint64_t delta = m_signalRateDelta*valueCount;
+//		void SubscribedSignal::incrementSyncSignalTime(unsigned int valueCount)
+//		{
+//			uint64_t delta = m_signalRateDelta*valueCount;
 
-			// add sub fractions overflowed to fraction
-			m_subFractionCollected += m_subFraction * valueCount;
-			delta += (m_subFractionCollected >> 32) & 0xffffffff;
+//			// add sub fractions overflowed to fraction
+//			m_subFractionCollected += m_subFraction * valueCount;
+//			delta += (m_subFractionCollected >> 32) & 0xffffffff;
 
-			m_syncSignalTime.add(delta);
-		}
+//			m_syncSignalTime.add(delta);
+//		}
 
 
 		size_t SubscribedSignal::processMeasuredData(unsigned char* pData, size_t size, DataCb_t cb)
@@ -159,7 +158,8 @@ namespace hbm {
 						break;
 					}
 					interpretValues(pData, valueCount);
-					incrementSyncSignalTime(valueCount);
+					m_syncSignalTime.increment(valueCount);
+					//incrementSyncSignalTime(valueCount);
 					if (cb) {
 						cb(*this, m_syncSignalTime.ntpTimeStamp(), m_valueBuffer, valueCount);
 					}
@@ -217,18 +217,20 @@ namespace hbm {
 			} else if(method=="signalRate") {
 				try {
 					std::cout << Json::StyledWriter().write(params) << std::endl;
-					m_signalRateSamples = params["samples"].asUInt();
-					m_signalRateSamplesDelta.set(params["delta"]);
-					m_subFraction = m_signalRateSamplesDelta.subFraction();
+					m_syncSignalTime.setSignalRate(params);
+//					std::cout << Json::StyledWriter().write(params) << std::endl;
+//					m_signalRateSamples = params["samples"].asUInt();
+//					m_signalRateSamplesDelta.set(params["delta"]);
+//					m_subFraction = m_signalRateSamplesDelta.subFraction();
 
-					// we are loosing precision here. In order to compensate this, we calculate a correction to use.
-					m_signalRateDelta = m_signalRateSamplesDelta.ntpTimeStamp()/m_signalRateSamples;
+//					// we are loosing precision here. In order to compensate this, we calculate a correction to use.
+//					m_signalRateDelta = m_signalRateSamplesDelta.ntpTimeStamp()/m_signalRateSamples;
 
-					// determine remainder and calculate sub fraction from it.
-					uint64_t rest = m_signalRateSamplesDelta.ntpTimeStamp()%m_signalRateSamples;
-					rest <<= 32;
-					rest /= m_signalRateSamples;
-					m_subFraction += static_cast < uint32_t > (rest & 0xffffffff);
+//					// determine remainder and calculate sub fraction from it.
+//					uint64_t rest = m_signalRateSamplesDelta.ntpTimeStamp()%m_signalRateSamples;
+//					rest <<= 32;
+//					rest /= m_signalRateSamples;
+//					m_subFraction += static_cast < uint32_t > (rest & 0xffffffff);
 
 				} catch(const std::runtime_error& e) {
 					std::cerr << e.what();

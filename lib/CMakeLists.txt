@@ -31,6 +31,7 @@ SET( INTERFADE_HEADERS
 set(STREAMCLIENT_SOURCES
   ${INTERFADE_HEADERS}
   timeinfo.cpp
+  deltatimeinfo.cpp
   streamclient.cpp
   transportheader.cpp
   metainformation.cpp

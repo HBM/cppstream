@@ -7,6 +7,7 @@
 #include <json/value.h>
 
 #include "timeinfo.h"
+#include "deltatimeinfo.h"
 
 namespace hbm {
 	namespace streaming {
@@ -74,14 +75,12 @@ namespace hbm {
 			std::string m_signalReference;
 
 			/// For synchronuous signals (Pattern V): will be set to the time of the first measured value and will be incremented with each value received.
-			timeInfo m_syncSignalTime;
+			deltaTimeInfo m_syncSignalTime;
 
-			unsigned int m_signalRateSamples;
+			//unsigned int m_signalRateSamples;
 			/// For synchronuous signals (Pattern V): The time between m_signalRateSamples samples. Use this to omit rounding errors.
-			timeInfo m_signalRateSamplesDelta;
+			//deltaTimeInfo m_signalRateSamplesDelta;
 
-			/// using this may cause rounding errors.
-			uint64_t m_signalRateDelta;
 
 			pattern_t m_dataFormatPattern;
 			bool m_dataIsBigEndian;
@@ -94,8 +93,11 @@ namespace hbm {
 
 			double m_valueBuffer[m_valueBufferMaxValues];
 
-			uint64_t m_subFraction;
-			uint64_t m_subFractionCollected;
+
+//			/// using this may cause rounding errors.
+//			uint64_t m_signalRateDelta;
+//			uint64_t m_subFraction;
+//			uint64_t m_subFractionCollected;
 		};
 	}
 }

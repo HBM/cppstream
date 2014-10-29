@@ -1,4 +1,3 @@
-#include <vector>
 #include <stdexcept>
 #include <iostream>
 #include <json/value.h>

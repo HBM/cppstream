@@ -59,6 +59,7 @@ namespace hbm {
 				PATTERN_TV,
 				/// "TB"; One timestamp per signal block. The timestamp corresponds to the first sample in the signal block.
 				PATTERN_TB,
+				PATTERN_UNDEFINED
 			};
 
 			enum dataType_t {
@@ -68,10 +69,12 @@ namespace hbm {
 				DATATYPE_U64,
 				DATATYPE_S64,
 				DATATYPE_REAL64,
+				DATATYPE_UNDEFINED
 			};
 
 			enum timeType_t {
-				TIMETYPE_NTP
+				TIMETYPE_NTP,
+				RIMETYPE_UNDEFINED
 			};
 
 			std::string m_signalReference;

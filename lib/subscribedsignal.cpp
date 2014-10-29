@@ -171,21 +171,26 @@ namespace hbm {
 				}
 				break;
 			case PATTERN_TB:
-				// 1 time stamp n values
-				size_t tupleSize = m_dataTimeSize+m_dataValueSize;
-				if(size>=tupleSize) {
-					size_t valueCount = (size-m_dataTimeSize) / m_dataValueSize;
-					if(valueCount>m_valueBufferMaxValues) {
-						valueCount=m_valueBufferMaxValues;
+				{
+					// 1 time stamp n values
+					size_t tupleSize = m_dataTimeSize+m_dataValueSize;
+					if(size>=tupleSize) {
+						size_t valueCount = (size-m_dataTimeSize) / m_dataValueSize;
+						if(valueCount>m_valueBufferMaxValues) {
+							valueCount=m_valueBufferMaxValues;
+						}
+						uint64_t ntpTimeStamp = interpreteNtpTimestamp(pData);
+						interpretValues(pData+m_dataTimeSize, valueCount);
+						if (cb) {
+							cb(*this, ntpTimeStamp, m_valueBuffer, valueCount);
+						}
+						bytesProcessed = m_dataTimeSize + (m_dataValueSize*valueCount);
 					}
-					uint64_t ntpTimeStamp = interpreteNtpTimestamp(pData);
-					interpretValues(pData+m_dataTimeSize, valueCount);
-					if (cb) {
-						cb(*this, ntpTimeStamp, m_valueBuffer, valueCount);
-					}
-					bytesProcessed = m_dataTimeSize + (m_dataValueSize*valueCount);
 				}
 				break;
+			default:
+				std::cerr << m_signalReference + " value pattern is not set!" << std::endl;
+				bytesProcessed = size;
 			}
 			return bytesProcessed;
 		}

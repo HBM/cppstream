@@ -222,10 +222,17 @@ namespace hbm {
 					std::cout << Json::StyledWriter().write(params) << std::endl;
 					m_signalRateSamples = params["samples"].asUInt();
 					m_signalRateSamplesDelta.set(params["delta"]);
-
-					// todo: we are loosing precision here. In order to compensate this, we calculate a correction to use.
-					m_signalRateDelta = m_signalRateSamplesDelta.ntpTimeStamp()/m_signalRateSamples;
 					m_subFraction = m_signalRateSamplesDelta.subFraction();
+
+					// we are loosing precision here. In order to compensate this, we calculate a correction to use.
+					m_signalRateDelta = m_signalRateSamplesDelta.ntpTimeStamp()/m_signalRateSamples;
+
+					// determine remainder and calculate sub fraction from it.
+					uint64_t rest = m_signalRateSamplesDelta.ntpTimeStamp()%m_signalRateSamples;
+					rest <<= 32;
+					rest /= m_signalRateSamples;
+					m_subFraction += static_cast < uint32_t > (rest & 0xffffffff);
+
 				} catch(const std::runtime_error& e) {
 					std::cerr << e.what();
 				}

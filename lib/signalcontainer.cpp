@@ -35,6 +35,8 @@ namespace hbm {
 			if (m_signalMetaCb) {
 				m_signalMetaCb(signal, method, params);
 			}
+
+			/// \warning we do not handle potential exceptions thrown!
 			signal.processSignalMetaInformation(method, params);
 
 			if(method=="unsubscribe") {

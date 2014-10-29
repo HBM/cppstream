@@ -114,7 +114,7 @@ namespace hbm {
 
 		uint64_t SubscribedSignal::interpreteNtpTimestamp(unsigned char* pData)
 		{
-			if((m_dataTimeType == TIMETYPE_NTP) && (m_dataTimeSize==4) ) {
+			if((m_dataTimeType == TIMETYPE_NTP) && (m_dataTimeSize==8) ) {
 				if(m_dataIsBigEndian) {
 					return be64toh(*reinterpret_cast < uint64_t* > (pData));
 				} else {
@@ -202,12 +202,8 @@ namespace hbm {
 			} else if(method=="data") {
 				setDataFormat(params);
 			} else if(method=="signalRate") {
-				try {
-					std::cout << Json::StyledWriter().write(params) << std::endl;
-					m_syncSignalTime.setDelta(params);
-				} catch(const std::runtime_error& e) {
-					std::cerr << e.what();
-				}
+				std::cout << Json::StyledWriter().write(params) << std::endl;
+				m_syncSignalTime.setDelta(params);
 			} else {
 				std::cout << "unhandled signal related meta information '" << method << "' for signal " << m_signalReference << " with parameters: " << Json::StyledWriter().write(params) << std::endl;
 			}
@@ -229,8 +225,10 @@ namespace hbm {
 
 			if(params["endian"].asString()=="big") {
 				m_dataIsBigEndian = true;
-			} else {
+			} else if(params["endian"].asString()=="little") {
 				m_dataIsBigEndian = false;
+			} else {
+				throw std::runtime_error(m_signalReference + ": ilegal endianness");
 			}
 			std::string dataValueType = params["valueType"].asString();
 			if(dataValueType=="real32") {

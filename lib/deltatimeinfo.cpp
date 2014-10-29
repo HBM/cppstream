@@ -24,6 +24,8 @@ namespace hbm {
 
 		void deltaTimeInfo::setTime(const Json::Value& params)
 		{
+			// we are getting the correct time => clear collected correction!
+			m_deltaSubFractionCollected = 0;
 			m_time.set(params);
 		}
 

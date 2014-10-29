@@ -114,13 +114,14 @@ namespace hbm {
 
 		uint64_t SubscribedSignal::interpreteNtpTimestamp(unsigned char* pData)
 		{
-			if(m_dataTimeType == TIMETYPE_NTP) {
+			if((m_dataTimeType == TIMETYPE_NTP) && (m_dataTimeSize==4) ) {
 				if(m_dataIsBigEndian) {
 					return be64toh(*reinterpret_cast < uint64_t* > (pData));
 				} else {
 					return le64toh(*reinterpret_cast < uint64_t* > (pData));
 				}
 			} else {
+				std::cerr << __FUNCTION__ << ": Time format is not supported" << std::endl;
 				return 0;
 			}
 		}
@@ -213,58 +214,55 @@ namespace hbm {
 		}
 
 
-		int SubscribedSignal::setDataFormat(const Json::Value& params)
+		void SubscribedSignal::setDataFormat(const Json::Value& params)
 		{
-			try {
-				std::string dataFormatPattern = params["pattern"].asString();
-				if(dataFormatPattern=="V") {
-					m_dataFormatPattern = PATTERN_V;
-				} else if(dataFormatPattern=="TV"){
-					m_dataFormatPattern = PATTERN_TV;
-				} else if(dataFormatPattern=="TB"){
-					m_dataFormatPattern = PATTERN_TB;
-				} else {
-					return -1;
-				}
-
-				if(params["endian"].asString()=="big") {
-					m_dataIsBigEndian = true;
-				} else {
-					m_dataIsBigEndian = false;
-				}
-				std::string dataValueType = params["valueType"].asString();
-				if(dataValueType=="real32") {
-					m_dataValueType = DATATYPE_REAL32;
-					m_dataValueSize = 4;
-				} else if(dataValueType=="u32") {
-					m_dataValueType = DATATYPE_U32;
-					m_dataValueSize = 4;
-				} else if(dataValueType=="s32") {
-					m_dataValueType = DATATYPE_S32;
-					m_dataValueSize = 4;
-				} else if(dataValueType=="real64") {
-					m_dataValueType = DATATYPE_REAL64;
-					m_dataValueSize = 8;
-				} else if(dataValueType=="u64") {
-					m_dataValueType = DATATYPE_U64;
-					m_dataValueSize = 8;
-				} else if(dataValueType=="s64") {
-					m_dataValueType = DATATYPE_S64;
-					m_dataValueSize = 8;
-				}
-
-
-				std::string dataTimeType = params["time"]["type"].asString();
-				if(dataTimeType=="ntp") {
-					m_dataTimeType = TIMETYPE_NTP;
-				}
-				m_dataTimeSize = params["time"]["size"].asUInt();
-
-				return 0;
-			} catch(const std::runtime_error& e) {
-				std::cerr << e.what();
-				return -1;
+			std::string dataFormatPattern = params["pattern"].asString();
+			if(dataFormatPattern=="V") {
+				m_dataFormatPattern = PATTERN_V;
+			} else if(dataFormatPattern=="TV"){
+				m_dataFormatPattern = PATTERN_TV;
+			} else if(dataFormatPattern=="TB"){
+				m_dataFormatPattern = PATTERN_TB;
+			} else {
+				throw std::runtime_error(m_signalReference + ": Value pattern is not supported");
 			}
+
+			if(params["endian"].asString()=="big") {
+				m_dataIsBigEndian = true;
+			} else {
+				m_dataIsBigEndian = false;
+			}
+			std::string dataValueType = params["valueType"].asString();
+			if(dataValueType=="real32") {
+				m_dataValueType = DATATYPE_REAL32;
+				m_dataValueSize = 4;
+			} else if(dataValueType=="u32") {
+				m_dataValueType = DATATYPE_U32;
+				m_dataValueSize = 4;
+			} else if(dataValueType=="s32") {
+				m_dataValueType = DATATYPE_S32;
+				m_dataValueSize = 4;
+			} else if(dataValueType=="real64") {
+				m_dataValueType = DATATYPE_REAL64;
+				m_dataValueSize = 8;
+			} else if(dataValueType=="u64") {
+				m_dataValueType = DATATYPE_U64;
+				m_dataValueSize = 8;
+			} else if(dataValueType=="s64") {
+				m_dataValueType = DATATYPE_S64;
+				m_dataValueSize = 8;
+			} else {
+				throw std::runtime_error(m_signalReference + ": Value type is not supported");
+			}
+
+
+			std::string dataTimeType = params["time"]["type"].asString();
+			if(dataTimeType=="ntp") {
+				m_dataTimeType = TIMETYPE_NTP;
+			} else {
+				throw std::runtime_error(m_signalReference + ": Time type is not supported");
+			}
+			m_dataTimeSize = params["time"]["size"].asUInt();
 		}
 	}
 }

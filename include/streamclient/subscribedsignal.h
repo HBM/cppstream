@@ -28,6 +28,7 @@ namespace hbm {
 			size_t processMeasuredData(unsigned char* pData, size_t size, DataCb_t cb);
 
 			/// process signal related meta information.
+			/// \throws std::runtime_error on error
 			void processSignalMetaInformation(const std::string& method, const Json::Value& params);
 
 			std::string signalReference()
@@ -45,10 +46,8 @@ namespace hbm {
 
 			uint64_t interpreteNtpTimestamp(unsigned char* pData);
 
-			/// for Pattern V: If timestamp is not provided with the value(s), we calulate the time
-			void incrementSyncSignalTime(unsigned int valueCount);
-
-			int setDataFormat(const Json::Value& params);
+			/// \throws std::runtime_error if params is invalid
+			void setDataFormat(const Json::Value& params);
 
 			enum pattern_t {
 				/// "V"; No timestamps, values only. Signal rate is recieved first.

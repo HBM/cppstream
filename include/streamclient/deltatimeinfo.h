@@ -33,6 +33,8 @@ namespace hbm {
 			/// the lower 32 bytes are fraction of seconds (0.5, 0.25, 0.125...)
 			uint64_t ntpTimeStamp() const;
 		private:
+			deltaTimeInfo(const deltaTimeInfo&);
+			deltaTimeInfo& operator=(const deltaTimeInfo&);
 
 			uint64_t m_deltaNtpTimestamp;
 			uint64_t m_deltaSubFraction;

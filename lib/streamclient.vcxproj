@@ -159,7 +159,6 @@
     <ClInclude Include="Controller.h" />
     <ClInclude Include="HttpPost.h" />
     <ClInclude Include="MetaInformation.h" />
-    <ClInclude Include="SocketNonblocking.h" />
     <ClInclude Include="Types.h" />
   </ItemGroup>
   <ItemGroup>

@@ -65,9 +65,6 @@
     <ClInclude Include="metainformation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="socketnonblocking.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="HttpPost.h">
       <Filter>Header Files</Filter>
     </ClInclude>

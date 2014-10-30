@@ -14,6 +14,8 @@ ENDIF()
 
 include_directories(../include)
 
+include_directories(/usr/include/jsoncpp/)
+
 set(TEST_STREAMCLIENT_SOURCES
   teststreamclient.cpp
 )

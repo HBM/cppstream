@@ -12,6 +12,7 @@ IF(NOT CMAKE_BUILD_TYPE )
   SET(CMAKE_BUILD_TYPE RELEASE CACHE STRING "" FORCE)
 ENDIF()
 
+include_directories("/usr/include/jsoncpp/")
 
 set( INTERFACE_INCLUDE_DIR ../include/streamclient)
 

@@ -1,7 +1,6 @@
 #ifndef _HBM__STREAMING__TYPES
 #define _HBM__STREAMING__TYPES
 
-#include <stdint.h>
 #include <vector>
 #include <json/value.h>
 

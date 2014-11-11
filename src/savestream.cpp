@@ -32,6 +32,7 @@ static void sigHandler(int)
 
 static void streamMetaInformationCb(hbm::streaming::StreamClient& stream, const std::string& method, const Json::Value& params)
 {
+	streamMetaFile << method << ": " << Json::FastWriter().write(params) << std::endl;
 	if (method == hbm::streaming::META_METHOD_AVAILABLE) {
 		// simply subscibe all signals that become available.
 		hbm::streaming::signalReferences_t signalReferences;
@@ -76,13 +77,13 @@ static void signalMetaInformationCb(hbm::streaming::SubscribedSignal& subscribed
 {
 	unsigned int signalNumber = subscribedSignal.signalNumber();
 	if(method=="subscribe") {
-		std::string signalMetaFilename = "signalMeta_"+subscribedSignal.signalReference();
+		std::string signalMetaFilename = "signalMeta_"+subscribedSignal.signalReference()+".dump";
 		std::unique_ptr < std::ofstream > pSignalMetaFile(new std::ofstream);
 		pSignalMetaFile->open(signalMetaFilename);
 		*pSignalMetaFile << method << ": " << Json::FastWriter().write(params) << std::endl;
 		signalMetaFiles.emplace(signalNumber, std::move(pSignalMetaFile));
 
-		std::string signalDataFilename = "signalData_"+subscribedSignal.signalReference();
+		std::string signalDataFilename = "signalData_"+subscribedSignal.signalReference()+".dump";
 		std::unique_ptr < std::ofstream > pSignalDataFile(new std::ofstream);
 		pSignalDataFile->open(signalDataFilename);
 
@@ -134,6 +135,8 @@ int main(int argc, char* argv[])
 		controlPort = argv[2];
 	}
 
+	static const std::string streamMetaFilename = "streamMeta.dump";
+	streamMetaFile.open(streamMetaFilename);
 
 	signalContainer.setDataCb(dataCb);
 	signalContainer.setSignalMetaCb(signalMetaInformationCb);

@@ -102,7 +102,7 @@ namespace hbm {
 						} else {
 							bytesToReadToBuffer = bytesToProcess-bytesInBuffer;
 						}
-						ssize_t bytesReadToBuffer = m_streamSocket.receive(dataRecvBuffer+bytesInBuffer, bytesToReadToBuffer);
+						ssize_t bytesReadToBuffer = m_streamSocket.receiveComplete(dataRecvBuffer+bytesInBuffer, bytesToReadToBuffer);
 						if(bytesReadToBuffer<=0) {
 							break;
 						}
@@ -121,7 +121,7 @@ namespace hbm {
 				} else if (type == TYPE_META){
 					MetaInformation metaInformation(m_streamSocket, bytesToProcess);
 					if(metaInformation.type()!=METAINFORMATION_JSON) {
-						std::cout << "unhandled meta information of type " << metaInformation.type() << std::endl;
+						std::cout << "Signal number " << signalNumber << ": unhandled meta information of type " << metaInformation.type() << std::endl;
 					} else {
 						const Json::Value& content = metaInformation.jsonContent();
 						std::string method = content[METHOD].asString();

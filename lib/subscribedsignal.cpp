@@ -10,8 +10,9 @@
 
 namespace hbm {
 	namespace streaming {
-		SubscribedSignal::SubscribedSignal()
-			: m_signalReference()
+		SubscribedSignal::SubscribedSignal(unsigned int signalNumber)
+			: m_signalNumber(signalNumber)
+			, m_signalReference()
 			, m_syncSignalTime()
 
 			, m_dataFormatPattern()

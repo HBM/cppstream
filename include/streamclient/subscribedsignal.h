@@ -13,14 +13,14 @@ namespace hbm {
 
 		class SubscribedSignal;
 
-		typedef std::function<void(SubscribedSignal& subscribedSignal, uint64_t ntpTimeStamp, double* values, size_t count)> DataCb_t;
+		typedef std::function<void(SubscribedSignal& subscribedSignal, uint64_t ntpTimeStamp, const double* values, size_t count)> DataCb_t;
 
 		/// interpretes and stores meta information of a subscribed signal.
 		/// Mesured data of a subscribed signal is processed here
 		/// \warning for windows, this class works on little endian machines only. this is because of endian issues.
 		class SubscribedSignal {
 		public:
-			SubscribedSignal();
+			SubscribedSignal(unsigned int signalNumber);
 
 			/// process measured data
 			/// \return number of bytes processed
@@ -29,9 +29,14 @@ namespace hbm {
 			/// process signal related meta information.
 			void processSignalMetaInformation(const std::string& method, const Json::Value& params);
 
-			std::string signalReference()
+			std::string signalReference() const
 			{
 				return m_signalReference;
+			}
+
+			unsigned int signalNumber() const
+			{
+				return m_signalNumber;
 			}
 
 		private:
@@ -70,6 +75,7 @@ namespace hbm {
 				TIMETYPE_NTP
 			};
 
+			unsigned int m_signalNumber;
 			std::string m_signalReference;
 
 			/// For synchronuous signals (Pattern V): will be set to the time of the first measured value and will be incremented with each value received.

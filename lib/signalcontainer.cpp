@@ -39,7 +39,7 @@ namespace hbm {
 			}
 
 			if (iter == m_subscribedsignals.end()) {
-				SubscribedSignal newSignal;
+				SubscribedSignal newSignal(signalNumber);
 				std::pair < signals_t::iterator, bool > result;
 				std::pair < unsigned int, SubscribedSignal > newEntry(signalNumber, newSignal);
 				result = m_subscribedsignals.insert(newEntry);
@@ -47,10 +47,10 @@ namespace hbm {
 			}
 
 			SubscribedSignal& signal = iter->second;
+			signal.processSignalMetaInformation(method, params);
 			if (m_signalMetaCb) {
 				m_signalMetaCb(signal, method, params);
 			}
-			signal.processSignalMetaInformation(method, params);
 		}
 
 		void SignalContainer::clear()

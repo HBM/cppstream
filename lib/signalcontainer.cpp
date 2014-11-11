@@ -32,17 +32,25 @@ namespace hbm {
 		void SignalContainer::processMetaInformation(unsigned int signalNumber, const std::string& method, const Json::Value& params)
 		{
 			signals_t::iterator iter = m_subscribedsignals.find(signalNumber);
-			if (iter != m_subscribedsignals.end()) {
-				SubscribedSignal& signal = iter->second;
-				if (m_signalMetaCb) {
-					m_signalMetaCb(signal, method, params);
-				}
-				signal.processSignalMetaInformation(method, params);
-			}
 
 			if(method=="unsubscribe") {
 				m_subscribedsignals.erase(signalNumber);
+				return;
 			}
+
+			if (iter == m_subscribedsignals.end()) {
+				SubscribedSignal newSignal;
+				std::pair < signals_t::iterator, bool > result;
+				std::pair < unsigned int, SubscribedSignal > newEntry(signalNumber, newSignal);
+				result = m_subscribedsignals.insert(newEntry);
+				iter = result.first;
+			}
+
+			SubscribedSignal& signal = iter->second;
+			if (m_signalMetaCb) {
+				m_signalMetaCb(signal, method, params);
+			}
+			signal.processSignalMetaInformation(method, params);
 		}
 
 		void SignalContainer::clear()

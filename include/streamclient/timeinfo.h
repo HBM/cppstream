@@ -24,8 +24,6 @@ namespace hbm {
 			void clear();
 
 		private:
-			timeInfo(const timeInfo&);
-			timeInfo& operator=(const timeInfo&);
 			uint32_t m_era;
 			uint64_t m_ntpTimestamp;
 			uint32_t m_subFraction;

@@ -13,7 +13,7 @@ namespace hbm {
 
 		class SubscribedSignal;
 
-		typedef std::function<void(SubscribedSignal& subscribedSignal, uint64_t ntpTimeStamp, double* values, size_t count)> DataCb_t;
+		typedef std::function<void(SubscribedSignal& subscribedSignal, uint64_t ntpTimeStamp, const double* values, size_t count)> DataCb_t;
 
 		/// interpretes and stores meta information of a subscribed signal.
 		/// Mesured data of a subscribed signal is processed here

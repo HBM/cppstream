@@ -69,7 +69,7 @@ static void signalMetaInformationCb(hbm::streaming::SubscribedSignal& subscribed
 }
 
 
-static void dataCb(hbm::streaming::SubscribedSignal& subscribedSignal, uint64_t ntpTimestamp, double* pValues, size_t count)
+static void dataCb(hbm::streaming::SubscribedSignal& subscribedSignal, uint64_t ntpTimestamp, const double* pValues, size_t count)
 {
 	std::cout << subscribedSignal.signalReference() << ": " << std::hex << ntpTimestamp << std::dec << " ";
 	for (size_t i=0; i<count; ++i) {

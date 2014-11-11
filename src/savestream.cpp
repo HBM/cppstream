@@ -1,14 +1,18 @@
+#include <memory>
 #include <unordered_map>
 #include <iostream>
 #include <string>
 #include <signal.h>
 #include <fstream>
 
+#include <json/writer.h>
+
 #include "streamclient/streamclient.h"
 #include "streamclient/signalcontainer.h"
 #include "streamclient/types.h"
 
-typedef std::unordered_map < std::string, std::ofstream > files_t;
+/// signal number is the key
+typedef std::unordered_map < unsigned int, std::unique_ptr < std::ofstream > > files_t;
 
 /// receives data from DAQ Stream Server. Subscribes/Unsubscribes signals
 static hbm::streaming::StreamClient streamClient;
@@ -35,7 +39,6 @@ static void streamMetaInformationCb(hbm::streaming::StreamClient& stream, const 
 			const Json::Value& element = *iter;
 			signalReferences.push_back(element.asString());
 		}
-
 
 		try {
 			stream.subscribe(signalReferences);
@@ -69,20 +72,49 @@ static void streamMetaInformationCb(hbm::streaming::StreamClient& stream, const 
 	}
 }
 
-static void signalMetaInformationCb(hbm::streaming::SubscribedSignal& subscribedSignal, const std::string& method, const Json::Value& )
+static void signalMetaInformationCb(hbm::streaming::SubscribedSignal& subscribedSignal, const std::string& method, const Json::Value& params)
 {
-	std::cout << subscribedSignal.signalReference() << ": " << method << std::endl;
+	unsigned int signalNumber = subscribedSignal.signalNumber();
+	if(method=="subscribe") {
+		std::string signalMetaFilename = "signalMeta_"+subscribedSignal.signalReference();
+		std::unique_ptr < std::ofstream > pSignalMetaFile(new std::ofstream);
+		pSignalMetaFile->open(signalMetaFilename);
+		*pSignalMetaFile << method << ": " << Json::FastWriter().write(params) << std::endl;
+		signalMetaFiles.emplace(signalNumber, std::move(pSignalMetaFile));
+
+		std::string signalDataFilename = "signalData_"+subscribedSignal.signalReference();
+		std::unique_ptr < std::ofstream > pSignalDataFile(new std::ofstream);
+		pSignalDataFile->open(signalDataFilename);
+
+
+		signalDataFiles.emplace(signalNumber, std::move(pSignalDataFile));
+	} else if(method=="unsubscribe") {
+		signalMetaFiles.erase(signalNumber);
+		signalDataFiles.erase(signalNumber);
+		return;
+	} else {
+		files_t::iterator iter = signalMetaFiles.find(signalNumber);
+		if(iter==signalMetaFiles.end()) {
+			return;
+		}
+		*iter->second << method << ": " << Json::FastWriter().write(params) << std::endl;
+	}
 }
 
 
-static void dataCb(hbm::streaming::SubscribedSignal& subscribedSignal, uint64_t ntpTimestamp, double* pValues, size_t count)
+static void dataCb(hbm::streaming::SubscribedSignal& subscribedSignal, uint64_t ntpTimestamp, const double* pValues, size_t count)
 {
-	std::cout << subscribedSignal.signalReference() << ": " << std::hex << ntpTimestamp << std::dec << " ";
+	files_t::iterator iter = signalDataFiles.find(subscribedSignal.signalNumber());
+	if(iter==signalDataFiles.end()) {
+		return;
+	}
+
+	*iter->second << std::hex << ntpTimestamp << std::dec << " ";
 	for (size_t i=0; i<count; ++i) {
-		std::cout << *pValues << " ";
+		*iter->second << *pValues << " ";
 		++pValues;
 	}
-	std::cout << std::endl;
+	*iter->second << std::endl;
 }
 
 int main(int argc, char* argv[])

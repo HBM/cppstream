@@ -26,6 +26,17 @@ target_link_libraries( exampleclient.bin
   jsoncpp
 )
 
+set(SAVESTREAM_SOURCES
+  savestream.cpp
+)
+
+add_executable( savestream.bin ${SAVESTREAM_SOURCES} )
+
+target_link_libraries( savestream.bin
+  streamclient-static
+  jsoncpp
+)
+
 set(RECONNECT_SOURCES
   reconnect.cpp
 )

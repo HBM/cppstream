@@ -81,14 +81,16 @@ static void signalMetaInformationCb(hbm::streaming::SubscribedSignal& subscribed
 		std::unique_ptr < std::ofstream > pSignalMetaFile(new std::ofstream);
 		pSignalMetaFile->open(signalMetaFilename);
 		*pSignalMetaFile << method << ": " << Json::FastWriter().write(params) << std::endl;
-		signalMetaFiles.emplace(signalNumber, std::move(pSignalMetaFile));
+//		signalMetaFiles.emplace(signalNumber, std::move(pSignalMetaFile));
+		signalMetaFiles.insert(std::pair < unsigned int, std::unique_ptr < std::ofstream > > (signalNumber, std::move(pSignalMetaFile)));
 
 		std::string signalDataFilename = "signalData_"+subscribedSignal.signalReference()+".dump";
 		std::unique_ptr < std::ofstream > pSignalDataFile(new std::ofstream);
 		pSignalDataFile->open(signalDataFilename);
 
 
-		signalDataFiles.emplace(signalNumber, std::move(pSignalDataFile));
+//		signalDataFiles.emplace(signalNumber, std::move(pSignalDataFile));
+		signalDataFiles.insert(std::pair < unsigned int, std::unique_ptr < std::ofstream > > (signalNumber, std::move(pSignalDataFile)));
 	} else if(method=="unsubscribe") {
 		signalMetaFiles.erase(signalNumber);
 		signalDataFiles.erase(signalNumber);

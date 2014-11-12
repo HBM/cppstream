@@ -11,8 +11,40 @@
 #include "streamclient/signalcontainer.h"
 #include "streamclient/types.h"
 
+class signalInfo_t {
+public:
+	signalInfo_t(const std::string& sinalReference)
+		: dataFile("signalData_"+sinalReference+".dump")
+		, dataFileNextLine(1)
+		, metaInfoFile("signalMetaInfo_"+sinalReference+".dump")
+	{
+	}
+
+	/// meta inforamtion is written into file. It is preceded by the next line in the corresponding data file.
+	void addMetaInfo(const std::string& method, const Json::Value& params)
+	{
+		metaInfoFile << dataFileNextLine << ": " << method << " " << Json::FastWriter().write(params) << std::endl;
+	}
+
+	void addData(uint64_t ntpTimestamp, const double* pValues, size_t count)
+	{
+		dataFile << std::hex << ntpTimestamp << std::dec << " ";
+		for (size_t i=0; i<count; ++i) {
+			dataFile << *pValues << " ";
+			++pValues;
+		}
+		dataFile << std::endl;
+		++dataFileNextLine;
+	}
+
+private:
+	std::ofstream dataFile;
+	off_t dataFileNextLine;
+	std::ofstream metaInfoFile;
+};
+
 /// signal number is the key
-typedef std::unordered_map < unsigned int, std::unique_ptr < std::ofstream > > files_t;
+typedef std::unordered_map < unsigned int, std::unique_ptr < signalInfo_t > > signalInfos_t;
 
 /// receives data from DAQ Stream Server. Subscribes/Unsubscribes signals
 static hbm::streaming::StreamClient streamClient;
@@ -22,8 +54,7 @@ static hbm::streaming::SignalContainer signalContainer;
 
 
 static std::ofstream streamMetaFile;
-static files_t signalMetaFiles;
-static files_t signalDataFiles;
+static signalInfos_t signalFiles;
 
 static void sigHandler(int)
 {
@@ -77,47 +108,30 @@ static void signalMetaInformationCb(hbm::streaming::SubscribedSignal& subscribed
 {
 	unsigned int signalNumber = subscribedSignal.signalNumber();
 	if(method=="subscribe") {
-		std::string signalMetaFilename = "signalMeta_"+subscribedSignal.signalReference()+".dump";
-		std::unique_ptr < std::ofstream > pSignalMetaFile(new std::ofstream);
-		pSignalMetaFile->open(signalMetaFilename);
-		*pSignalMetaFile << method << ": " << Json::FastWriter().write(params) << std::endl;
-//		signalMetaFiles.emplace(signalNumber, std::move(pSignalMetaFile));
-		signalMetaFiles.insert(std::pair < unsigned int, std::unique_ptr < std::ofstream > > (signalNumber, std::move(pSignalMetaFile)));
-
-		std::string signalDataFilename = "signalData_"+subscribedSignal.signalReference()+".dump";
-		std::unique_ptr < std::ofstream > pSignalDataFile(new std::ofstream);
-		pSignalDataFile->open(signalDataFilename);
-
-
-//		signalDataFiles.emplace(signalNumber, std::move(pSignalDataFile));
-		signalDataFiles.insert(std::pair < unsigned int, std::unique_ptr < std::ofstream > > (signalNumber, std::move(pSignalDataFile)));
+		std::unique_ptr < signalInfo_t > pSignalInfo(new signalInfo_t(subscribedSignal.signalReference()));
+		pSignalInfo->addMetaInfo(method, params);
+		signalFiles.insert(std::pair < unsigned int, std::unique_ptr < signalInfo_t > > (signalNumber, std::move(pSignalInfo)));
 	} else if(method=="unsubscribe") {
-		signalMetaFiles.erase(signalNumber);
-		signalDataFiles.erase(signalNumber);
+		signalFiles.erase(signalNumber);
 		return;
 	} else {
-		files_t::iterator iter = signalMetaFiles.find(signalNumber);
-		if(iter==signalMetaFiles.end()) {
+		signalInfos_t::iterator iter = signalFiles.find(signalNumber);
+		if(iter==signalFiles.end()) {
 			return;
 		}
-		*iter->second << method << ": " << Json::FastWriter().write(params) << std::endl;
+		iter->second->addMetaInfo(method, params);
 	}
 }
 
 
 static void dataCb(hbm::streaming::SubscribedSignal& subscribedSignal, uint64_t ntpTimestamp, const double* pValues, size_t count)
 {
-	files_t::iterator iter = signalDataFiles.find(subscribedSignal.signalNumber());
-	if(iter==signalDataFiles.end()) {
+	signalInfos_t::iterator iter = signalFiles.find(subscribedSignal.signalNumber());
+	if(iter==signalFiles.end()) {
 		return;
 	}
 
-	*iter->second << std::hex << ntpTimestamp << std::dec << " ";
-	for (size_t i=0; i<count; ++i) {
-		*iter->second << *pValues << " ";
-		++pValues;
-	}
-	*iter->second << std::endl;
+	iter->second->addData(ntpTimestamp, pValues,  count);
 }
 
 int main(int argc, char* argv[])

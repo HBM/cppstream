@@ -16,7 +16,7 @@ namespace hbm {
 		typedef std::function<void(SubscribedSignal& subscribedSignal, uint64_t ntpTimeStamp, const double* values, size_t count)> DataCb_t;
 
 		/// interpretes and stores meta information of a subscribed signal.
-		/// Mesured data of a subscribed signal is processed here
+		/// Measured data of a subscribed signal is processed here.
 		/// \warning for windows, this class works on little endian machines only. this is because of endian issues.
 		class SubscribedSignal {
 		public:

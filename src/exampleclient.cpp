@@ -28,9 +28,6 @@ static void streamMetaInformationCb(hbm::streaming::StreamClient& stream, const 
 			signalReferences.push_back(element.asString());
 		}
 
-//		signalReferences.push_back("AnalogIn_Connector1.Signal1");
-
-
 		try {
 			stream.subscribe(signalReferences);
 			std::cout << __FUNCTION__ << "the following signal(s) were subscribed: ";

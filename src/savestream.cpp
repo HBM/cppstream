@@ -75,17 +75,15 @@ static void streamMetaInformationCb(hbm::streaming::StreamClient& stream, const 
 		try {
 			stream.subscribe(signalReferences);
 			std::cout << __FUNCTION__ << "the following signal(s) were subscribed: ";
+			for(hbm::streaming::signalReferences_t::const_iterator iter=signalReferences.begin(); iter!=signalReferences.end(); ++iter) {
+				std::cout << "'" << *iter << "' ";
+			}
+			std::cout << std::endl;
 		} catch(const std::runtime_error& e) {
 			std::cerr << __FUNCTION__ << "error '" << e.what() << "' subscribing the following signal(s): ";
 		}
-
-		for(hbm::streaming::signalReferences_t::const_iterator iter=signalReferences.begin(); iter!=signalReferences.end(); ++iter) {
-			std::cout << "'" << *iter << "' ";
-		}
-		std::cout << std::endl;
 	} else if(method==hbm::streaming::META_METHOD_UNAVAILABLE) {
-
-		std::cout << __FUNCTION__ << "the following signal(s) are not available anyore: ";
+		std::cout << __FUNCTION__ << "the following signal(s) is(are) not available anymore: ";
 
 		for (Json::ValueConstIterator iter = params.begin(); iter!= params.end(); ++iter) {
 			const Json::Value& element = *iter;
@@ -113,16 +111,15 @@ static void signalMetaInformationCb(hbm::streaming::SubscribedSignal& subscribed
 		signalFiles.insert(std::pair < unsigned int, std::unique_ptr < signalInfo_t > > (signalNumber, std::move(pSignalInfo)));
 	} else if(method=="unsubscribe") {
 		signalFiles.erase(signalNumber);
-		return;
 	} else {
 		signalInfos_t::iterator iter = signalFiles.find(signalNumber);
 		if(iter==signalFiles.end()) {
+			std::cerr << "received meta information for signal that is not known to be subscribed" << std::endl;
 			return;
 		}
 		iter->second->addMetaInfo(method, params);
 	}
 }
-
 
 static void dataCb(hbm::streaming::SubscribedSignal& subscribedSignal, uint64_t ntpTimestamp, const double* pValues, size_t count)
 {
@@ -133,6 +130,8 @@ static void dataCb(hbm::streaming::SubscribedSignal& subscribedSignal, uint64_t 
 
 	iter->second->addData(ntpTimestamp, pValues,  count);
 }
+
+
 
 int main(int argc, char* argv[])
 {

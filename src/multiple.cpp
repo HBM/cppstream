@@ -4,9 +4,9 @@
 #include <memory>
 #include <signal.h>
 #include <unordered_map>
+#include <functional>
 
 #include <boost/thread/thread.hpp>
-#include <boost/bind.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 #include "streamclient/streamclient.h"
@@ -79,7 +79,7 @@ int main(int argc, char** )
 		hbm::streaming::StreamClient* streamPtr = new hbm::streaming::StreamClient(dumpFileName);
 		streamPtr->setStreamMetaCb(streamMetaInformationCb);
 
-		boost::thread* pStreamer = new boost::thread(boost::bind(&hbm::streaming::StreamClient::start, streamPtr, address, hbm::streaming::DAQSTREAM_PORT, "http"));
+		boost::thread* pStreamer = new boost::thread(std::bind(&hbm::streaming::StreamClient::start, streamPtr, address, hbm::streaming::DAQSTREAM_PORT, "http"));
 		threads.add_thread(pStreamer);
 		streams.push_back(streamPtr);
 	}

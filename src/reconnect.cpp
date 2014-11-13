@@ -1,9 +1,9 @@
 #include <iostream>
 #include <string>
+#include <functional>
 #include <cstdlib> //atoi
 
 #include <boost/thread/thread.hpp>
-#include <boost/bind.hpp>
 
 #include "streamclient/streamclient.h"
 
@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
 	hbm::streaming::StreamClient stream;
 	stream.setStreamMetaCb(streamMetaInformationCb);
 	do {
-		boost::thread streamer = boost::thread(boost::bind(&hbm::streaming::StreamClient::start, &stream, address, hbm::streaming::DAQSTREAM_PORT, controlPort));
+		boost::thread streamer = boost::thread(std::bind(&hbm::streaming::StreamClient::start, &stream, address, hbm::streaming::DAQSTREAM_PORT, controlPort));
 		std::cout << "Started" << std::endl;
 		boost::this_thread::sleep_for(cycleTime);
 		stream.stop();

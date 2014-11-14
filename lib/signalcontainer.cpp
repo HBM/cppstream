@@ -39,10 +39,7 @@ namespace hbm {
 			}
 
 			if (iter == m_subscribedsignals.end()) {
-				SubscribedSignal newSignal(signalNumber);
-				std::pair < signals_t::iterator, bool > result;
-				std::pair < unsigned int, SubscribedSignal > newEntry(signalNumber, newSignal);
-				result = m_subscribedsignals.insert(newEntry);
+				std::pair < signals_t::iterator, bool > result = m_subscribedsignals.emplace(signalNumber, SubscribedSignal(signalNumber));
 				iter = result.first;
 			}
 

@@ -33,7 +33,7 @@ static void streamMetaInformationCb(hbm::streaming::StreamClient& stream, const 
 
 		try {
 			stream.subscribe(signalReferences);
-			std::cout << __FUNCTION__ << "the following signal(s) were subscribed: ";
+			std::cout << __FUNCTION__ << "the following " << signalReferences.size() << " signal(s) were subscribed: ";
 		} catch(const std::runtime_error& e) {
 			std::cerr << __FUNCTION__ << "error '" << e.what() << "' subscribing the following signal(s): ";
 		}

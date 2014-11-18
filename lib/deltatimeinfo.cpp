@@ -1,3 +1,4 @@
+#include <iostream>
 #include "deltatimeinfo.h"
 
 namespace hbm {
@@ -79,6 +80,11 @@ namespace hbm {
 			rest <<= 32;
 			rest /= samples;
 			m_deltaSubFraction += static_cast < uint32_t > (rest & 0xffffffff);
+
+			std::cout << __FUNCTION__ << std::endl;
+			std::cout << "seconds = " << seconds << std::hex << " (0x" << seconds << ")" << std::endl;
+			std::cout << "fraction = " << fraction << std::hex << " (0x" << fraction << ")" << std::endl;
+			std::cout << "subFraction = " << subFraction << std::hex << " (0x" << subFraction << ")" << std::endl;
 		}
 
 		void deltaTimeInfo::clear()

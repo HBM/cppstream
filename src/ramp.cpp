@@ -2,6 +2,7 @@
 #include <string>
 #include <signal.h>
 #include <unordered_map>
+#include <cmath>
 
 #include <json/writer.h>
 #include <json/value.h>
@@ -20,8 +21,7 @@ static hbm::streaming::StreamClient streamClient;
 static hbm::streaming::SignalContainer signalContainer;
 
 static const double rampValueDiff = 0.1;
-static const double rampValueDiffLower = rampValueDiff-0.0000000001;
-static const double rampValueDiffUpper = rampValueDiff+0.0000000001;
+static const double epsilon = 0.0000000001;
 
 static lastValues_t m_lastValues;
 
@@ -89,8 +89,7 @@ static void dataCb(hbm::streaming::SubscribedSignal& subscribedSignal, uint64_t 
 		m_lastValues.insert(std::make_pair(signalNumber, pValues[count-1]));
 	else {
 		double valueDiff = pValues[0] - iter->second;
-		std::cout << valueDiff << " > " << rampValueDiffLower << " || " << valueDiff << " > " << rampValueDiffUpper << std::endl;
-		if ( (valueDiff > rampValueDiffLower) || (valueDiff > rampValueDiffUpper) ) {
+		if(fabs(valueDiff - rampValueDiff) > epsilon) {
 			throw std::runtime_error ("error in ramp!");
 		} else {
 			m_lastValues[signalNumber] = pValues[count-1];

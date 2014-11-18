@@ -27,7 +27,7 @@ namespace hbm {
 			, m_address()
 			, m_httpPath()
 			, m_streamId()
-			, m_controlPort()
+			, m_controlPort(0)
 			, m_initialTime()
 			, m_initialTimeScale()
 			, m_initialTimeEpoch()
@@ -41,7 +41,7 @@ namespace hbm {
 			, m_address()
 			, m_httpPath()
 			, m_streamId()
-			, m_controlPort()
+			, m_controlPort(0)
 			, m_initialTime()
 			, m_initialTimeScale()
 			, m_initialTimeEpoch()
@@ -68,7 +68,7 @@ namespace hbm {
 		}
 
 
-		int StreamClient::start(const std::string& address, const std::string &streamPort, const std::string &controlPort)
+		int StreamClient::start(const std::string& address, const std::string &streamPort)
 		{
 			int result = m_streamSocket.connect(address.c_str(), streamPort);
 			if (result < 0) {
@@ -77,7 +77,6 @@ namespace hbm {
 			}
 
 			m_address = address;
-			m_controlPort = controlPort;
 
 			unsigned char dataRecvBuffer[8192];
 
@@ -169,6 +168,7 @@ namespace hbm {
 						if (strncasecmp(element["httpMethod"].asString().c_str(), POST, sizeof(POST)) == 0) {
 							m_httpPath = element["httpPath"].asString();
 						}
+						m_controlPort = element["port"].asString();
 					}
 				} else if (method == "time") {
 					m_initialTime.set(params["stamp"]);

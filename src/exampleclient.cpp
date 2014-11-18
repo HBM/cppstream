@@ -92,12 +92,6 @@ int main(int argc, char* argv[])
 		return EXIT_SUCCESS;
 	}
 
-	// the control port might differ when communication runs via a router (CX27)
-	std::string controlPort = "http";
-	if (argc>2) {
-		controlPort = argv[2];
-	}
-
 	signalContainer.setDataCb(dataCb);
 	signalContainer.setSignalMetaCb(signalMetaInformationCb);
 
@@ -106,6 +100,6 @@ int main(int argc, char* argv[])
 
 	// connect to the daq stream service and give control to the receiving function.
 	// returns on signal (terminate, interrupt) buffer overrun on the server side or loss of connection.
-	streamClient.start(argv[1], hbm::streaming::DAQSTREAM_PORT, controlPort);
+	streamClient.start(argv[1], hbm::streaming::DAQSTREAM_PORT);
 	return EXIT_SUCCESS;
 }

@@ -2,6 +2,9 @@
 #include <string>
 #include <signal.h>
 
+#include <json/writer.h>
+#include <json/value.h>
+
 #include "streamclient/streamclient.h"
 #include "streamclient/signalcontainer.h"
 #include "streamclient/types.h"
@@ -57,6 +60,8 @@ static void streamMetaInformationCb(hbm::streaming::StreamClient& stream, const 
 				std::cout << stream.address() << ": ring buffer fill level is " << params[0u].asUInt() << "%" << std::endl;
 			}
 		}
+	} else {
+		std::cout << __FUNCTION__ << " " << method << " " << Json::FastWriter().write(params) << std::endl;
 	}
 }
 

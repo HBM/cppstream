@@ -3,7 +3,6 @@
 #include <iostream>
 #include <memory>
 #include <signal.h>
-#include <unordered_map>
 #include <functional>
 
 #include <boost/thread/thread.hpp>

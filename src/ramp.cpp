@@ -19,9 +19,9 @@ static hbm::streaming::StreamClient streamClient;
 /// handles signal related meta information and measured data.
 static hbm::streaming::SignalContainer signalContainer;
 
-static const double rampValueDiff = 0.01;
-static const double rampValueDiffLower = rampValueDiff-0.00001;
-static const double rampValueDiffUpper = rampValueDiff+0.00001;
+static const double rampValueDiff = 0.1;
+static const double rampValueDiffLower = rampValueDiff-0.0000000001;
+static const double rampValueDiffUpper = rampValueDiff+0.0000000001;
 
 static lastValues_t m_lastValues;
 
@@ -76,9 +76,6 @@ static void streamMetaInformationCb(hbm::streaming::StreamClient& stream, const 
 
 static void signalMetaInformationCb(hbm::streaming::SubscribedSignal& subscribedSignal, const std::string& method, const Json::Value& )
 {
-	if (method=="subscribe") {
-		m_lastValues[subscribedSignal.signalNumber()] = 0;
-	}
 	std::cout << subscribedSignal.signalReference() << ": " << method << std::endl;
 }
 
@@ -86,11 +83,18 @@ static void signalMetaInformationCb(hbm::streaming::SubscribedSignal& subscribed
 static void dataCb(hbm::streaming::SubscribedSignal& subscribedSignal, uint64_t , const double* pValues, size_t count)
 {
 	unsigned int signalNumber = subscribedSignal.signalNumber();
-	double valueDiff = pValues[0] - m_lastValues[signalNumber];
-	if( (rampValueDiffLower < valueDiff) || (valueDiff > rampValueDiffUpper) ) {
-		throw std::runtime_error ("error in ramp!");
-	} else {
-		m_lastValues[signalNumber] = pValues[count];
+	lastValues_t::iterator iter = m_lastValues.find(signalNumber);
+
+	if(iter==m_lastValues.end())
+		m_lastValues.insert(std::make_pair(signalNumber, pValues[count-1]));
+	else {
+		double valueDiff = pValues[0] - iter->second;
+		std::cout << valueDiff << " > " << rampValueDiffLower << " || " << valueDiff << " > " << rampValueDiffUpper << std::endl;
+		if ( (valueDiff > rampValueDiffLower) || (valueDiff > rampValueDiffUpper) ) {
+			throw std::runtime_error ("error in ramp!");
+		} else {
+			m_lastValues[signalNumber] = pValues[count-1];
+		}
 	}
 }
 

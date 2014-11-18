@@ -26,6 +26,17 @@ target_link_libraries( exampleclient.bin
   jsoncpp
 )
 
+set(RAMP_SOURCES
+  ramp.cpp
+)
+
+add_executable( ramp.bin ${RAMP_SOURCES} )
+
+target_link_libraries( ramp.bin
+  streamclient-static
+  jsoncpp
+)
+
 set(SAVESTREAM_SOURCES
   savestream.cpp
 )

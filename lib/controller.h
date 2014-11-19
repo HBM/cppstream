@@ -12,7 +12,7 @@
 
 namespace hbm {
 	namespace streaming {
-		/// used to send commands to the streaming control port.
+		/// used to send commands to the streaming control http port.
 		class Controller
 		{
 		public:

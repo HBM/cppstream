@@ -17,8 +17,8 @@ namespace hbm {
 
 			, m_dataFormatPattern()
 			, m_dataIsBigEndian(false)
-			, m_dataValueType()
-			, m_dataValueSize(0)
+			, m_dataValueType(DATATYPE_REAL32)
+			, m_dataValueSize(4) // may not be zero because it is used as divisor.
 			, m_dataTimeType()
 			, m_dataTimeSize(0)
 		{

@@ -23,7 +23,7 @@ Download and install the binaries and set the '`BOOST_ROOT`' environment variabl
 ### Build System
 #### Linux
 Under Linux the cmake build system is being used. Install it using your distribution package system. Create a sub directory inside the project directory. change into this subdirectory and call '`cmake ..`'. Execute '`make`' afterwards to build all libraries and executables.
-Tested with gcc 4.6
+Tested with gcc 4.8.2
 
 
 #### Windows

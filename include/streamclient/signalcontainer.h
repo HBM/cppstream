@@ -32,6 +32,7 @@ namespace hbm {
 			void setDataCb(DataCb_t cb);
 
 			/// new subscribed signals are added with arrival of initial meta information
+			/// \throw std::runtime_error
 			void processMetaInformation(unsigned int signalNumber, const std::string &method, const Json::Value& params);
 
 			/// \return number of bytes processed or -1 if signal is unknown.

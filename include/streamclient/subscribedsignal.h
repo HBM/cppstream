@@ -48,7 +48,8 @@ namespace hbm {
 			/// for Pattern V: If timestamp is not provided with the value(s), we calulate the time
 			void incrementSyncSignalTime(unsigned int valueCount);
 
-			int setDataFormat(const Json::Value& params);
+			/// \throws std::runtime_error
+			void setDataFormat(const Json::Value& params);
 
 			enum pattern_t {
 				/// "V"; No timestamps, values only. Signal rate is recieved first.

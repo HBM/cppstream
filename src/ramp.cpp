@@ -123,8 +123,9 @@ int main(int argc, char* argv[])
 
 	if (argc==3) {
 		char* pEnd;
-		rampValueDiff = strtod(argv[2], &pEnd);
-		if (pEnd ==argv[2]) {
+		const char* pStart = argv[2];
+		rampValueDiff = strtod(pStart, &pEnd);
+		if (pEnd ==pStart) {
 			std::cerr << "invalid slope value. Must be a number" << std::endl;
 			return EXIT_FAILURE;
 		}

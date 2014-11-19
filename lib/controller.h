@@ -5,6 +5,8 @@
 #include <vector>
 #include <stdexcept>
 
+#include <json/value.h>
+
 #include "types.h"
 #include "httppost.h"
 
@@ -27,6 +29,9 @@ namespace hbm {
 		private:
 			Controller(const Controller&);
 			Controller& operator= (const Controller&);
+
+			/// \throws std::runtime_error
+			void execute(const Json::Value& request);
 
 			std::string m_streamId;
 			HttpPost m_httpPost;

@@ -25,6 +25,24 @@ namespace hbm {
 			}
 		}
 
+		void Controller::execute(const Json::Value &request)
+		{
+			std::string requestString = Json::FastWriter().write(request);
+
+			std::string response = m_httpPost.execute(requestString);
+
+			Json::Value result;
+			Json::Reader reader;
+			if(reader.parse(response, result)==false) {
+				throw std::runtime_error("http response is not valid JSON '" + reader.getFormatedErrorMessages() + "'");
+			}
+			if(result.isMember(ERROR)) {
+				std::ostringstream msg;
+				msg << "http response contains error: code=" << result[ERROR]["code"].asInt() << " '" << result[ERROR]["message"].asString() << "'";
+				throw std::runtime_error(msg.str());
+			}
+		}
+
 		void Controller::subscribe(const signalReferences_t &signalReferences)
 		{
 			if(signalReferences.empty()) {
@@ -38,21 +56,7 @@ namespace hbm {
 			}
 			content["id"] = ++s_id;
 
-			std::string request = Json::FastWriter().write(content);
-
-			std::string response = m_httpPost.execute(request);
-
-			Json::Value result;
-			if(Json::Reader().parse(response, result)==false) {
-				throw std::runtime_error("http response is not valid JSON");
-			}
-			if(result.isMember(ERROR)) {
-				std::ostringstream msg;
-
-				msg << "http response contains error: code=" << result[ERROR]["code"].asInt() << " '" << result[ERROR]["message"].asString() << "'";
-
-				throw std::runtime_error(msg.str());
-			}
+			execute(content);
 		}
 
 		void Controller::unsubscribe(const signalReferences_t &signalReferences)
@@ -68,23 +72,8 @@ namespace hbm {
 			}
 			content["id"] = ++s_id;
 
-			std::string request = Json::FastWriter().write(content);
-
-			std::string response = m_httpPost.execute(request);
-
-			Json::Value result;
-			if(Json::Reader().parse(response, result)==false) {
-				throw std::runtime_error("http response is not valid JSON");
-			}
-			if(result.isMember(ERROR)) {
-				std::ostringstream msg;
-
-				msg << "http response contains error: code=" << result[ERROR]["code"].asInt() << " '" << result[ERROR]["message"].asString() << "'";
-
-				throw std::runtime_error(msg.str());
-			}
+			execute(content);
 		}
-
 	}
 }
 

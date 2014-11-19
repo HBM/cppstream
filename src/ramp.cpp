@@ -11,7 +11,12 @@
 #include "streamclient/signalcontainer.h"
 #include "streamclient/types.h"
 
-typedef std::unordered_map < unsigned int, double > lastValues_t;
+struct lastRampValues {
+	uint64_t timeStamp;
+	double amplitude;
+};
+
+typedef std::unordered_map < unsigned int, lastRampValues > lastRampValues_t;
 
 
 /// receives data from DAQ Stream Server. Subscribes/Unsubscribes signals
@@ -20,10 +25,10 @@ static hbm::streaming::StreamClient streamClient;
 /// handles signal related meta information and measured data.
 static hbm::streaming::SignalContainer signalContainer;
 
-static const double rampValueDiff = 0.1;
+static double rampValueDiff = 0.1;
 static const double epsilon = 0.0000000001;
 
-static lastValues_t m_lastValues;
+static lastRampValues_t m_lastRampValues;
 
 static void sigHandler(int)
 {
@@ -80,19 +85,24 @@ static void signalMetaInformationCb(hbm::streaming::SubscribedSignal& subscribed
 }
 
 
-static void dataCb(hbm::streaming::SubscribedSignal& subscribedSignal, uint64_t , const double* pValues, size_t count)
+static void dataCb(hbm::streaming::SubscribedSignal& subscribedSignal, uint64_t timeStamp, const double* pValues, size_t count)
 {
 	unsigned int signalNumber = subscribedSignal.signalNumber();
-	lastValues_t::iterator iter = m_lastValues.find(signalNumber);
+	lastRampValues_t::iterator iter = m_lastRampValues.find(signalNumber);
 
-	if(iter==m_lastValues.end())
-		m_lastValues.insert(std::make_pair(signalNumber, pValues[count-1]));
-	else {
-		double valueDiff = pValues[0] - iter->second;
+	if(iter==m_lastRampValues.end()) {
+		lastRampValues lastValues;
+		lastValues.timeStamp = timeStamp;
+		lastValues.amplitude = pValues[count-1];
+		m_lastRampValues.insert(std::make_pair(signalNumber, lastValues));
+	} else {
+		double valueDiff = pValues[0] - iter->second.amplitude;
 		if(fabs(valueDiff - rampValueDiff) > epsilon) {
-			throw std::runtime_error ("error in ramp!");
+			throw std::runtime_error (subscribedSignal.signalReference() + ": unexpected value in ramp!");
+		} else if (iter->second.timeStamp>=timeStamp){
+			throw std::runtime_error (subscribedSignal.signalReference() + ": unexpected time stamp in ramp!");
 		} else {
-			m_lastValues[signalNumber] = pValues[count-1];
+			iter->second.amplitude = pValues[count-1];
 		}
 	}
 }
@@ -104,8 +114,20 @@ int main(int argc, char* argv[])
 	signal( SIGINT, &sigHandler);
 
 	if ((argc<2) || (std::string(argv[1])=="-h") ) {
-		std::cout << "syntax: " << argv[0] << " <stream server address>" << std::endl;
+		std::cout << "Subscribes all signals that become available." << std::endl;
+		std::cout << "Each signal is expected to deliver a ramp with a defined slope." << std::endl;
+		std::cout << std::endl;
+		std::cout << "syntax: " << argv[0] << " <stream server address> <slope (default is " << rampValueDiff << ")>" << std::endl;
 		return EXIT_SUCCESS;
+	}
+
+	if (argc==3) {
+		char* pEnd;
+		rampValueDiff = strtod(argv[2], &pEnd);
+		if (pEnd ==argv[2]) {
+			std::cerr << "invalid slope value. Must be a number" << std::endl;
+			return EXIT_FAILURE;
+		}
 	}
 
 	signalContainer.setDataCb(dataCb);

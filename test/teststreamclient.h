@@ -1,3 +1,7 @@
+// Copyright 2014 Hottinger Baldwin Messtechnik
+// Distributed under MIT license
+// See file LICENSE provided
+
 #ifndef _TESTSTREAMCLIENT_H
 #define _TESTSTREAMCLIENT_H
 

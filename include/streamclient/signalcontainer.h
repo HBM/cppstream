@@ -1,3 +1,7 @@
+// Copyright 2014 Hottinger Baldwin Messtechnik
+// Distributed under MIT license
+// See file LICENSE provided
+
 #ifndef _HBM__STREAMING__SIGNALS
 #define _HBM__STREAMING__SIGNALS
 

@@ -1,3 +1,7 @@
+// Copyright 2014 Hottinger Baldwin Messtechnik
+// Distributed under MIT license
+// See file LICENSE provided
+
 #include <stdint.h>
 #include <WinSock2.h>
 #include <WS2tcpip.h>

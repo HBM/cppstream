@@ -3,7 +3,7 @@ Implements an HBM Daq Stream Client and some simple example programs using C++
 
 ## License
 
-Copyright (c) 2014 Matthias Loy. See the LICENSE file for license rights and limitations (AFL 3.0).
+Copyright (c) 2014 Matthias Loy. See the LICENSE file for license rights and limitations.
 
 ## Prerequisites
 

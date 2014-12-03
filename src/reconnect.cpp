@@ -1,9 +1,10 @@
 #include <iostream>
 #include <string>
 #include <functional>
+#include <thread>
+#include <chrono>
 #include <cstdlib> //atoi
 
-#include <boost/thread/thread.hpp>
 
 #include "streamclient/streamclient.h"
 
@@ -34,7 +35,7 @@ static void streamMetaInformationCb(hbm::streaming::StreamClient& stream, const 
 
 int main(int argc, char* argv[])
 {
-	boost::chrono::milliseconds cycleTime(3000);
+	std::chrono::milliseconds cycleTime(3000);
 
 	if((argc<2) || (std::string(argv[1])=="-h") ) {
 		std::cout << "periodically connects to a daq stream, subscribes all signals and disconnects after a specified time" << std::endl;
@@ -48,15 +49,15 @@ int main(int argc, char* argv[])
 
 
 	if(argc>2) {
-		cycleTime = boost::chrono::milliseconds(atoi(argv[2]));
+		cycleTime = std::chrono::milliseconds(atoi(argv[2]));
 	}
 
 	hbm::streaming::StreamClient stream;
 	stream.setStreamMetaCb(streamMetaInformationCb);
 	do {
-		boost::thread streamer = boost::thread(std::bind(&hbm::streaming::StreamClient::start, &stream, address, hbm::streaming::DAQSTREAM_PORT));
+		std::thread streamer = std::thread(std::bind(&hbm::streaming::StreamClient::start, &stream, address, hbm::streaming::DAQSTREAM_PORT));
 		std::cout << "Started" << std::endl;
-		boost::this_thread::sleep_for(cycleTime);
+		std::this_thread::sleep_for(cycleTime);
 		stream.stop();
 		streamer.join();
 	} while(true);

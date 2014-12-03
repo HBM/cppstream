@@ -1,7 +1,7 @@
 #ifndef _TESTSTREAMCLIENT_H
 #define _TESTSTREAMCLIENT_H
 
-#include <boost/thread/thread.hpp>
+#include <thread>
 
 #include "streamclient/streamclient.h"
 
@@ -14,6 +14,6 @@ protected:
 	std::string m_address;
 	std::string m_controlPort;
 	hbm::streaming::StreamClient m_streamClient;
-	boost::thread m_streamer;
+	std::thread m_streamer;
 };
 #endif

@@ -1,3 +1,7 @@
+// Copyright 2014 Hottinger Baldwin Messtechnik
+// Distributed under MIT license
+// See file LICENSE provided
+
 #ifndef _HBM__BUFFEREDREADER_H
 #define _HBM__BUFFEREDREADER_H
 

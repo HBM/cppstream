@@ -1,3 +1,7 @@
+// Copyright 2014 Hottinger Baldwin Messtechnik
+// Distributed under MIT license
+// See file LICENSE provided
+
 #ifndef __HBM__SOCKETNONBLOCKING_H
 #define __HBM__SOCKETNONBLOCKING_H
 

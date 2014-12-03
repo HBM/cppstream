@@ -25,8 +25,6 @@ add_executable( teststreamclient.bin ${TEST_STREAMCLIENT_SOURCES} )
 target_link_libraries( teststreamclient.bin
   streamclient-static
   jsoncpp
-  boost_system
-  boost_thread
   boost_unit_test_framework
 )
 

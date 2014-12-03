@@ -55,21 +55,7 @@ set(RECONNECT_SOURCES
 add_executable( reconnect.bin ${RECONNECT_SOURCES} )
 
 target_link_libraries( reconnect.bin
+  -pthread
   streamclient-static
   jsoncpp
-  boost_system
-  boost_thread
-)
-
-set(MULTIPLE_SOURCES
-  multiple.cpp
-)
-
-add_executable( multiple.bin ${MULTIPLE_SOURCES} )
-
-target_link_libraries( multiple.bin
-  streamclient-static
-  jsoncpp
-  boost_system
-  boost_thread
 )

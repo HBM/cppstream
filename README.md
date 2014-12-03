@@ -27,7 +27,7 @@ Tested with gcc 4.8.2
 
 
 #### Windows
-A solution for MSVC2010 is provided.
+A solution for MSVC2012 is provided.
 
 ## Library
 Center of all is a library containing everything needed to implement an HBM Daq Stream Client. Sources are to be found below `lib`. Headers with the interface headers are to be found under `include`.

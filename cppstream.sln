@@ -1,15 +1,17 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lib_json", "..\jsoncpp\makefiles\msvc2010\lib_json.vcxproj", "{1E6C2C1C-6453-4129-AE3F-0EE8E6599C89}"
-EndProject
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "streamclient", "lib\streamclient.vcxproj", "{370AB3E4-8510-4D2E-8618-20327B6C77B4}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "exampleclient", "src\exampleclient.vcxproj", "{670E5C5D-4BC7-4275-AB32-AB5718695BB1}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExampleClient", "src\exampleclient.vcxproj", "{670E5C5D-4BC7-4275-AB32-AB5718695BB1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "reconnect", "src\reconnect.vcxproj", "{D8C7EFBC-2BE9-4A45-A5B0-4A6C34E61305}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "savestream", "src\savestream.vcxproj", "{14C12C2B-D477-475E-AD59-1D5EC14FFE34}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lib_json", "..\jsoncpp\makefiles\msvc2012\lib_json.vcxproj", "{1E6C2C1C-6453-4129-AE3F-0EE8E6599C89}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,17 +23,6 @@ Global
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1E6C2C1C-6453-4129-AE3F-0EE8E6599C89}.Debug|Win32.ActiveCfg = Debug|Win32
-		{1E6C2C1C-6453-4129-AE3F-0EE8E6599C89}.Debug|Win32.Build.0 = Debug|Win32
-		{1E6C2C1C-6453-4129-AE3F-0EE8E6599C89}.Debug|x64.ActiveCfg = Debug|x64
-		{1E6C2C1C-6453-4129-AE3F-0EE8E6599C89}.Debug|x64.Build.0 = Debug|x64
-		{1E6C2C1C-6453-4129-AE3F-0EE8E6599C89}.dummy|Win32.ActiveCfg = Debug|x64
-		{1E6C2C1C-6453-4129-AE3F-0EE8E6599C89}.dummy|x64.ActiveCfg = Debug|x64
-		{1E6C2C1C-6453-4129-AE3F-0EE8E6599C89}.dummy|x64.Build.0 = Debug|x64
-		{1E6C2C1C-6453-4129-AE3F-0EE8E6599C89}.Release|Win32.ActiveCfg = Release|Win32
-		{1E6C2C1C-6453-4129-AE3F-0EE8E6599C89}.Release|Win32.Build.0 = Release|Win32
-		{1E6C2C1C-6453-4129-AE3F-0EE8E6599C89}.Release|x64.ActiveCfg = Release|x64
-		{1E6C2C1C-6453-4129-AE3F-0EE8E6599C89}.Release|x64.Build.0 = Release|x64
 		{370AB3E4-8510-4D2E-8618-20327B6C77B4}.Debug|Win32.ActiveCfg = Debug|Win32
 		{370AB3E4-8510-4D2E-8618-20327B6C77B4}.Debug|Win32.Build.0 = Debug|Win32
 		{370AB3E4-8510-4D2E-8618-20327B6C77B4}.Debug|x64.ActiveCfg = Debug|x64
@@ -74,6 +65,18 @@ Global
 		{14C12C2B-D477-475E-AD59-1D5EC14FFE34}.Release|Win32.ActiveCfg = Release|Win32
 		{14C12C2B-D477-475E-AD59-1D5EC14FFE34}.Release|Win32.Build.0 = Release|Win32
 		{14C12C2B-D477-475E-AD59-1D5EC14FFE34}.Release|x64.ActiveCfg = Release|Win32
+		{1E6C2C1C-6453-4129-AE3F-0EE8E6599C89}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1E6C2C1C-6453-4129-AE3F-0EE8E6599C89}.Debug|Win32.Build.0 = Debug|Win32
+		{1E6C2C1C-6453-4129-AE3F-0EE8E6599C89}.Debug|x64.ActiveCfg = Debug|x64
+		{1E6C2C1C-6453-4129-AE3F-0EE8E6599C89}.Debug|x64.Build.0 = Debug|x64
+		{1E6C2C1C-6453-4129-AE3F-0EE8E6599C89}.dummy|Win32.ActiveCfg = Debug|Win32
+		{1E6C2C1C-6453-4129-AE3F-0EE8E6599C89}.dummy|Win32.Build.0 = Debug|Win32
+		{1E6C2C1C-6453-4129-AE3F-0EE8E6599C89}.dummy|x64.ActiveCfg = Debug|x64
+		{1E6C2C1C-6453-4129-AE3F-0EE8E6599C89}.dummy|x64.Build.0 = Debug|x64
+		{1E6C2C1C-6453-4129-AE3F-0EE8E6599C89}.Release|Win32.ActiveCfg = Release|Win32
+		{1E6C2C1C-6453-4129-AE3F-0EE8E6599C89}.Release|Win32.Build.0 = Release|Win32
+		{1E6C2C1C-6453-4129-AE3F-0EE8E6599C89}.Release|x64.ActiveCfg = Release|x64
+		{1E6C2C1C-6453-4129-AE3F-0EE8E6599C89}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

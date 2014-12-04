@@ -8,7 +8,7 @@ Copyright (c) 2014 Hottinger Baldwin Messtechnik. See the [LICENSE](LICENSE) fil
 ## Prerequisites
 
 ### Sources 
-All sources of the example programs are to be found on the [HBM Daq Stream Examples github project page](https://github.com/HBM-Team/cppstream "").
+All sources of the example programs are to be found on the [HBM Daq Stream Examples github project page](https://github.com/HBM/cppstream "").
 
 ### Used Libraries
 We try to use as much existing and prooved software as possbile in order to keep implementation and testing effort as low as possible. All libraries used carry a generous license. See the licenses for details.

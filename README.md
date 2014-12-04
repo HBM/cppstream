@@ -1,14 +1,14 @@
 # HBM Daq Stream Client Examples
-Implements an HBM Daq Stream Client and some simple example programs using C++
+Implements an HBM Daq Stream Client and some simple example programs using C++.
 
 ## License
 
-Copyright (c) 2014 Hottinger Baldwin Messtechnik. See the LICENSE file for license rights and limitations.
+Copyright (c) 2014 Hottinger Baldwin Messtechnik. See the [LICENSE](LICENSE) file for license rights and limitations.
 
 ## Prerequisites
 
 ### Sources 
-All sources of the example programs are to be found on the [HBM Daq Stream Examples github project page](https://github.com/HBM-Team/cppstream "")
+All sources of the example programs are to be found on the [HBM Daq Stream Examples github project page](https://github.com/HBM-Team/cppstream "").
 
 ### Used Libraries
 We try to use as much existing and prooved software as possbile in order to keep implementation and testing effort as low as possible. All libraries used carry a generous license. See the licenses for details.
@@ -22,8 +22,8 @@ Download and install the binaries and set the '`BOOST_ROOT`' environment variabl
 
 ### Build System
 #### Linux
-Under Linux the cmake build system is being used. Install it using your distribution package system. Create a sub directory inside the project directory. change into this subdirectory and call '`cmake ..`'. Execute '`make`' afterwards to build all libraries and executables.
-Tested with gcc 4.8.2
+Under Linux the cmake build system is being used. Install it using your distribution package system. Create a sub directory inside the project directory. Change into this subdirectory and call '`cmake ..`'. Execute '`make`' afterwards to build all libraries and executables.
+Tested with gcc 4.8.2 and 4.9.2.
 
 
 #### Windows
@@ -43,7 +43,7 @@ There are simple example programs using the library.
 This program connects to a HBM Daq Streaming socket, receives everything that arrives, subscribes all signals, interprets stream and signal related meta information and measured data. It is started with at least one paramter telling about the address of the HBM Daq Stream server. 
 '`./exampleclient.bin 172.19.3.4`'
 
-call without parameter or with parameter '`-h`' to get help.
+Call without parameter or with parameter '`-h`' to get help.
 
 ### Reconnect
 Works as example client but stops and restarts the streaming client periodically. This program relies on the boost thread library.

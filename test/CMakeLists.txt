@@ -28,3 +28,4 @@ target_link_libraries( teststreamclient.bin
   boost_unit_test_framework
 )
 
+add_test(test teststreamclient.bin)

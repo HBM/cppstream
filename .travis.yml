@@ -3,4 +3,4 @@ compiler:
   - gcc
   - clang
 
-make test
+script: make test

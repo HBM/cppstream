@@ -7,6 +7,7 @@
 
 #include <stdint.h>
 #include <functional>
+#include <string>
 
 #include <json/value.h>
 

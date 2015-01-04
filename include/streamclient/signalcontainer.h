@@ -5,8 +5,8 @@
 #ifndef _HBM__STREAMING__SIGNALS
 #define _HBM__STREAMING__SIGNALS
 
+#include <string>
 #include <unordered_map>
-#include <vector>
 #include <functional>
 
 #include <json/value.h>

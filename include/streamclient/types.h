@@ -6,7 +6,7 @@
 #define _HBM__STREAMING__TYPES
 
 #include <vector>
-#include <json/value.h>
+#include <string>
 
 namespace hbm {
 	static const char PARAMS[] = "params";

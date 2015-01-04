@@ -7,6 +7,7 @@
 
 #include <fstream>
 #include <stdexcept>
+#include <string>
 
 #ifdef _WIN32
 #ifndef ssize_t

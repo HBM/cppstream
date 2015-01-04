@@ -2,9 +2,9 @@ project("hbm_daq_stream_example")
 
 cmake_minimum_required(VERSION 2.8)
 
-add_subdirectory("lib")
-add_subdirectory("src")
-
 enable_testing()
 
+
+add_subdirectory("lib")
+add_subdirectory("src")
 add_subdirectory("test")

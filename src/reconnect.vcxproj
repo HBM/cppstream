@@ -158,7 +158,7 @@
     <ClCompile Include="Reconnect.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\jsoncpp\makefiles\msvc2012\lib_json.vcxproj">
+    <ProjectReference Include="..\..\jsoncpp\makefiles\msvc2010\lib_json.vcxproj">
       <Project>{1e6c2c1c-6453-4129-ae3f-0ee8e6599c89}</Project>
     </ProjectReference>
     <ProjectReference Include="..\lib\streamclient.vcxproj">

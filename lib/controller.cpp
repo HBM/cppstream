@@ -38,7 +38,7 @@ namespace hbm {
 			Json::Value result;
 			Json::Reader reader;
 			if(reader.parse(response, result)==false) {
-				throw std::runtime_error("http response is not valid JSON '" + reader.getFormatedErrorMessages() + "'");
+				throw std::runtime_error("http response is not valid JSON '" + reader.getFormattedErrorMessages() + "'");
 			}
 			if(result.isMember(ERROR)) {
 				std::ostringstream msg;

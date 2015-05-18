@@ -13,7 +13,6 @@ IF(NOT CMAKE_BUILD_TYPE )
 ENDIF()
 
 include_directories(../include)
-include_directories(/usr/include/jsoncpp/)
 
 set(EXAMPLECLIENT_SOURCES
   exampleclient.cpp

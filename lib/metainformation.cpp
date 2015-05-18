@@ -39,7 +39,7 @@ namespace hbm {
 
 				Json::Reader reader;
 				if(reader.parse(&data[0], &data[dataSize], m_jsonContent)==false) {
-					std::cerr << "parsing meta '" << std::string(&data[0], dataSize) << "'information failed : " << reader.getFormatedErrorMessages() << std::endl;
+					std::cerr << "parsing meta '" << std::string(&data[0], dataSize) << "'information failed : " << reader.getFormattedErrorMessages() << std::endl;
 				}
 
 			} else {

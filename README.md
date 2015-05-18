@@ -13,7 +13,8 @@ All sources of the example programs are to be found on the [HBM Daq Stream Examp
 ### Used Libraries
 We try to use as much existing and prooved software as possbile in order to keep implementation and testing effort as low as possible. All libraries used carry a generous license. See the licenses for details.
 
-The open source project jsoncpp is being used as JSON composer and parser. For Linux, simply install the jsoncpp development package of your distribution. For Windows, download the sources from the [jsoncpp github project page](https://github.com/open-source-parsers/jsoncpp "") and put them beside the directory of this project.
+The open source project jsoncpp is being used as JSON composer and parser. Version 1.6.2 is included as submodule. Use the following git command in order to get the code:
+`git submodule update --init --recursive --remote`. Please make sure to choose Visual Studio 2013 as platform toolset (to be found in the project configuration properties under "General").
 
 The unit tests provided do use the Boost libraries (1.55). Refer to [boost](http://www.boost.org/ "") for details.
 For Linux, simply install the Boost development packages of your distribution. For Windows, the projects are tailored to link against the prebuilt boost binaries from [boost](http://www.boost.org/ "").

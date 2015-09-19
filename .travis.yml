@@ -7,6 +7,8 @@ env:
    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
    #   via the "travis encrypt" command using the project repo's public key
    - secure: "d7h+LcNsx2moiUitX9VHHQLyP6G+TbxUXCMkqqdGXm9nBDMFQC3hxuPZepzI12tLf0LjIRStEfYvJhekWV46mYAhhXSTEuLyNn7dZIjBOuPMqVWsPPnpjdsUO2HBF2oUlQ9JIJ2qdotbBw9W7QCRRnhn4rhgz1uXEyXB13FWh2s="
+  matrix:
+    - BUILD=gcc
 
 compiler:
   - gcc

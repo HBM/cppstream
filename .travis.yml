@@ -2,10 +2,9 @@ language: cpp
 
 sudo: required
 
-env:
-  matrix:
-    - BUILD=gcc
-    - BUILD=clang
+compiler:
+  - gcc
+  - clang
 
 addons:
   apt:

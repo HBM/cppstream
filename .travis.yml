@@ -6,6 +6,12 @@ compiler:
   - gcc
   - clang
 
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "O6qpcYVv11V/j5hUWGy6y3rU37+Zn1ShyvKCWFP6JeftFRPvA7VxKXKLqYdF0OhLCmICV0lHMx0tW7pIPGX6PB4VvLZtTvTRmEK0nKpAKsHTvfAAAh8Triz99Ya4L/qRV9okEo/hrqoO+k7Lkck7+gXi7UzhEMFhra1p9I066B8="
+
 addons:
   apt:
     sources:
@@ -17,6 +23,15 @@ addons:
     - valgrind
     - libboost-dev
     - libboost-test-dev
+
+  coverity_scan:
+    project:
+      name: "HBM/cppstream"
+      description: "Build submitted via Travis CI"
+    notification_email: stephan.gatzka@gmail.com
+    build_command: ./travis.sh
+    branch_pattern: coverity_scan
+
 os:
   - linux
 

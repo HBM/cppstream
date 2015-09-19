@@ -1,9 +1,43 @@
 language: cpp
 
-sudo: false
+sudo: required
 
-compiler:
-  - gcc
-  - clang
+env:
+  matrix:
+    - BUILD=gcc
+    - BUILD=clang
 
-script: make test
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - gcc-4.9
+    - g++-4.9
+    - clang
+    - valgrind
+    - libboost-dev
+    - libboost-test-dev
+os:
+  - linux
+install:
+# /usr/bin/gcc is 4.6 always, but gcc-X.Y is available.
+- if [ "$CXX" = "g++" ]; then export CXX="g++-4.9" CC="gcc-4.9"; fi
+
+
+before_script:
+  - git submodule update --init --recursive --remote
+  - cd jsoncpp
+  - pwd
+  - cmake .
+  - make
+  - sudo make install
+  - cd ..
+  - mkdir build
+  - cd build
+
+script:
+  - if [ "$COVERITY_SCAN_BRANCH" != 1 ]; then
+      cmake ../ && make && make test ;
+    fi
+

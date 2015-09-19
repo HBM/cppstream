@@ -35,9 +35,16 @@ addons:
 os:
   - linux
 
+before_install:
+  - pip install --user travis cpp-coveralls
+
 install:
 # /usr/bin/gcc is 4.6 always, but gcc-X.Y is available.
 - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
 
 script:
 - if [ "$COVERITY_SCAN_BRANCH" != 1 ]; then ./travis.sh; fi
+
+after_success:
+  - coveralls --verbose --root .. --build-root . --gcov-options '\-lp'
+

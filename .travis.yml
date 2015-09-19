@@ -2,38 +2,8 @@ language: cpp
 
 sudo: false
 
-env:
-  global:
-   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
-   #   via the "travis encrypt" command using the project repo's public key
-   - secure: "d7h+LcNsx2moiUitX9VHHQLyP6G+TbxUXCMkqqdGXm9nBDMFQC3hxuPZepzI12tLf0LjIRStEfYvJhekWV46mYAhhXSTEuLyNn7dZIjBOuPMqVWsPPnpjdsUO2HBF2oUlQ9JIJ2qdotbBw9W7QCRRnhn4rhgz1uXEyXB13FWh2s="
-  matrix:
-    - BUILD=gcc
-
 compiler:
   - gcc
+  - clang
 
-before_script:
-  - mkdir build
-  - cd build
-
-script:
-  - if [ "$COVERITY_SCAN_BRANCH" != 1 ]; then
-      case ${BUILD} in
-        gcc)
-          cmake ../ &&
-          make &&
-          make test
-          ;;
-      esac ;
-    fi
-
-addons:
-  coverity_scan:
-    project:
-      name: "HBM/cppstream"
-      description: "Build submitted via Travis CI"
-    notification_email: stephan.gatzka@gmail.com
-    build_command_prepend: "cmake ../"
-    build_command: "make"
-    branch_pattern: coverity_scan
+script: make test

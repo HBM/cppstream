@@ -4,8 +4,12 @@ Implements an HBM Daq Stream Client and some simple example programs using C++.
 * Build Status: [![Build Status](https://travis-ci.org/HBM/cppstream.svg?branch=master)](https://travis-ci.org/HBM/cppstream)
 
 ## License
-
 Copyright (c) 2014 Hottinger Baldwin Messtechnik. See the [LICENSE](LICENSE) file for license rights and limitations.
+
+## Build Status
+[![Travis CI](https://travis-ci.org/HBM/cppstream.svg?branch=master)](https://travis-ci.org/HBM/cppstream)
+
+[![Coverity](https://scan.coverity.com/projects/6402/badge.svg)](https://scan.coverity.com/projects/6402)
 
 ## Prerequisites
 

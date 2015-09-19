@@ -29,5 +29,13 @@ before_script:
   - make
   - sudo make install
   - cd ..
+  - mkdir build
+  - cd build
 
-script: make test
+script:
+  - if [ "$COVERITY_SCAN_BRANCH" != 1 ]; then
+      cmake ../ &&
+      make &&
+      make test
+    fi
+

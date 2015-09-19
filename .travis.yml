@@ -4,7 +4,6 @@ sudo: required
 
 compiler:
   - gcc
-  - clang
 
 env:
   global:
@@ -17,9 +16,8 @@ addons:
     sources:
     - ubuntu-toolchain-r-test
     packages:
-    - gcc-4.8
-    - g++-4.8
-    - clang
+    - gcc-4.9
+    - g++-4.9
     - valgrind
     - libboost-dev
     - libboost-test-dev

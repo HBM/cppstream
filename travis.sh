@@ -18,7 +18,8 @@ mkdir build
 cd build
 cmake ../
 make
+cd ..
 if [ "$COVERITY_SCAN_BRANCH" != 1 ]; then
-  valgrind --error-exitcode=42 --show-reachable=yes --leak-check=full ./test/teststreamclient.bin
+  valgrind --error-exitcode=42 --show-reachable=yes --leak-check=full ./build/test/teststreamclient.bin
 fi
 

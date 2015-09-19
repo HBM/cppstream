@@ -26,5 +26,6 @@ before_script:
   - cd jsoncpp
   - cmake .
   - make
+  - sudo make install
 
 script: make test

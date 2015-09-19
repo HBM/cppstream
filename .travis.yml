@@ -4,6 +4,7 @@ sudo: required
 
 compiler:
   - gcc
+  - clang
 
 env:
   global:
@@ -13,7 +14,12 @@ env:
 
 addons:
   apt:
+    sources:
+    - ubuntu-toolchain-r-test
     packages:
+    - gcc-4.8
+    - g++-4.8
+    - clang
     - valgrind
     - libboost-dev
     - libboost-test-dev
@@ -31,6 +37,10 @@ os:
 
 before_install:
   - pip install --user travis cpp-coveralls
+
+install:
+# /usr/bin/gcc is 4.6 always, but gcc-X.Y is available.
+- if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
 
 script:
 - if [ "$COVERITY_SCAN_BRANCH" != 1 ]; then ./travis.sh; fi

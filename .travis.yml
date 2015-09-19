@@ -34,6 +34,7 @@ os:
   - linux
 
 before_install:
+  - pip install --user travis --upgrade pip
   - pip install --user travis cpp-coveralls
 
 install:

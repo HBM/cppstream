@@ -19,6 +19,6 @@ cd build
 cmake ../
 make
 if [ "$COVERITY_SCAN_BRANCH" != 1 ]; then
-  ./test/teststreamclient.bin
+  valgrind ./test/teststreamclient.bin
 fi
 

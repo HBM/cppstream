@@ -1,10 +1,25 @@
 language: cpp
 
-sudo: false
+sudo: required
 
 compiler:
   - gcc
   - clang
+
+before_install:
+  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+  - sudo apt-get update -qq
+# g++4.8.1
+  - if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.8; fi
+  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
+# clang 3.4
+  - if [ "$CXX" == "clang++" ]; then sudo apt-get install --allow-unauthenticated -qq clang-3.4; fi
+  #libstdc++-4.8 is needed by Clang to build too
+  - if [ "$CXX" == "clang++" ]; then sudo apt-get install -qq g++-4.8 libstdc++-4.8-dev; fi
+#  - if [ "$CXX" == "clang++" ]; then export CXX="clang++-3.4"; fi
+  # boost is needed for unit tests. boost is not pre-installed in the Travis CI.
+  - sudo apt-get install -qq libboost-dev
+  - sudo apt-get install -qq libboost-test-dev
 
 before_script:
   - git submodule update --init --recursive --remote

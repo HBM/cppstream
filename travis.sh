@@ -15,7 +15,9 @@ sudo make install
 cd ..
 mkdir build
 cd build
+cmake ../
+make
 if [ "$COVERITY_SCAN_BRANCH" != 1 ]; then
-  cmake ../ && make && make test ;
+  valgrind --error-exitcode=42 --leak-check=full ./test/teststreamclient.bin
 fi
 

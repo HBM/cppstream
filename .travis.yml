@@ -2,9 +2,10 @@ language: cpp
 
 sudo: required
 
-compiler:
-  - gcc
-  - clang
+env:
+  matrix:
+    - BUILD=gcc
+    - BUILD=clang
 
 before_install:
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
@@ -27,5 +28,6 @@ before_script:
   - cmake .
   - make
   - sudo make install
+  - cd ..
 
 script: make test

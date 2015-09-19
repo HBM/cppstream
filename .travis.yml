@@ -7,19 +7,23 @@ env:
     - BUILD=gcc
     - BUILD=clang
 
-before_install:
-  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-  - sudo apt-get update -qq
-# g++4.8.1
-  - if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.8; fi
-  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
-# clang 3.4
-  - if [ "$CXX" == "clang++" ]; then sudo apt-get install --allow-unauthenticated -qq clang-3.4; fi
-  #libstdc++-4.8 is needed by Clang to build too
-  - if [ "$CXX" == "clang++" ]; then sudo apt-get install -qq g++-4.8 libstdc++-4.8-dev; fi
-  # boost is needed for unit tests. boost is not pre-installed in the Travis CI.
-  - sudo apt-get install -qq libboost-dev
-  - sudo apt-get install -qq libboost-test-dev
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - gcc-4.9
+    - g++-4.9
+    - clang
+    - valgrind
+    - libboost-dev
+    - libboost-test-dev
+os:
+  - linux
+install:
+# /usr/bin/gcc is 4.6 always, but gcc-X.Y is available.
+- if [ "$CXX" = "g++" ]; then export CXX="g++-4.9" CC="gcc-4.9"; fi
+
 
 before_script:
   - git submodule update --init --recursive --remote

@@ -46,5 +46,5 @@ script:
 - if [ "$COVERITY_SCAN_BRANCH" != 1 ]; then ./travis.sh; fi
 
 after_success:
-  - coveralls --verbose --root . --build-root build/ --gcov-options '\-lp'
+  - coveralls --verbose --root . --build-root build --exclude build/CMakeFiles/CompilerIdC/ --exclude build/CMakeFiles/CompilerIdCXX/ --exclude jsoncpp/ --gcov-options '\-lp'
 

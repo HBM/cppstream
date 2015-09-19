@@ -40,6 +40,4 @@ install:
 - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
 
 script:
-  - if [ "$COVERITY_SCAN_BRANCH" != 1 ]; then
-    ./travis.sh ;
-  fi
+- if [ "$COVERITY_SCAN_BRANCH" != 1 ]; then ./travis.sh; fi

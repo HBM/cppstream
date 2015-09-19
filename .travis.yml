@@ -24,20 +24,5 @@ install:
 # /usr/bin/gcc is 4.6 always, but gcc-X.Y is available.
 - if [ "$CXX" = "g++" ]; then export CXX="g++-4.9" CC="gcc-4.9"; fi
 
-
-before_script:
-  - git submodule update --init --recursive --remote
-  - cd jsoncpp
-  - pwd
-  - cmake .
-  - make
-  - sudo make install
-  - cd ..
-  - mkdir build
-  - cd build
-
-script:
-  - if [ "$COVERITY_SCAN_BRANCH" != 1 ]; then
-      cmake ../ && make && make test ;
-    fi
+script: ./travis.sh
 

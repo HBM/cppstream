@@ -52,23 +52,33 @@ int hbm::SocketNonblocking::init()
 		retVal=-1;
 	} else {
 		// turn off Nagle algorithm
-		setsockopt(m_fd, IPPROTO_TCP, TCP_NODELAY, reinterpret_cast<char*>(&opt), sizeof(opt));
+		if (setsockopt(m_fd, IPPROTO_TCP, TCP_NODELAY, reinterpret_cast<char*>(&opt), sizeof(opt))==-1) {
+			return -1;
+		}
 
 		opt = 12;
 		// the interval between the last data packet sent (simple ACKs are not considered data) and the first keepalive probe;
 		// after the connection is marked to need keepalive, this counter is not used any further
-		setsockopt(m_fd, SOL_TCP, TCP_KEEPIDLE, reinterpret_cast<char*>(&opt), sizeof(opt));
+		if (setsockopt(m_fd, SOL_TCP, TCP_KEEPIDLE, reinterpret_cast<char*>(&opt), sizeof(opt))==-1) {
+			return -1;
+		}
 
 		opt = 3;
 		// the interval between subsequential keepalive probes, regardless of what the connection has exchanged in the meantime
-		setsockopt(m_fd, SOL_TCP, TCP_KEEPINTVL, reinterpret_cast<char*>(&opt), sizeof(opt));
+		if (setsockopt(m_fd, SOL_TCP, TCP_KEEPINTVL, reinterpret_cast<char*>(&opt), sizeof(opt))==-1) {
+			return -1;
+		}
 
 		opt = 2;
 		// the number of unacknowledged probes to send before considering the connection dead and notifying the application layer
-		setsockopt(m_fd, SOL_TCP, TCP_KEEPCNT, reinterpret_cast<char*>(&opt), sizeof(opt));
+		if (setsockopt(m_fd, SOL_TCP, TCP_KEEPCNT, reinterpret_cast<char*>(&opt), sizeof(opt))==-1) {
+			return -1;
+		}
 
 		opt = 1;
-		setsockopt(m_fd, SOL_SOCKET, SO_KEEPALIVE, reinterpret_cast<char*>(&opt), sizeof(opt));
+		if (setsockopt(m_fd, SOL_SOCKET, SO_KEEPALIVE, reinterpret_cast<char*>(&opt), sizeof(opt))==-1) {
+			return -1;
+		}
 	}
 
 	return retVal;

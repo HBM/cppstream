@@ -95,7 +95,6 @@ namespace hbm {
 
 				if (type == TYPE_DATA) {
 					// read and process measured data. This happens really often! Be sure to be as efficient as possible here.
-
 					size_t bytesInBuffer = 0;
 					size_t bytesToReadToBuffer;
 					while(bytesToProcess>0) {
@@ -116,9 +115,9 @@ namespace hbm {
 								// unknown signal!
 								break;
 							}
-							
+
 							size_t bytesProcessedFromBuffer = result;
-							
+
 							bytesToProcess -= bytesProcessedFromBuffer;
 							bytesInBuffer -= bytesProcessedFromBuffer;
 							memmove(dataRecvBuffer, dataRecvBuffer+bytesProcessedFromBuffer, bytesInBuffer);

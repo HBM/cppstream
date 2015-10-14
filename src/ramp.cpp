@@ -148,6 +148,9 @@ int main(int argc, char* argv[])
 	} catch (const std::runtime_error& e) {
 		std::cerr << e.what();
 		return EXIT_FAILURE;
+	} catch (const Json::Exception& e) {
+		std::cerr << e.what();
+		return EXIT_FAILURE;
 	}
 
 	return EXIT_SUCCESS;

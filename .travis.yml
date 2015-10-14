@@ -42,5 +42,3 @@ install:
 script:
 - if [ "$COVERITY_SCAN_BRANCH" != 1 ]; then ./travis.sh; fi
 
-after_script:
-- cat /home/travis/build/HBM/cppstream/cov-int/build-log.txt

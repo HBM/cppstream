@@ -67,6 +67,11 @@ namespace hbm {
 							m_valueBuffer[i] = static_cast < double > (hbm::streaming::extract<int64_t, hbm::streaming::big>()(&pData));
 						}
 						break;
+                    			case DATATYPE_CANRAW:
+                        			for(size_t i=0; i<count; ++i) {
+                            				m_valueBuffer[i] = hbm::streaming::extract<uint8_t, hbm::streaming::big>()(&pData);
+                        			}
+                    				break;
 
 					default:
 						throw std::runtime_error("datatype not supported!");

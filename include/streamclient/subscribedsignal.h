@@ -75,6 +75,7 @@ namespace hbm {
 				DATATYPE_U64,
 				DATATYPE_S64,
 				DATATYPE_REAL64,
+                		DATATYPE_CANRAW,
 			};
 
 			enum timeType_t {

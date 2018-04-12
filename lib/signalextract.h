@@ -17,6 +17,16 @@ namespace hbm {
 		template<size_t n, endian e>
 		struct swap_impl {};
 
+                template<>
+                struct swap_impl<1, big> {
+                        static inline uint8_t swap(uint8_t value) { return value; }
+                };
+
+                template<>
+                struct swap_impl<1, little> {
+                        static inline uint8_t swap(uint8_t value) { return value; }
+                };
+
 		template<>
 		struct swap_impl<4, big> {
 			static inline uint32_t swap(uint32_t value) { return be32toh(value); }
@@ -38,6 +48,7 @@ namespace hbm {
 		};
 
 		template<typename T> struct copy_traits;
+                template<> struct copy_traits<uint8_t> {typedef uint8_t copy_type;};
 		template<> struct copy_traits<uint32_t> {typedef uint32_t copy_type;};
 		template<> struct copy_traits<int32_t> {typedef uint32_t copy_type;};
 		template<> struct copy_traits<uint64_t> {typedef uint64_t copy_type;};

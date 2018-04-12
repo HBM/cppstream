@@ -135,7 +135,7 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	signalContainer.setDataCb(dataCb);
+	signalContainer.setDataAsDoubleCb(dataCb);
 	signalContainer.setSignalMetaCb(signalMetaInformationCb);
 
 	streamClient.setStreamMetaCb(streamMetaInformationCb);
@@ -143,12 +143,6 @@ int main(int argc, char* argv[])
 
 	// connect to the daq stream service and give control to the receiving function.
 	// returns on signal (terminate, interrupt) buffer overrun on the server side or loss of connection.
-	try {
-		streamClient.start(argv[1], hbm::streaming::DAQSTREAM_PORT);
-	} catch (const std::runtime_error& e) {
-		std::cerr << e.what();
-		return EXIT_FAILURE;
-	}
-
+	streamClient.start(argv[1], hbm::streaming::DAQSTREAM_PORT);
 	return EXIT_SUCCESS;
 }

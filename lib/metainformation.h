@@ -23,6 +23,7 @@ namespace hbm {
 		public:
 			typedef std::vector < unsigned char > binaryContent_t;
 
+			/// \param size Size of the meta information
 			MetaInformation(hbm::SocketNonblocking& socket, size_t size);
 
 

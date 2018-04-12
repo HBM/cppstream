@@ -19,7 +19,16 @@ namespace hbm {
 			/// set accumulated timestamp
 			void setTime(const Json::Value& params);
 
+			/// \return current NTP time
+			uint64_t getNtpTimeStamp() const
+			{
+				return m_time.ntpTimeStamp();
+			}
+
 			/// set delta timestamp
+			/// expects an JSON in the following form:
+			/// \code {"samples": <unsigned int>, "delta": { "type": "ntp", "seconds": <unsigned int>, "fraction": <unsigned int>, "subFraction": <unsigned int>}}
+			/// \endcode
 			/// \throws std::runtime_error if provided JSON is not valid
 			void setDelta(const Json::Value& params);
 
@@ -41,6 +50,7 @@ namespace hbm {
 			uint64_t m_deltaSubFraction;
 			uint64_t m_deltaSubFractionCollected;
 
+			/// is set initially with setTime and is incremented with increment
 			timeInfo m_time;
 		};
 	}

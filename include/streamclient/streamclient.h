@@ -28,10 +28,6 @@ namespace hbm {
 		public:
 			StreamClient();
 
-			/// use this variant to dump everything received to a file
-			/// \throw std::runtime_error if file could not be opened
-			StreamClient(const std::string& fileName);
-
 			/// \warning set callback function before calling start() otherwise you will miss meta information received.
 			void setStreamMetaCb(StreamMetaCb_t cb);
 
@@ -49,7 +45,8 @@ namespace hbm {
 			/// Returns when stream is stopped by calling stop() or if loss of connection is recognized.
 			/// @param address address of the HBM daq stream server
 			/// @param streamPort name or number of the HBM daq stream port. Might differ from default when communication runs via a router (CX27)
-			int start(const std::string& address, const std::string &streamPort = DAQSTREAM_PORT);
+			/// @param controlPort leave empty to get port from meta information provide port for devices behind NAT router
+			int start(const std::string& address, const std::string &streamPort = DAQSTREAM_PORT, const std::string& controlPort = "");
 
 			/// closes the stream socket.
 			void stop();
@@ -57,6 +54,11 @@ namespace hbm {
 			std::string address() const
 			{
 				return m_address;
+			}
+			
+			std::string streamPort() const
+			{
+				return m_streamPort;
 			}
 
 		private:
@@ -74,6 +76,7 @@ namespace hbm {
 			std::string m_httpPath;
 
 			std::string m_streamId;
+			std::string m_streamPort;
 			std::string m_controlPort;
 
 			/// initial time received when opening the stream

@@ -30,20 +30,7 @@ namespace hbm {
 			, m_address()
 			, m_httpPath()
 			, m_streamId()
-			, m_controlPort()
-			, m_initialTime()
-			, m_initialTimeScale()
-			, m_initialTimeEpoch()
-			, m_pSignalContainer(NULL)
-			, m_streamMetaCb()
-		{
-		}
-
-		StreamClient::StreamClient(const std::string& fileName)
-			: m_streamSocket(fileName)
-			, m_address()
-			, m_httpPath()
-			, m_streamId()
+			, m_streamPort()
 			, m_controlPort()
 			, m_initialTime()
 			, m_initialTimeScale()
@@ -71,15 +58,17 @@ namespace hbm {
 		}
 
 
-		int StreamClient::start(const std::string& address, const std::string &streamPort)
+		int StreamClient::start(const std::string& address, const std::string &streamPort, const std::string& controlPort)
 		{
 			int result = m_streamSocket.connect(address.c_str(), streamPort);
 			if (result < 0) {
-				std::cerr << "could not connect to " << address << ":" << streamPort << std::endl;
+				std::cerr << "could not connect to streming port " << address << ":" << streamPort << std::endl;
 				return -1;
 			}
 
 			m_address = address;
+			m_streamPort = streamPort;
+			m_controlPort = controlPort;
 
 			unsigned char dataRecvBuffer[8192];
 
@@ -95,6 +84,7 @@ namespace hbm {
 
 				if (type == TYPE_DATA) {
 					// read and process measured data. This happens really often! Be sure to be as efficient as possible here.
+
 					size_t bytesInBuffer = 0;
 					size_t bytesToReadToBuffer;
 					while(bytesToProcess>0) {
@@ -110,14 +100,7 @@ namespace hbm {
 						bytesInBuffer += bytesReadToBuffer;
 
 						if (m_pSignalContainer) {
-							ssize_t result = m_pSignalContainer->processMeasuredData(signalNumber, dataRecvBuffer, bytesInBuffer);
-							if (result<0) {
-								// unknown signal!
-								break;
-							}
-
-							size_t bytesProcessedFromBuffer = result;
-
+							size_t bytesProcessedFromBuffer = m_pSignalContainer->processMeasuredData(signalNumber, dataRecvBuffer, bytesInBuffer);
 							bytesToProcess -= bytesProcessedFromBuffer;
 							bytesInBuffer -= bytesProcessedFromBuffer;
 							memmove(dataRecvBuffer, dataRecvBuffer+bytesProcessedFromBuffer, bytesInBuffer);
@@ -147,6 +130,8 @@ namespace hbm {
 					}
 				}
 			} while(true);
+			
+			std::cout << "stream client " << m_address << ":" << m_streamPort << " stopped" << std::endl;
 
 			return result;
 		}
@@ -177,7 +162,12 @@ namespace hbm {
 						if (strncasecmp(element["httpMethod"].asString().c_str(), POST, sizeof(POST)) == 0) {
 							m_httpPath = element["httpPath"].asString();
 						}
-						m_controlPort = element["port"].asString();
+						
+						// do not overwrite if control port is already set.
+						// important for devices behind NAT router
+						if (m_controlPort.empty()) {
+							m_controlPort = element["port"].asString();
+						}
 					}
 				} else if (method == "time") {
 					m_initialTime.set(params["stamp"]);

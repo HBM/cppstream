@@ -44,23 +44,24 @@ namespace hbm {
 		void timeInfo::set(const Json::Value& timeObject)
 		{
 			try {
-				if(timeObject["type"]=="ntp") {
+				const Json::Value& stmapNode = timeObject["stamp"];
+				if(stmapNode["type"]=="ntp") {
 					uint32_t seconds = 0;
 					uint32_t fraction = 0;
 					Json::Value value;
-					value = timeObject["era"];
+					value = stmapNode["era"];
 					if(value.isNull()) {
 						m_era = 0;
 					} else {
 						m_era = value.asUInt();
 					}
 
-					value = timeObject["seconds"];
+					value = stmapNode["seconds"];
 					if(value.isNull()==false) {
 						seconds = value.asUInt();
 					}
 
-					value = timeObject["fraction"];
+					value = stmapNode["fraction"];
 					if(value.isNull()==false) {
 						fraction = value.asUInt();
 					}
@@ -68,7 +69,7 @@ namespace hbm {
 					m_ntpTimestamp <<= 32;
 					m_ntpTimestamp |= fraction;
 
-					value = timeObject["fraction"];
+					value = stmapNode["subFraction"];
 					if(value.isNull()) {
 						m_subFraction = 0;
 					} else {

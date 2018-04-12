@@ -33,7 +33,10 @@ namespace hbm {
 			void setSignalMetaCb(SignalMetaCb_t cb);
 
 			/// \warning set callback function before subscribing signals, otherwise you will miss measured values received.
-			void setDataCb(DataCb_t cb);
+			void setDataAsDoubleCb(DataAsDoubleCb_t cb);
+
+			/// \warning set callback function before subscribing signals, otherwise you will miss measured values received.
+			void setDataAsRawCb(DataAsRawCb_t cb);
 
 			/// new subscribed signals are added with arrival of initial meta information
 			/// \throw std::runtime_error
@@ -55,7 +58,8 @@ namespace hbm {
 			signals_t m_subscribedsignals;
 
 			SignalMetaCb_t m_signalMetaCb;
-			DataCb_t m_dataCb;
+			DataAsDoubleCb_t m_dataAsDoubleCb;
+			DataAsRawCb_t m_dataAsRawCb;
 		};
 	}
 }

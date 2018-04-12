@@ -2,6 +2,7 @@
 // Distributed under MIT license
 // See file LICENSE provided
 
+#include <cstdint>
 #include <iostream>
 #include "deltatimeinfo.h"
 
@@ -20,9 +21,11 @@ namespace hbm {
 		{
 			uint64_t delta = m_deltaNtpTimestamp*count;
 
-			// add sub fractions overflowed to fraction
+			// transfer sub fraction overflow to fractions
 			m_deltaSubFractionCollected += m_deltaSubFraction * count;
-			delta += (m_deltaSubFractionCollected >> 32) & 0xffffffff;
+			delta += (m_deltaSubFractionCollected >> 32) & UINT32_MAX;
+			// remove overflow that was added to the fractions
+			m_deltaSubFractionCollected &= UINT32_MAX;
 
 			return m_time.add(delta);
 		}
@@ -80,15 +83,15 @@ namespace hbm {
 			m_deltaSubFraction = subFraction/samples;
 
 			// determine remainder and calculate sub fraction from it.
-			uint64_t rest = m_deltaNtpTimestamp%samples;
-			rest <<= 32;
-			rest /= samples;
-			m_deltaSubFraction += static_cast < uint32_t > (rest & 0xffffffff);
+			uint64_t remainder = m_deltaNtpTimestamp%samples;
+			remainder <<= 32;
+			remainder /= samples;
+			m_deltaSubFraction += static_cast < uint32_t > (remainder & 0xffffffff);
 
 			std::cout << __FUNCTION__ << std::endl;
-			std::cout << "seconds = " << seconds << std::hex << " (0x" << seconds << ")" << std::endl;
-			std::cout << "fraction = " << fraction << std::hex << " (0x" << fraction << ")" << std::endl;
-			std::cout << "subFraction = " << subFraction << std::hex << " (0x" << subFraction << ")" << std::endl;
+			std::cout << "seconds = " << seconds << std::hex << " (0x" << seconds << ")" << std::dec << std::endl;
+			std::cout << "fraction = " << fraction << std::hex << " (0x" << fraction << ")" << std::dec << std::endl;
+			std::cout << "subFraction = " << subFraction << std::hex << " (0x" << subFraction << ")" << std::dec << std::endl;
 		}
 
 		void deltaTimeInfo::clear()

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "streamclient", "lib\streamclient.vcxproj", "{370AB3E4-8510-4D2E-8618-20327B6C77B4}"
 EndProject
@@ -12,6 +12,10 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "savestream", "src\savestream.vcxproj", "{14C12C2B-D477-475E-AD59-1D5EC14FFE34}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lib_json", "jsoncpp\makefiles\msvc2010\lib_json.vcxproj", "{1E6C2C1C-6453-4129-AE3F-0EE8E6599C89}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "multiclient", "src\multiclient.vcxproj", "{E21271A9-4775-4D7B-A464-8010B7F9CB1D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hbmstream_rawclient", "src\hbmstream_rawclient.vcxproj", "{4EF08195-C701-45B0-85D8-CBFFDE3F021E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +63,20 @@ Global
 		{1E6C2C1C-6453-4129-AE3F-0EE8E6599C89}.Release|Win32.Build.0 = Release|Win32
 		{1E6C2C1C-6453-4129-AE3F-0EE8E6599C89}.Release|x64.ActiveCfg = Release|x64
 		{1E6C2C1C-6453-4129-AE3F-0EE8E6599C89}.Release|x64.Build.0 = Release|x64
+		{E21271A9-4775-4D7B-A464-8010B7F9CB1D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E21271A9-4775-4D7B-A464-8010B7F9CB1D}.Debug|Win32.Build.0 = Debug|Win32
+		{E21271A9-4775-4D7B-A464-8010B7F9CB1D}.Debug|x64.ActiveCfg = Debug|Win32
+		{E21271A9-4775-4D7B-A464-8010B7F9CB1D}.Release|Win32.ActiveCfg = Release|Win32
+		{E21271A9-4775-4D7B-A464-8010B7F9CB1D}.Release|Win32.Build.0 = Release|Win32
+		{E21271A9-4775-4D7B-A464-8010B7F9CB1D}.Release|x64.ActiveCfg = Release|Win32
+		{4EF08195-C701-45B0-85D8-CBFFDE3F021E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4EF08195-C701-45B0-85D8-CBFFDE3F021E}.Debug|Win32.Build.0 = Debug|Win32
+		{4EF08195-C701-45B0-85D8-CBFFDE3F021E}.Debug|x64.ActiveCfg = Debug|x64
+		{4EF08195-C701-45B0-85D8-CBFFDE3F021E}.Debug|x64.Build.0 = Debug|x64
+		{4EF08195-C701-45B0-85D8-CBFFDE3F021E}.Release|Win32.ActiveCfg = Release|Win32
+		{4EF08195-C701-45B0-85D8-CBFFDE3F021E}.Release|Win32.Build.0 = Release|Win32
+		{4EF08195-C701-45B0-85D8-CBFFDE3F021E}.Release|x64.ActiveCfg = Release|x64
+		{4EF08195-C701-45B0-85D8-CBFFDE3F021E}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

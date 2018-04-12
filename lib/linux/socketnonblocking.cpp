@@ -31,12 +31,6 @@ hbm::SocketNonblocking::SocketNonblocking()
 {
 }
 
-hbm::SocketNonblocking::SocketNonblocking(const std::string& fileName)
-	: m_fd(-1)
-	, m_bufferedReader(fileName)
-{
-}
-
 hbm::SocketNonblocking::~SocketNonblocking()
 {
 	stop();
@@ -52,33 +46,23 @@ int hbm::SocketNonblocking::init()
 		retVal=-1;
 	} else {
 		// turn off Nagle algorithm
-		if (setsockopt(m_fd, IPPROTO_TCP, TCP_NODELAY, reinterpret_cast<char*>(&opt), sizeof(opt))==-1) {
-			return -1;
-		}
+		setsockopt(m_fd, IPPROTO_TCP, TCP_NODELAY, reinterpret_cast<char*>(&opt), sizeof(opt));
 
 		opt = 12;
 		// the interval between the last data packet sent (simple ACKs are not considered data) and the first keepalive probe;
 		// after the connection is marked to need keepalive, this counter is not used any further
-		if (setsockopt(m_fd, SOL_TCP, TCP_KEEPIDLE, reinterpret_cast<char*>(&opt), sizeof(opt))==-1) {
-			return -1;
-		}
+		setsockopt(m_fd, SOL_TCP, TCP_KEEPIDLE, reinterpret_cast<char*>(&opt), sizeof(opt));
 
 		opt = 3;
 		// the interval between subsequential keepalive probes, regardless of what the connection has exchanged in the meantime
-		if (setsockopt(m_fd, SOL_TCP, TCP_KEEPINTVL, reinterpret_cast<char*>(&opt), sizeof(opt))==-1) {
-			return -1;
-		}
+		setsockopt(m_fd, SOL_TCP, TCP_KEEPINTVL, reinterpret_cast<char*>(&opt), sizeof(opt));
 
 		opt = 2;
 		// the number of unacknowledged probes to send before considering the connection dead and notifying the application layer
-		if (setsockopt(m_fd, SOL_TCP, TCP_KEEPCNT, reinterpret_cast<char*>(&opt), sizeof(opt))==-1) {
-			return -1;
-		}
+		setsockopt(m_fd, SOL_TCP, TCP_KEEPCNT, reinterpret_cast<char*>(&opt), sizeof(opt));
 
 		opt = 1;
-		if (setsockopt(m_fd, SOL_SOCKET, SO_KEEPALIVE, reinterpret_cast<char*>(&opt), sizeof(opt))==-1) {
-			return -1;
-		}
+		setsockopt(m_fd, SOL_SOCKET, SO_KEEPALIVE, reinterpret_cast<char*>(&opt), sizeof(opt));
 	}
 
 	return retVal;
@@ -134,7 +118,7 @@ int hbm::SocketNonblocking::connect(const std::string &address, const std::strin
 
 ssize_t hbm::SocketNonblocking::receive(void* pBlock, size_t size)
 {
-	return m_bufferedReader.recv(m_fd, pBlock, size, 0);
+	return m_bufferedReader.recv(m_fd, pBlock, size);
 }
 
 ssize_t hbm::SocketNonblocking::receiveComplete(void* pBlock, size_t size)
@@ -143,7 +127,7 @@ ssize_t hbm::SocketNonblocking::receiveComplete(void* pBlock, size_t size)
 	unsigned char* pPos = reinterpret_cast < unsigned char* > (pBlock);
 	size_t sizeLeft = size;
 	while(sizeLeft) {
-		retVal = m_bufferedReader.recv(m_fd, pPos, sizeLeft, 0);
+		retVal = m_bufferedReader.recv(m_fd, pPos, sizeLeft);
 		if(retVal>0) {
 			sizeLeft -= retVal;
 			pPos += retVal;

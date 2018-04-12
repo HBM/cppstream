@@ -40,8 +40,8 @@ BOOST_AUTO_TEST_CASE (test_timeInfo)
 	{
 		Json::Value params;
 
-		params["type"] = "ntp";
-		params["seconds"] = 8;
+		params["stamp"]["type"] = "ntp";
+		params["stamp"]["seconds"] = 8;
 
 		timeInfo.set(params);
 	}
@@ -55,8 +55,8 @@ BOOST_AUTO_TEST_CASE (test_timeInfo)
 	{
 		Json::Value params;
 
-		params["type"] = "ntp";
-		params["era"] = 3;
+		params["stamp"]["type"] = "ntp";
+		params["stamp"]["era"] = 3;
 
 		timeInfo.set(params);
 	}

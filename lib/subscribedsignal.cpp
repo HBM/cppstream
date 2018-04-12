@@ -28,7 +28,7 @@ namespace hbm {
 		{
 		}
 
-		void SubscribedSignal::interpretValues(unsigned char *pData, size_t count)
+		void SubscribedSignal::interpretValuesAsDouble(unsigned char *pData, size_t count)
 		{
 			if(m_dataIsBigEndian) {
 				switch (m_dataValueType) {
@@ -67,6 +67,11 @@ namespace hbm {
 							m_valueBuffer[i] = static_cast < double > (hbm::streaming::extract<int64_t, hbm::streaming::big>()(&pData));
 						}
 						break;
+                    case DATATYPE_CANRAW:
+                        for(size_t i=0; i<count; ++i) {
+                            m_valueBuffer[i] = hbm::streaming::extract<uint8_t, hbm::streaming::big>()(&pData);
+                        }
+                        break;
 
 					default:
 						throw std::runtime_error("datatype not supported!");
@@ -109,6 +114,11 @@ namespace hbm {
 							m_valueBuffer[i] = static_cast < double > (hbm::streaming::extract<int64_t, hbm::streaming::little>()(&pData));
 						}
 						break;
+                    case DATATYPE_CANRAW:
+                        for(size_t i=0; i<count; ++i) {
+                            m_valueBuffer[i] = hbm::streaming::extract<uint8_t, hbm::streaming::little>()(&pData);
+                        }
+                        break;
 
 					default:
 						throw std::runtime_error("datatype not supported!");
@@ -130,7 +140,7 @@ namespace hbm {
 			}
 		}
 
-		size_t SubscribedSignal::processMeasuredData(unsigned char* pData, size_t size, DataCb_t cb)
+		size_t SubscribedSignal::processMeasuredData(unsigned char* pData, size_t size, DataAsDoubleCb_t cbDouble, DataAsRawCb_t cbRaw)
 		{
 			size_t bytesProcessed = 0;
 
@@ -143,10 +153,14 @@ namespace hbm {
 					} else if (valueCount == 0) {
 						break;
 					}
-					interpretValues(pData, valueCount);
 					uint64_t timeStamp = m_syncSignalTime.increment(valueCount);
-					if (cb) {
-						cb(*this, timeStamp, m_valueBuffer, valueCount);
+					if (cbDouble) {
+						interpretValuesAsDouble(pData, valueCount);
+						cbDouble(*this, timeStamp, m_valueBuffer, valueCount);
+					}
+
+					if (cbRaw) {
+						cbRaw(*this, timeStamp, pData, size);
 					}
 					bytesProcessed = valueCount * m_dataValueSize;
 				}
@@ -158,12 +172,17 @@ namespace hbm {
 					while (size>=tupleSize) {
 						uint64_t ntpTimeStamp = interpreteNtpTimestamp(pData);
 						pData += m_dataTimeSize;
-						interpretValues(pData, 1);
+						if (cbDouble) {
+							interpretValuesAsDouble(pData, 1);
+							cbDouble(*this, ntpTimeStamp, m_valueBuffer, 1);
+						}
+
+						if (cbRaw) {
+							cbRaw(*this, ntpTimeStamp, pData, m_dataValueSize);
+						}
+
 						pData += m_dataValueSize;
 						size -= tupleSize;
-						if (cb) {
-							cb(*this, ntpTimeStamp, m_valueBuffer, 1);
-						}
 						bytesProcessed += tupleSize;
 					}
 				}
@@ -177,10 +196,16 @@ namespace hbm {
 						valueCount=m_valueBufferMaxValues;
 					}
 					uint64_t ntpTimeStamp = interpreteNtpTimestamp(pData);
-					interpretValues(pData+m_dataTimeSize, valueCount);
-					if (cb) {
-						cb(*this, ntpTimeStamp, m_valueBuffer, valueCount);
+					if (cbDouble) {
+						interpretValuesAsDouble(pData+m_dataTimeSize, valueCount);
+						cbDouble(*this, ntpTimeStamp, m_valueBuffer, valueCount);
 					}
+
+					if (cbRaw) {
+						cbRaw(*this, ntpTimeStamp+m_dataTimeSize, pData, size-m_dataTimeSize);
+					}
+
+
 					bytesProcessed = m_dataTimeSize + (m_dataValueSize*valueCount);
 				}
 				break;
@@ -252,6 +277,9 @@ namespace hbm {
 			} else if(dataValueType=="s64") {
 				m_dataValueType = DATATYPE_S64;
 				m_dataValueSize = 8;
+            } else if(dataValueType == "CanRaw") {
+                m_dataValueType = DATATYPE_CANRAW;
+                m_dataValueSize = 1;
 			} else {
 				throw std::runtime_error("invalid value type");
 			}

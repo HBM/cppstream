@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -147,12 +147,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="bufferedreader.cpp" />
     <ClCompile Include="controller.cpp" />
     <ClCompile Include="deltatimeinfo.cpp" />
     <ClCompile Include="httppost.cpp" />
     <ClCompile Include="metainformation.cpp" />
     <ClCompile Include="timeinfo.cpp" />
+    <ClCompile Include="windows/bufferedreader.cpp" />
     <ClCompile Include="windows/socketnonblocking.cpp" />
     <ClCompile Include="signalcontainer.cpp" />
     <ClCompile Include="streamclient.cpp" />

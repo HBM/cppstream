@@ -1,0 +1,15 @@
+before_script:
+  # We use an external submodule (from another git server). In this case gitlab ci does not automatically retrieve it!
+  - git submodule sync --recursive
+  - git submodule update --init --recursive
+
+stages:
+  - build
+
+ci_build_and_test:
+  stage: build
+  script:
+    - mkdir build && cd build && cmake .. -DFEATURE_POST_BUILD_UNITTEST=ON && make && make test
+  tags:
+    - linux
+

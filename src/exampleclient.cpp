@@ -2,6 +2,7 @@
 // Distributed under MIT license
 // See file LICENSE provided
 
+#include <iomanip>
 #include <iostream>
 #include <string>
 #include <signal.h>
@@ -75,7 +76,7 @@ static void signalMetaInformationCb(hbm::streaming::SubscribedSignal& subscribed
 }
 
 
-static void dataCb(hbm::streaming::SubscribedSignal& subscribedSignal, uint64_t ntpTimestamp, const double* pValues, size_t count)
+static void dataCbVerbose(hbm::streaming::SubscribedSignal& subscribedSignal, uint64_t ntpTimestamp, const double* pValues, size_t count)
 {
 	std::cout << subscribedSignal.signalReference() << ": " << std::hex << ntpTimestamp << std::dec << " ";
 	for (size_t i=0; i<count; ++i) {
@@ -85,6 +86,11 @@ static void dataCb(hbm::streaming::SubscribedSignal& subscribedSignal, uint64_t 
 	std::cout << std::endl;
 }
 
+
+static void dataCbQuiet(hbm::streaming::SubscribedSignal& , uint64_t , const double* , size_t )
+{
+}
+
 int main(int argc, char* argv[])
 {
 	// Some signals should lead to a normal shutdown of the daq stream client. Afterwards the program exists.
@@ -92,11 +98,17 @@ int main(int argc, char* argv[])
 	signal( SIGINT, &sigHandler);
 
 	if ((argc<2) || (std::string(argv[1])=="-h") ) {
-		std::cout << "syntax: " << argv[0] << " <stream server address>" << std::endl;
+		std::cout << "syntax: " << argv[0] << " <stream server address> [ -q]" << std::endl;
+		std::cout << "use option -q to print meta data only" << std::endl;
 		return EXIT_SUCCESS;
 	}
+	
+	if ((argc>=3) && (std::string(argv[2]) == "-q")) {
+		signalContainer.setDataAsDoubleCb(dataCbQuiet);
+	} else {
+		signalContainer.setDataAsDoubleCb(dataCbVerbose);
+	}
 
-	signalContainer.setDataCb(dataCb);
 	signalContainer.setSignalMetaCb(signalMetaInformationCb);
 
 	streamClient.setStreamMetaCb(streamMetaInformationCb);
@@ -104,11 +116,6 @@ int main(int argc, char* argv[])
 
 	// connect to the daq stream service and give control to the receiving function.
 	// returns on signal (terminate, interrupt) buffer overrun on the server side or loss of connection.
-	try {
-		streamClient.start(argv[1], hbm::streaming::DAQSTREAM_PORT);
-	} catch (const std::runtime_error& e) {
-		std::cerr << e.what();
-		return EXIT_FAILURE;
-	}
+	streamClient.start(argv[1], hbm::streaming::DAQSTREAM_PORT);
 	return EXIT_SUCCESS;
 }

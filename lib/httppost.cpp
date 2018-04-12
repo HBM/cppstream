@@ -47,6 +47,7 @@ namespace hbm {
 		}
 
 		char recvBuffer[1024];
+		// important HTTP 1.0 will return the response and close the socket afterwards. This does look like a short read.
 		ssize_t retVal = socket.receiveComplete(recvBuffer, sizeof(recvBuffer));
 		// ensure termination!
 		recvBuffer[sizeof(recvBuffer)-1] = '\0';
@@ -56,7 +57,7 @@ namespace hbm {
 			static const std::string NEEDLE("\r\n\r\n");
 
 			std::string response(recvBuffer, retVal);
-			/// body with response is to be found after the first empty line
+			// body with response is to be found after the first empty line
 			size_t position = response.find(NEEDLE);
 			if(position == std::string::npos) {
 				return "";

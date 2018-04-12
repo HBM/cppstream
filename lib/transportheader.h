@@ -20,6 +20,7 @@ namespace hbm {
 		/// reads and interprets the header of the transport layer
 		class TransportHeader {
 		public:
+			/// þaram socket receiving socket
 			TransportHeader(SocketNonblocking& socket);
 
 			/// at least 32 Bit are being read. Maybe 32 additional bit extended length information are being read.

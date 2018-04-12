@@ -78,16 +78,16 @@ static void streamMetaInformationCb(hbm::streaming::StreamClient& stream, const 
 
 		try {
 			stream.subscribe(signalReferences);
-			std::cout << __FUNCTION__ << "the following " << signalReferences.size() << " signal(s) were subscribed: ";
+			std::cout << "The following " << signalReferences.size() << " signal(s) were subscribed: ";
 			for(hbm::streaming::signalReferences_t::const_iterator iter=signalReferences.begin(); iter!=signalReferences.end(); ++iter) {
 				std::cout << "'" << *iter << "' ";
 			}
 			std::cout << std::endl;
 		} catch(const std::runtime_error& e) {
-			std::cerr << __FUNCTION__ << "error '" << e.what() << "' subscribing the following signal(s): ";
+			std::cerr << __FUNCTION__ << " error '" << e.what() << "' subscribing the following signal(s): ";
 		}
 	} else if(method==hbm::streaming::META_METHOD_UNAVAILABLE) {
-		std::cout << __FUNCTION__ << "the following signal(s) is(are) not available anymore: ";
+		std::cout << __FUNCTION__ << " the following signal(s) is(are) not available anymore: ";
 
 		for (Json::ValueConstIterator iter = params.begin(); iter!= params.end(); ++iter) {
 			const Json::Value& element = *iter;
@@ -151,7 +151,7 @@ int main(int argc, char* argv[])
 	static const std::string streamMetaFilename = "streamMeta.dump";
 	streamMetaFile.open(streamMetaFilename);
 
-	signalContainer.setDataCb(dataCb);
+	signalContainer.setDataAsDoubleCb(dataCb);
 	signalContainer.setSignalMetaCb(signalMetaInformationCb);
 
 	streamClient.setStreamMetaCb(streamMetaInformationCb);
@@ -159,11 +159,6 @@ int main(int argc, char* argv[])
 
 	// connect to the daq stream service and give control to the receiving function.
 	// returns on signal (terminate, interrupt) buffer overrun on the server side or loss of connection.
-	try {
-		streamClient.start(argv[1], hbm::streaming::DAQSTREAM_PORT);
-	} catch (const std::runtime_error& e) {
-		std::cerr << e.what();
-		return EXIT_FAILURE;
-	}
+	streamClient.start(argv[1], hbm::streaming::DAQSTREAM_PORT);
 	return EXIT_SUCCESS;
 }

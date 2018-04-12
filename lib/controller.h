@@ -6,13 +6,14 @@
 #define _HBM__STREMAING__CONTROLLER_H
 
 #include <string>
-#include <vector>
 #include <stdexcept>
-
-#include <json/value.h>
 
 #include "types.h"
 #include "httppost.h"
+
+namespace Json {
+	class Value;
+}
 
 namespace hbm {
 	namespace streaming {

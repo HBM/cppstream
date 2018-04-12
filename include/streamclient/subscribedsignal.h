@@ -18,18 +18,19 @@ namespace hbm {
 
 		class SubscribedSignal;
 
-		typedef std::function<void(SubscribedSignal& subscribedSignal, uint64_t ntpTimeStamp, const double* values, size_t count)> DataCb_t;
+		typedef std::function<void(SubscribedSignal& subscribedSignal, uint64_t ntpTimeStamp, const double* values, size_t count)> DataAsDoubleCb_t;
+		typedef std::function<void(SubscribedSignal& subscribedSignal, uint64_t ntpTimeStamp, const uint8_t* values, size_t count)> DataAsRawCb_t;
 
 		/// interpretes and stores meta information of a subscribed signal.
 		/// Measured data of a subscribed signal is processed here.
-		/// \warning for windows, this class works on little endian machines only. this is because of endian issues.
+		/// \warning for windows, this class works on little endian machines only.
 		class SubscribedSignal {
 		public:
 			SubscribedSignal(unsigned int signalNumber);
 
 			/// process measured data
 			/// \return number of bytes processed
-			size_t processMeasuredData(unsigned char* pData, size_t size, DataCb_t cb);
+			size_t processMeasuredData(unsigned char* pData, size_t size, DataAsDoubleCb_t cbDouble, DataAsRawCb_t cbRaw);
 
 			/// process signal related meta information.
 			void processSignalMetaInformation(const std::string& method, const Json::Value& params);
@@ -46,7 +47,7 @@ namespace hbm {
 
 		private:
 			/// @param count number of values not the number of bytes!
-			void interpretValues(unsigned char* pData, size_t count);
+			void interpretValuesAsDouble(unsigned char* pData, size_t count);
 
 			uint64_t interpreteNtpTimestamp(unsigned char* pData);
 
@@ -57,7 +58,7 @@ namespace hbm {
 			void setDataFormat(const Json::Value& params);
 
 			enum pattern_t {
-				/// "V"; No timestamps, values only. Signal rate is recieved first.
+				/// "V"; No timestamps, values only. Signal rate is received first.
 				/// Time stamp of first value is received as meat information before value.
 				/// Increment with delta time from signal rate for each value.
 				PATTERN_V,
@@ -75,6 +76,7 @@ namespace hbm {
 				DATATYPE_U64,
 				DATATYPE_S64,
 				DATATYPE_REAL64,
+                		DATATYPE_CANRAW,
 			};
 
 			enum timeType_t {

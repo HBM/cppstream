@@ -1,8 +1,15 @@
 project("hbm_daq_stream_client" CXX)
 
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0.2)
 
-SET(WARN_SWITCHES "-Wall -Wextra -Weffc++ -Winit-self -Wstrict-overflow=5 -Wpointer-arith -Wformat=2 -Wcast-align -Wmissing-declarations -Wmissing-include-dirs -Wcast-qual -Wwrite-strings")
+SET(WARN_SWITCHES "-Wall -Wextra -Winit-self -Wstrict-overflow=5 -Wpointer-arith -Wformat=2 -Wcast-align -Wmissing-declarations -Wmissing-include-dirs -Wcast-qual -Wwrite-strings -pedantic")
+
+
+
+if (NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 7)
+  ## disable some warnings from gcc7, otherwise jsoncpp won't build!
+  SET(WARN_SWITCHES "${WARN_SWITCHES} -Wno-implicit-fallthrough")
+endif()
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x ${WARN_SWITCHES}")
 
@@ -41,7 +48,7 @@ set(STREAMCLIENT_SOURCES
   signalcontainer.cpp
   subscribedsignal.cpp
   linux/socketnonblocking.cpp
-  bufferedreader.cpp
+  linux/bufferedreader.cpp
 )
 
 add_library(streamclient-static  STATIC ${STREAMCLIENT_SOURCES})

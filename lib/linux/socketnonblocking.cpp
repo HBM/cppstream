@@ -102,8 +102,9 @@ int hbm::SocketNonblocking::connect(const std::string &address, const std::strin
 			if(err==1) {
 				int value;
 				socklen_t len = sizeof(value);
-				getsockopt(m_fd, SOL_SOCKET, SO_ERROR, &value, &len);
-				if(value!=0) {
+				if (getsockopt(m_fd, SOL_SOCKET, SO_ERROR, &value, &len) != 0) {
+					retVal = -1;
+				} else if(value!=0) {
 					retVal = -1;
 				}
 			} else {

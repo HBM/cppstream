@@ -59,7 +59,7 @@ int main(int argc, char* argv[])
 	hbm::streaming::StreamClient stream;
 	stream.setStreamMetaCb(streamMetaInformationCb);
 	do {
-		std::thread streamer = std::thread(std::bind(&hbm::streaming::StreamClient::start, &stream, address, hbm::streaming::DAQSTREAM_PORT));
+		std::thread streamer = std::thread(std::bind(&hbm::streaming::StreamClient::start, &stream, address, hbm::streaming::DAQSTREAM_PORT, ""));
 		std::cout << "Started" << std::endl;
 		std::this_thread::sleep_for(cycleTime);
 		stream.stop();

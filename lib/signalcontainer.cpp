@@ -10,7 +10,7 @@ namespace hbm {
 		SignalContainer::SignalContainer()
 			: m_subscribedsignals()
 			, m_signalMetaCb()
-			, m_dataCb()
+			, m_dataAsDoubleCb()
 		{
 		}
 
@@ -19,16 +19,21 @@ namespace hbm {
 			m_signalMetaCb = cb;
 		}
 
-		void SignalContainer::setDataCb(DataCb_t cb)
+		void SignalContainer::setDataAsDoubleCb(DataAsDoubleCb_t cb)
 		{
-			m_dataCb = cb;
+			m_dataAsDoubleCb = cb;
+		}
+
+		void SignalContainer::setDataAsRawCb(DataAsRawCb_t cb)
+		{
+			m_dataAsRawCb = cb;
 		}
 
 		ssize_t SignalContainer::processMeasuredData(unsigned int signalNumber, unsigned char* data, size_t len)
 		{
 			signals_t::iterator iter = m_subscribedsignals.find(signalNumber);
 			if (iter != m_subscribedsignals.end()) {
-				return iter->second.processMeasuredData(data, len, m_dataCb);
+				return iter->second.processMeasuredData(data, len, m_dataAsDoubleCb, m_dataAsRawCb);
 			}
 			return -1;
 		}

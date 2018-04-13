@@ -5,3 +5,5 @@ Release/*
 ipch/*
 *.dump
 *.user
+build/*
+*~
